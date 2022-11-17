@@ -1,0 +1,38 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@5.0.3
+
+jobs:
+  test:
+    executor: node/default
+    steps:
+      - checkout
+      - node/install-packages:
+        pkg-manager: yarn
+      - run: yarn test
+  publish:
+    executor: node/default
+    steps:
+      - checkout
+      - run:
+          name: Authenticate with NPM
+          command: |
+            echo "//registry.npmjs.org/:_authToken=$NPM_VGS_PUBLISH_TOKEN" >> ~/project/.npmrc
+            npm ci
+      - run:
+          name: Publish package
+          command: |
+            npm publish --access public
+workflows:
+  version: 2
+  test-and-publish:
+    jobs:
+      - test
+      - publish:
+          context: frontend-deploy
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/

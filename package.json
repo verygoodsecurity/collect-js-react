@@ -1,10 +1,9 @@
 {
   "name": "collect-js-react",
-  "version": "1.0.0",
-  "description": "Made with create-react-library",
-  "author": "flor-master",
+  "version": "0.0.1",
+  "description": "VGS Collect.js React wrapper",
+  "author": "vgs",
   "license": "MIT",
-  "repository": "flor-master/collect-js-react",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.tsx",
