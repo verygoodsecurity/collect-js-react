@@ -1,5 +1,5 @@
 {
-  "name": "collect-js-react",
+  "name": "@vgs/collect-js-react",
   "version": "0.0.1",
   "description": "VGS Collect.js React wrapper",
   "author": "vgs",
