@@ -1,22 +1,14 @@
 import React from 'react';
 import { setFormState, getFormState } from "./state";
+import { ICollect } from "./types/interfaces";
 
-interface Collect {
-  create: Function;
-}
-
-declare global {
-  interface Window {
-    VGSCollect: Collect;
-  }
-}
 
 export const CollectForm = (props: any) => {
   const { vaultId, environment, submitParameters } = props
   
-  const form:any =  window.VGSCollect.create(vaultId, environment, (state: any) => {
+  const form: ICollect =  window.VGSCollect.create(vaultId, environment, (state: any) => {
     props.onUpdateCallback(state)
-  })
+  }) 
 
   setFormState(form)
 

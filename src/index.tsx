@@ -6,6 +6,7 @@ import {
   CardSecurityCodeField,
   PasswordField,
   TextareaField,
+  NumberField,
 } from "./Fields";
 
 export { 
@@ -15,5 +16,6 @@ export {
   CardExpirationDateField,
   CardSecurityCodeField,
   PasswordField,
-  TextareaField
+  TextareaField,
+  NumberField,
 }
