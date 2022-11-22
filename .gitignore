@@ -20,7 +20,7 @@ cucumber.report.json
 .nyc_output
 
 node_modules
-dist
+dist/
 .idea
 .DS_Store
 .
