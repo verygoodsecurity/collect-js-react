@@ -1,38 +1,50 @@
 import React from 'react';
 import { useEffect } from "react";
 import { getFormState } from "./state";
+import { 
+  ITextField,
+  ICardNumberField,
+  ICardCVCField,
+  ICardExpDateField,
+  IPasswordField,
+  ITextareaField,
+  INumberField, 
+} from "./types/interfaces";
 
-const RenderField = (props: any) => {
-  const { id, name, placeholder, validations, css, successColor } = props
-  const { type } = props
-  useEffect(() => {
+function RenderField(props: any) {
+  const {
+    placeholder,
+    validations,
+    css,
+    name,
+    // successColor,
+    type,
+    className: className = ""
+  } = props
+  const id = `vgs-${window.crypto.randomUUID()}`
+  
+  useEffect(() => { 
     const form: any = getFormState()
     form.field(`#${id}`, {
-      type, 
+      type,  
       name,
-      validations,
+      validations, 
       placeholder,
       css,
-      successColor
-    })    
+    })
   }, [])
   
   return(
-    <div id={id}></div>
+    <div className={`collect-iframe-wr ${className}`} id={id}></div>
   )
 }
-interface ITextField {
-  id: string;
 
-  name: string;
-  validations: Array<string>;
-  placeholder: string
-}
 
 const TextField = (props: ITextField) => {
-  // const id = generateId()
-  let defaultParams = {
-    type: "text", 
+  const defaultParams = { 
+    type: "text",
+    name: "text",
+    placeholder: "Any text",
   }
   return (
     <RenderField
@@ -41,12 +53,13 @@ const TextField = (props: ITextField) => {
   )
 }
 
-const CardNumberField = (props: any) => {
-  // const id = generateId()
-  let defaultParams = {
+const CardNumberField = (props: ICardNumberField) => {
+  const defaultParams = {
     type: "card-number", 
+    name: "card-number",
+    placeholder: "4111 1111 1111 1111",
   }
-  
+
   return (
     <RenderField
       {...Object.assign(defaultParams, props)}
@@ -54,9 +67,11 @@ const CardNumberField = (props: any) => {
   )  
 }
 
-const CardExpirationDateField = (props: any) => {
-  let defaultParams = {
+const CardExpirationDateField = (props: ICardExpDateField) => {
+  const defaultParams = {
     type: "card-expiration-date", 
+    name: "card-expiration-date",
+    placeholder: `12 / ${new Date().getFullYear() + 3}`
   }
   return (
     <RenderField
@@ -64,9 +79,11 @@ const CardExpirationDateField = (props: any) => {
     />
   )  
 }
-const CardSecurityCodeField = (props: any) => {
-  let defaultParams = {
-    type: "card-security-code", 
+const CardSecurityCodeField = (props: ICardCVCField) => {
+  const defaultParams = {
+    type: "card-security-code",
+    name: "card-security-code",
+    placeholder: "123",
   }
   return (
     <RenderField
@@ -74,9 +91,11 @@ const CardSecurityCodeField = (props: any) => {
     />
   )  
 }
-const PasswordField = (props: any) => {
-  let defaultParams = {
-    type: "password", 
+const PasswordField = (props: IPasswordField) => {
+  const defaultParams = {
+    type: "password",
+    name: "password",
+    placeholder: "Password",
   }
   return (
     <RenderField
@@ -85,9 +104,24 @@ const PasswordField = (props: any) => {
   )  
 }
 
-const TextareaField = (props: any) => {
-  let defaultParams = {
-    type: "textarea", 
+const TextareaField = (props: ITextareaField) => {
+  const defaultParams = {
+    type: "textarea",
+    name: "textarea",
+    placeholder: "Text",
+  }
+  return (
+    <RenderField
+      {...Object.assign(defaultParams, props)}
+    />
+  )  
+}
+
+const NumberField = (props: INumberField) => {
+  const defaultParams = {
+    type: "number",
+    name: "number",
+    placeholder: "Number",
   }
   return (
     <RenderField
@@ -104,4 +138,5 @@ export {
   CardSecurityCodeField,
   PasswordField,
   TextareaField,
+  NumberField,
 }
