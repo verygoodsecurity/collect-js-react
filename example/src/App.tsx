@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 import {
   CollectForm,
@@ -9,14 +9,16 @@ import {
   PasswordField,
   TextareaField,
   NumberField,
-} from 'collect-js-react'
+  SSNField,
+  ZipCodeField
+} from 'collect-js-react';
 
 const App = () => {
   const onSubmitCallback = (status: any, resp: any) => {
-    console.log(status, resp)
+    console.log(status, resp);
   }
   const onUpdateCallback = (state: any) => {
-    console.log(state)
+    console.log(state);
   }
 
   return (
@@ -24,39 +26,38 @@ const App = () => {
       vaultId="tntnmemz6i7"
       environment="sandbox"
       submitParameters={{}}
-      onUpdateCallback={onUpdateCallback} 
+      onUpdateCallback={onUpdateCallback}
       onSubmitCallback={onSubmitCallback}
     >
       <TextField
         validations={["required"]}
-        // placeholder="Text"
-      />        
+      />
       <CardNumberField
         successColor="green"
         validations={["required", "validCardNumber"]}
-        // placeholder="4111 1111 1111 1111"
       />
       <CardExpirationDateField
-        validations={["required"]}
-        // placeholder="12 / 25"
+        validations={["required", "validCardExpirationDate"]}
       />
       <CardSecurityCodeField
+        validations={["required", "validCardSecurityCode"]}
+      />
+      <SSNField
+        validations={["required", "validSSN"]}
+      />
+      <ZipCodeField
         validations={["required"]}
-        // placeholder="12 / 25"
       />
       <PasswordField
         validations={["required"]}
-        // placeholder="password"
-      /> 
+      />
       <NumberField
         validations={["required"]}
-        // placeholder="password"
-      /> 
+      />
       <TextareaField
         validations={["required"]}
         className="custom-class"
-        // placeholder="textarea"
-      /> 
+      />
       <button type="submit">Submit</button>
     </CollectForm>
   )
