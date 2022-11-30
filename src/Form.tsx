@@ -10,7 +10,7 @@ interface ICollectFormProps {
   onUpdateCallback?: (state: object) => void;
   onSubmitCallback?: (status: any, resp: any) => void;
   submitParameters?: any;
-  children: JSX.Element[] | JSX.Element;
+  children?: JSX.Element[] | JSX.Element;
 }
 
 export const CollectForm = (props: ICollectFormProps) => {
@@ -22,10 +22,6 @@ export const CollectForm = (props: ICollectFormProps) => {
     onSubmitCallback,
     children
   } = props;
-
-  if (!vaultId) {
-    throw new Error('@vgs/collect-js-react: vaultId is required.');
-  }
 
   if (window.VGSCollect) {
     const form: ICollect = window.VGSCollect.create(vaultId, environment, (state: any) => {
