@@ -1,21 +1,23 @@
-// I don;t like this solution, we need to improve it 
 
-let form: any = {}
-let formFields: any = []
+import { IVGSCollectForm } from './types/Form';
 
-const setFormInstance = (newVal:any) => {
-  form = newVal
+let form = {} as IVGSCollectForm;
+let formFields: string[] = [];
+
+const setFormInstance = (newVal: IVGSCollectForm) => {
+  form = newVal;
 }
-const getFormInstance = () => form
+
+const getFormInstance = () => form;
 
 const addFieldName = (name: string) => {
-  formFields.push(name)
+  formFields.push(name);
 }
-const getFieldsName = () => formFields
+const getFieldsName = () => formFields;
 
 export {
   setFormInstance,
   getFormInstance,
   getFieldsName,
   addFieldName,
-}
+};

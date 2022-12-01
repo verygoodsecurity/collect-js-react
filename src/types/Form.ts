@@ -1,0 +1,246 @@
+import { FieldInstance, ClassMap, FieldType } from 'types/Field';
+
+declare global {
+  interface Window {
+    VGSCollect: IVGSCollect;
+  }
+  interface Crypto {
+    randomUUID: () => string;
+  }
+}
+
+type VGSVaultEnvironments = 'sandbox' | 'live' | 'live-eu-1';
+/**
+ * Available options for .field() method configuration
+ */
+type BooleanValue = boolean | 'true' | 'false';
+type YearLength = '2' | '4' | 2 | 4;
+
+/**
+ * Available options for .submit() method
+ */
+type SubmitMethod = 'post' | 'patch' | 'put' | 'delete' | 'get';
+type SubmitSerializer = 'deep' | 'flat';
+type SubmitSerialization = 'json' | 'formData';
+type SubmitMapDotToObject = BooleanValue | 'merge' | 'mergeArray';
+type InputMode = 'none' | 'text' | 'decimal' | 'numeric' | 'tel' | 'search' | 'email' | 'url';
+
+/**
+ * Available options for the form .on() method
+ */
+type FormEventTypes = 'enterPress';
+
+interface ICollectFormProps {
+  vaultId: string;
+  environment: VGSVaultEnvironments;
+  submitParameters?: any;
+  action?: string;
+  children?: JSX.Element[] | JSX.Element;
+  onUpdateCallback?: (state: VGSCollectFormState | null) => void;
+  onSubmitCallback?: (status: any, resp: any) => void;
+}
+
+interface VGSCollectStateParams {
+  name: string;
+  errorMessages: string[];
+  isDirty: boolean;
+  isTouched: boolean;
+  isFocused: boolean;
+  isValid: boolean;
+  isEmpty: boolean;
+  last4?: string;
+  bin?: string;
+  cardType?: string;
+}
+
+type VGSCollectFormState = Record<string, VGSCollectStateParams> | null;
+
+interface IDefaultFieldOptions {
+  type: FieldType;
+  name: string;
+  validations?: string[];
+  css?: Record<string, any>;
+  successColor?: string;
+  errorColor?: string;
+  classes?: ClassMap;
+  serializers?: any;
+  autoComplete?: string;
+  placeholder?: string;
+  autoFocus?: BooleanValue;
+  disabled?: BooleanValue;
+  ariaLabel?: string;
+  readonly?: BooleanValue;
+  inputMode?: InputMode;
+}
+
+type FieldProps<Props extends { type: string }> = {
+  [P in Props as P["type"]]: P
+}
+
+type FieldConfig = FieldProps<
+  IVGSCollectTextField |
+  IVGSCollectCardNumberField |
+  IVGSCollectCardExpirationField |
+  IVGSCollectCardCVCField |
+  IVGSCollectSSNField |
+  IVGSCollectZipCodeField |
+  IVGSCollectPasswordField |
+  IVGSCollectNumberField |
+  IVGSCollectTextareaField
+>
+
+interface IVGSCollectTextField extends IDefaultFieldOptions {
+  type: 'text';
+  min?: number;
+  max?: number;
+  maxLength?: number;
+  step?: number;
+  hideValue?: BooleanValue;
+}
+
+interface IVGSCollectCardNumberField extends IDefaultFieldOptions {
+  type: 'card-number';
+  icons?: Record<string, string>;
+  showCardIcon?: boolean | Record<string, any>;
+  addCardBrands?: Array<CardInfo>;
+  validCardBrands: Array<Partial<CardInfo>>;
+  hideValue?: BooleanValue;
+}
+
+interface IVGSCollectCardExpirationField extends IDefaultFieldOptions {
+  type: 'card-expiration-date';
+  yearLength?: YearLength;
+  separator?: string;
+  hideValue?: BooleanValue;
+}
+
+interface IVGSCollectCardCVCField extends IDefaultFieldOptions {
+  type: 'card-security-code';
+  showCardIcon?: boolean | object;
+  icons?: Record<string, string>;
+  hideValue?: BooleanValue;
+}
+
+interface IVGSCollectSSNField extends IDefaultFieldOptions {
+  type: 'ssn';
+  hideValue?: BooleanValue;
+}
+
+interface IVGSCollectZipCodeField extends IDefaultFieldOptions {
+  type: 'zip-code';
+  hideValue?: BooleanValue;
+}
+
+interface IVGSCollectPasswordField extends IDefaultFieldOptions {
+  type: 'password';
+  hideValue?: BooleanValue;
+}
+
+interface IVGSCollectNumberField extends IDefaultFieldOptions {
+  type: 'number';
+  hideValue?: BooleanValue;
+}
+
+interface IVGSCollectTextareaField extends IDefaultFieldOptions {
+  type: 'textarea';
+  min?: number;
+  max?: number;
+  maxLength?: number;
+  step?: number;
+  hideValue?: BooleanValue;
+}
+
+interface CardInfo {
+  type: string;
+  pattern: RegExp;
+  format?: RegExp;
+  length?: number[];
+  cvvLength?: number[];
+  luhn?: Boolean;
+}
+
+interface VGSCollectSubmitOptions {
+  data: object | ((values: any) => any);
+  headers: object;
+  method: SubmitMethod;
+  serailizer: SubmitSerializer;
+  serialization: SubmitSerialization;
+  mapDotToObject: SubmitMapDotToObject;
+  withCredentials: BooleanValue;
+}
+
+interface IVGSCollectForm {
+  /**
+   * Docs: https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
+   */
+  field(selector: string, options: FieldConfig): FieldInstance;
+
+  /**
+   * Docs: https://www.verygoodsecurity.com/docs/api/collect/#api-fieldon
+   *       https://www.verygoodsecurity.com/docs/api/collect/#api-fieldoff
+   */
+  on(event: FormEventTypes, callback: (info: { name: string }) => void): void;
+  off(event: FormEventTypes, callback: () => void): void;
+
+  /**
+   * Docs: https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit
+   */
+  submit(
+    path: string,
+    options: Partial<VGSCollectSubmitOptions>,
+    successCallback?: (status: number | null, data: any) => any,
+    errorCallback?: (error: VGSCollectFormState) => any
+  ): any;
+
+  /**
+   * Docs: https://www.verygoodsecurity.com/docs/api/collect/#api-formtokenize
+   */
+  tokenize(
+    successCallback: (status: number | null, data: any) => any,
+    errorCallback: (error: VGSCollectFormState) => any
+  ): any;
+
+  /**
+   * Docs: https://www.verygoodsecurity.com/docs/api/collect/#api-fieldreset
+   */
+  reset(): any;
+
+  /**
+   * Docs: https://www.verygoodsecurity.com/docs/api/collect/#api-formunmount
+   */
+  unmount(): void;
+
+  /**
+   * Docs: https://www.verygoodsecurity.com/docs/vgs-collect/js/cookbook#how-to-integrate-vgs-collectjs-with-vgs-satellite
+   */
+  connectSatellite(port: number): any;
+
+  /**
+   * Docs: https://www.verygoodsecurity.com/docs/vgs-collect/js/integration#vgs-collect-with-cname
+   */
+  useCname(cname: string): void;
+}
+
+interface IVGSCollect {
+  create(
+    vaultId: string,
+    environment: string,
+    stateCallback?: (state: VGSCollectFormState) => void
+  ): any;
+}
+
+export {
+  IVGSCollect,
+  IVGSCollectForm,
+  VGSCollectFormState,
+  IVGSCollectTextField,
+  IVGSCollectCardNumberField,
+  IVGSCollectCardExpirationField,
+  IVGSCollectCardCVCField,
+  IVGSCollectSSNField,
+  IVGSCollectZipCodeField,
+  IVGSCollectPasswordField,
+  IVGSCollectNumberField,
+  IVGSCollectTextareaField,
+  ICollectFormProps
+}

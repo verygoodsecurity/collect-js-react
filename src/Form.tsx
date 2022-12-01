@@ -1,9 +1,8 @@
 import React from 'react';
 import { setFormInstance, getFormInstance } from "./state";
-import { ICollect, ICollectFormProps } from "./types/interfaces";
+import { IVGSCollectForm, VGSCollectFormState, ICollectFormProps } from "./types/Form";
 
-
-export const CollectForm = (props: ICollectFormProps) => {
+export const VGSCollectForm = (props: ICollectFormProps) => {
   const {
     vaultId,
     environment = 'sandbox',
@@ -14,8 +13,8 @@ export const CollectForm = (props: ICollectFormProps) => {
     children
   } = props;
 
-  if (window.VGSCollect) {
-    const form: ICollect = window.VGSCollect.create(vaultId, environment, (state: any) => {
+  if (typeof window !== 'undefined' && window.VGSCollect) {
+    const form: IVGSCollectForm = window.VGSCollect.create(vaultId, environment, (state: VGSCollectFormState) => {
       if (onUpdateCallback) {
         onUpdateCallback(state);
       }
@@ -27,7 +26,7 @@ export const CollectForm = (props: ICollectFormProps) => {
   const submitHandler = (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    const form: any = getFormInstance();
+    const form: IVGSCollectForm = getFormInstance();
 
     if (form) {
       form.submit(action, submitParameters, (status: any, resp: any) => {
