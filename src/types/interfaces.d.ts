@@ -7,10 +7,22 @@ declare global {
   }
 }
 type YearLength = '2' | '4' | 2 | 4;
+type VGSVaultEnvironments = 'sandbox' | 'live' | 'live-eu-1';
 
 interface ICollect {
   create: Function;
 }
+
+interface ICollectFormProps {
+  vaultId: string;
+  environment: VGSVaultEnvironments;
+  submitParameters?: any;
+  action?: string;
+  children?: JSX.Element[] | JSX.Element;
+  onUpdateCallback?: (state: object) => void;
+  onSubmitCallback?: (status: any, resp: any) => void;
+}
+
 
 interface IDedaultField {
   type?: string; // FieldType;
@@ -100,6 +112,7 @@ interface INumberField extends IDedaultField {
 
 export {
   ICollect,
+  ICollectFormProps,
   ITextField,
   ICardNumberField,
   ICardExpDateField,

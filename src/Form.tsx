@@ -1,18 +1,7 @@
 import React from 'react';
 import { setFormInstance, getFormInstance } from "./state";
-import { ICollect } from "./types/interfaces";
+import { ICollect, ICollectFormProps } from "./types/interfaces";
 
-type VGSVaultEnvironments = 'sandbox' | 'live' | 'live-eu-1';
-
-interface ICollectFormProps {
-  vaultId: string;
-  environment: VGSVaultEnvironments;
-  action: string;
-  submitParameters?: any;
-  children?: JSX.Element[] | JSX.Element;
-  onUpdateCallback?: (state: object) => void;
-  onSubmitCallback?: (status: any, resp: any) => void;
-}
 
 export const CollectForm = (props: ICollectFormProps) => {
   const {
