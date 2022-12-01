@@ -7,16 +7,18 @@ type VGSVaultEnvironments = 'sandbox' | 'live' | 'live-eu-1';
 interface ICollectFormProps {
   vaultId: string;
   environment: VGSVaultEnvironments;
-  onUpdateCallback?: (state: object) => void;
-  onSubmitCallback?: (status: any, resp: any) => void;
+  action: string;
   submitParameters?: any;
   children?: JSX.Element[] | JSX.Element;
+  onUpdateCallback?: (state: object) => void;
+  onSubmitCallback?: (status: any, resp: any) => void;
 }
 
 export const CollectForm = (props: ICollectFormProps) => {
   const {
     vaultId,
     environment = 'sandbox',
+    action = '/',
     submitParameters,
     onUpdateCallback,
     onSubmitCallback,
@@ -30,16 +32,16 @@ export const CollectForm = (props: ICollectFormProps) => {
       }
     });
 
-    setFormState(form);
+    setFormInstance(form);
   }
 
   const submitHandler = (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    const form: any = getFormState();
+    const form: any = getFormInstance();
 
     if (form) {
-      form.submit("/post", submitParameters, (status: any, resp: any) => {
+      form.submit(action, submitParameters, (status: any, resp: any) => {
         if (onSubmitCallback) {
           onSubmitCallback(status, resp);
         }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useEffect } from "react";
-import { getFormState } from "./state";
+import { getFormInstance } from "./state";
+import { setDefaultName } from "./utils";
 import {
   ITextField,
   ICardNumberField,
@@ -23,7 +24,7 @@ function RenderField(props: any) {
   const id = `vgs-${window.crypto.randomUUID()}`
 
   useEffect(() => {
-    const form: any = getFormState()
+    const form: any = getFormInstance()
     form.field(`#${id}`, {
       type,
       name,
@@ -153,7 +154,6 @@ const NumberField = (props: INumberField) => {
     />
   )
 }
-
 
 export {
   TextField,
