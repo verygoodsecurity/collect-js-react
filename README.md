@@ -49,11 +49,79 @@ npm install @vgs/collect-js-react
 
 ## How to use
 
-*TBU*
+### Import parent form wrapper
+
+```
+import { CollectForm } from '@vgs/collect-js-react';
+
+const myApp = () => {
+  const onSubmitCallback = (status, data) => {};
+  const onUpdateCallback = (state) => {};
+
+  return (
+    <CollectForm 
+      vaultId="<vault_id>" // https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate
+      environment="<environment>" // https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate
+      submitParamethers={{}} // https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit (options)
+      onUpdateCallback={} // https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate (stateCallback)
+      onSubmitCallback={} // https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit
+    >
+      // Add secure fields here
+    </CollectForm>
+  )
+};
+```
+
+### Import and declare needed input fields
+
+| Collect.js input type  | Collect.js React Component   | Default Prop Values                                                                               |
+|------------------------|------------------------------|---------------------------------------------------------------------------------------------------|
+| `text`                 | `<TextField/>`               | ` {   type: 'text',   name: 'text',   placeholder: 'Cardholder Name'   }`                         |
+| `card-number`          | `<CardNumberField/>`         | ` {   type: 'card-number',   name: 'card-number',   placeholder: 'Credit Card Number'   } `       |
+| `card-expiration-date` | `<CardExpirationDateField/>` | ` {   type: 'card-expiration-date',   name: 'card-expiration-date',   placeholder: 'MM/YY'   } `  |
+| `card-security-code`   | `<CardSecurityCodeField/>`   | ` {   type: 'card-security-code',   name: 'card-security-code',   placeholder: 'CVC/CVV'   } `    |
+| `password`             | `<PasswordField/>`           | ` {   type: 'password',   name: 'password',   placeholder: 'Enter Password'   } `                 |
+| `ssn`                  | `<SSNField/>`                | ` {   type: 'ssn',   name: 'ssn',   placeholder: 'SSN'   } `                                      |
+| `zip-code`             | `<ZipCodeField/>`            | ` {   type: 'zip-code',   name: 'zip-code',   placeholder: 'Zip Code'   } `                       |
+| `number`               | `<NumberField/>`             | ` {   type: 'number',   name: 'number',   placeholder: 'Number'   } `                             |
+| `textarea`             | `<TextareaField/>`           | ` {   type: 'textarea',   name: 'textarea',   placeholder: 'Comment'   } `                        |
+
+Full list of supported properties: https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
+
+*Example:*
+
+```
+import { 
+  CollectForm,
+  CardNumberField,
+  CardExpirationDateField,
+  CardSecurityCodeField
+} from '@vgs/collect-js-react';
+
+const myApp = () => {
+  const onSubmitCallback = (status, data) => {};
+  const onUpdateCallback = (state) => {};
+
+  return (
+    <CollectForm 
+      vaultId="<vault_id>"
+      environment="<environment>"
+      submitParamethers={{}}
+      onUpdateCallback={}
+      onSubmitCallback={}
+    >
+      <CardNumberField validations={["required", "validCardNumber"]} />
+      <CardEpirationDateField validations={["required", validCardExpirationDate"]} />
+      <CardSecurityCodeField validations={["required", "validCardSecurityCode"]} />
+    </CollectForm>
+  )
+};
+```
 
 ## Documentation
 
-Full abilities of VGS Collect.js and integration details you can find in our [documentation](https://www.verygoodsecurity.com/docs/vgs-collect/js/integration).
+- [Collect.js Documentation](https://www.verygoodsecurity.com/docs/vgs-collect/js/integration)
+- [Collect.js Reference Documentation](https://www.verygoodsecurity.com/docs/api/collect)
 
 ## Examples
 

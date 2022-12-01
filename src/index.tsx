@@ -1,15 +1,17 @@
 import { CollectForm } from "./Form";
-import { 
-  TextField, 
-  CardNumberField, 
-  CardExpirationDateField, 
+import {
+  TextField,
+  CardNumberField,
+  CardExpirationDateField,
   CardSecurityCodeField,
   PasswordField,
   TextareaField,
   NumberField,
+  SSNField,
+  ZipCodeField
 } from "./Fields";
 
-export { 
+export {
   CollectForm,
   TextField,
   CardNumberField,
@@ -18,4 +20,6 @@ export {
   PasswordField,
   TextareaField,
   NumberField,
+  SSNField,
+  ZipCodeField
 }
