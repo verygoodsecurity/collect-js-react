@@ -1,6 +1,7 @@
 import React from 'react';
 import { useEffect } from "react";
-import { getFormState } from "./state";
+import { getFormInstance } from "./state";
+import { setDefaultName } from "./utils";
 import {
   ITextField,
   ICardNumberField,
@@ -23,7 +24,7 @@ function RenderField(props: any) {
   const id = `vgs-${window.crypto.randomUUID()}`
 
   useEffect(() => {
-    const form: any = getFormState()
+    const form: any = getFormInstance()
     form.field(`#${id}`, {
       type,
       name,
@@ -41,7 +42,7 @@ function RenderField(props: any) {
 const TextField = (props: ITextField) => {
   const defaultParams = {
     type: "text",
-    name: "text",
+    name: setDefaultName("text"),
     placeholder: "Cardholder Name",
   }
   return (
@@ -54,7 +55,7 @@ const TextField = (props: ITextField) => {
 const CardNumberField = (props: ICardNumberField) => {
   const defaultParams = {
     type: "card-number",
-    name: "card-number",
+    name: setDefaultName("card-number"),
     placeholder: "Credit Card Number",
   }
 
@@ -68,8 +69,8 @@ const CardNumberField = (props: ICardNumberField) => {
 const CardExpirationDateField = (props: ICardExpDateField) => {
   const defaultParams = {
     type: "card-expiration-date",
-    name: "card-expiration-date",
-    placeholder: "Card Expiration Date"
+    name: setDefaultName("card-expiration-date"),
+    placeholder: "Card Expiration Date",
   }
   return (
     <RenderField
@@ -80,7 +81,7 @@ const CardExpirationDateField = (props: ICardExpDateField) => {
 const CardSecurityCodeField = (props: ICardCVCField) => {
   const defaultParams = {
     type: "card-security-code",
-    name: "card-security-code",
+    name: setDefaultName("card-security-code"),
     placeholder: "CVC/CVV",
   }
   return (
@@ -92,7 +93,7 @@ const CardSecurityCodeField = (props: ICardCVCField) => {
 const PasswordField = (props: IPasswordField) => {
   const defaultParams = {
     type: "password",
-    name: "password",
+    name: setDefaultName("card-security-code"),
     placeholder: "Enter password",
   }
   return (
@@ -144,7 +145,7 @@ const TextareaField = (props: ITextareaField) => {
 const NumberField = (props: INumberField) => {
   const defaultParams = {
     type: "number",
-    name: "number",
+    name: setDefaultName("number"),
     placeholder: "Number",
   }
   return (
@@ -153,7 +154,6 @@ const NumberField = (props: INumberField) => {
     />
   )
 }
-
 
 export {
   TextField,
