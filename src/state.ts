@@ -8,6 +8,8 @@ const setFormState = (newVal: any) => {
 const getFormState = () => form;
 
 export {
-  setFormState,
-  getFormState,
+  setFormInstance,
+  getFormInstance,
+  getFieldsName,
+  addFieldName,
 }

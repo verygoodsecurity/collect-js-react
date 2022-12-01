@@ -32,6 +32,10 @@ const App = () => {
       <TextField
         validations={["required"]}
       />
+      />
+      <TextField
+        validations={["required"]}
+      />
       <CardNumberField
         successColor="green"
         validations={["required", "validCardNumber"]}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { setFormState, getFormState } from "./state";
+import { setFormInstance, getFormInstance } from "./state";
 import { ICollect } from "./types/interfaces";
 
 type VGSVaultEnvironments = 'sandbox' | 'live' | 'live-eu-1';
