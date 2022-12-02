@@ -1,4 +1,4 @@
-import { CollectForm } from "./Form";
+import { VGSCollectForm } from "./Form";
 import {
   TextField,
   CardNumberField,
@@ -12,7 +12,7 @@ import {
 } from "./Fields";
 
 export {
-  CollectForm,
+  VGSCollectForm,
   TextField,
   CardNumberField,
   CardExpirationDateField,

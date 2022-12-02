@@ -1,159 +1,114 @@
 import React from 'react';
 import { useEffect } from "react";
 import { getFormInstance } from "./state";
-import { setDefaultName } from "./utils";
+import { DEFAULT_CONFIG } from './constants';
+
 import {
-  ITextField,
-  ICardNumberField,
-  ICardCVCField,
-  ICardExpDateField,
-  IPasswordField,
-  ITextareaField,
-  INumberField,
-} from "./types/interfaces";
+  IVGSCollectTextField,
+  IVGSCollectCardNumberField,
+  IVGSCollectCardExpirationField,
+  IVGSCollectCardCVCField,
+  IVGSCollectPasswordField,
+  IVGSCollectSSNField,
+  IVGSCollectNumberField,
+  IVGSCollectZipCodeField,
+  IVGSCollectTextareaField,
+  IVGSCollectForm
+} from './types/Form';
+
+type GeneralFieldProps = {
+  className: string;
+}
 
 function RenderField(props: any) {
   const {
-    placeholder,
-    validations,
-    css,
-    name,
-    type,
-    className: className = ""
-  } = props
-  const id = `vgs-${window.crypto.randomUUID()}`
+    className,
+    ...fieldProps
+  } = props;
+
+  const fieldId = `vgs-${window.crypto.randomUUID()}`;
 
   useEffect(() => {
-    const form: any = getFormInstance()
-    form.field(`#${id}`, {
-      type,
-      name,
-      validations,
-      placeholder,
-      css,
-    })
-  }, [])
+    const VGSCollectForm = getFormInstance() as IVGSCollectForm;
+    VGSCollectForm.field(`#${fieldId}`, fieldProps);
+  }, []);
 
   return (
-    <div className={`collect-iframe-wr ${className}`} id={id}></div>
+    <div className={`vgs-collect-iframe-wr ${className}`} id={fieldId}></div>
   )
 }
 
-const TextField = (props: ITextField) => {
-  const defaultParams = {
-    type: "text",
-    name: setDefaultName("text"),
-    placeholder: "Cardholder Name",
-  }
+const TextField = (props: Partial<IVGSCollectTextField & GeneralFieldProps>) => {
   return (
     <RenderField
-      {...Object.assign(defaultParams, props)}
+      {...Object.assign(DEFAULT_CONFIG.TEXT, props)}
     />
   )
 }
 
-const CardNumberField = (props: ICardNumberField) => {
-  const defaultParams = {
-    type: "card-number",
-    name: setDefaultName("card-number"),
-    placeholder: "Credit Card Number",
-  }
+const CardNumberField = (props: Partial<IVGSCollectCardNumberField & GeneralFieldProps>) => {
+  return (
+    <RenderField
+      {...Object.assign(DEFAULT_CONFIG.CARD_NUMBER, props)}
+    />
+  )
+};
 
+const CardExpirationDateField = (props: Partial<IVGSCollectCardExpirationField & GeneralFieldProps>) => {
   return (
     <RenderField
-      {...Object.assign(defaultParams, props)}
+      {...Object.assign(DEFAULT_CONFIG.CARD_EXPIRATION_DATE, props)}
     />
   )
-}
+};
 
-const CardExpirationDateField = (props: ICardExpDateField) => {
-  const defaultParams = {
-    type: "card-expiration-date",
-    name: setDefaultName("card-expiration-date"),
-    placeholder: "Card Expiration Date",
-  }
+const CardSecurityCodeField = (props: Partial<IVGSCollectCardCVCField & GeneralFieldProps>) => {
   return (
     <RenderField
-      {...Object.assign(defaultParams, props)}
+      {...Object.assign(DEFAULT_CONFIG.CARD_SECURITY_CODE, props)}
     />
   )
-}
-const CardSecurityCodeField = (props: ICardCVCField) => {
-  const defaultParams = {
-    type: "card-security-code",
-    name: setDefaultName("card-security-code"),
-    placeholder: "CVC/CVV",
-  }
-  return (
-    <RenderField
-      {...Object.assign(defaultParams, props)}
-    />
-  )
-}
-const PasswordField = (props: IPasswordField) => {
-  const defaultParams = {
-    type: "password",
-    name: setDefaultName("card-security-code"),
-    placeholder: "Enter password",
-  }
-  return (
-    <RenderField
-      {...Object.assign(defaultParams, props)}
-    />
-  )
-}
+};
 
-const SSNField = (props: IPasswordField) => {
-  const defaultParams = {
-    type: "ssn",
-    name: "ssn",
-    placeholder: "SSN",
-  }
+const PasswordField = (props: Partial<IVGSCollectPasswordField & GeneralFieldProps>) => {
   return (
     <RenderField
-      {...Object.assign(defaultParams, props)}
+      {...Object.assign(DEFAULT_CONFIG.PASSWORD, props)}
     />
   )
-}
+};
 
-const ZipCodeField = (props: IPasswordField) => {
-  const defaultParams = {
-    type: "zip-code",
-    name: "zip-code",
-    placeholder: "Zip Code",
-  }
+const SSNField = (props: Partial<IVGSCollectSSNField & GeneralFieldProps>) => {
   return (
     <RenderField
-      {...Object.assign(defaultParams, props)}
+      {...Object.assign(DEFAULT_CONFIG.SSN, props)}
     />
   )
-}
+};
 
-const TextareaField = (props: ITextareaField) => {
-  const defaultParams = {
-    type: "textarea",
-    name: "textarea",
-    placeholder: "Comment",
-  }
+const ZipCodeField = (props: Partial<IVGSCollectZipCodeField & GeneralFieldProps>) => {
   return (
     <RenderField
-      {...Object.assign(defaultParams, props)}
+      {...Object.assign(DEFAULT_CONFIG.ZIP_CODE, props)}
     />
   )
-}
+};
 
-const NumberField = (props: INumberField) => {
-  const defaultParams = {
-    type: "number",
-    name: setDefaultName("number"),
-    placeholder: "Number",
-  }
+const TextareaField = (props: Partial<IVGSCollectTextareaField & GeneralFieldProps>) => {
   return (
     <RenderField
-      {...Object.assign(defaultParams, props)}
+      {...Object.assign(DEFAULT_CONFIG.TEXTAREA, props)}
     />
   )
-}
+};
+
+const NumberField = (props: Partial<IVGSCollectNumberField & GeneralFieldProps>) => {
+  return (
+    <RenderField
+      {...Object.assign(DEFAULT_CONFIG.NUMBER, props)}
+    />
+  )
+};
 
 export {
   TextField,
