@@ -51,6 +51,7 @@ interface VGSCollectStateParams {
   last4?: string;
   bin?: string;
   cardType?: string;
+  errors?: any[];
 }
 
 type VGSCollectFormState = Record<string, VGSCollectStateParams> | null;
