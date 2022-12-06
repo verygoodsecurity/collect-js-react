@@ -23,10 +23,10 @@ const AdditionalData = () => {
   const [isVGSCollectScriptLoaded, setCollectScriptLoaded] = useState(false);
   const [inputValue, setInputValue] = useState('')
   const VGSCollectFieldStyles = {
-    boxSizing: 'border-box',
     padding: '.5rem 1rem',
+    boxSizing: 'border-box',
     '&::placeholder': {
-      color: 'lightgrey'
+      color: '#686868'
     }
   };
 
@@ -63,54 +63,52 @@ const AdditionalData = () => {
   return (
     <>
       {isVGSCollectScriptLoaded && (
-        <div className="container">
-          <div className="left">
-            {/**
-             * VGS Collect form wrapper element. Abstraction over the VGSCollect.create()
-             * https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate
-             */}
-            <VGSCollectForm
-              vaultId={VGS_CONFIG.vaultId}
-              environment={VGS_CONFIG.environment}
-              action="/post"
-              submitParameters={{
-                data: (fields: ICollectFormAdditionalData) => {
-                  console.log(fields)
-                  return {
-                    a: inputValue,
-                    b: fields.textField,
-                    c: fields['card-number'],
-                  }
+        <div className="left">
+          <h2>Additional data and custom payload</h2>
+          {/**
+           * VGS Collect form wrapper element. Abstraction over the VGSCollect.create()
+           * https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate
+           */}
+          <VGSCollectForm
+            vaultId={VGS_CONFIG.vaultId}
+            environment={VGS_CONFIG.environment}
+            action="/post"
+            submitParameters={{
+              // JSON request body generated on the form submission including custom parameters
+              // https://www.verygoodsecurity.com/docs/vgs-collect/js/integration#form-submit
+              data: (fields: ICollectFormAdditionalData) => {
+                return {
+                  cusomData: inputValue,
+                  textField: fields.textField,
+                  cardNumber: fields['card-number'],
                 }
-              }}
-              onUpdateCallback={onUpdateCallback}
-              onSubmitCallback={onSubmitCallback}
-            >
-              { /**
-               * VGS Collect text field component:
-               * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
-               */}
-              <TextField
-                name="textField"
-                validations={["required"]}
-                css={VGSCollectFieldStyles}
-              />
-              <CardNumberField
-                name="card-number"
-                validations={["required"]}
-                css={VGSCollectFieldStyles}
-              />
-              <div className="vgs-collect-iframe-wr">
-                <input 
-                  type="text"
-
-                  placeholder="Not sensitive data"
-                  onChange={(e) => {inputHandler(e)}}
-                />
-              </div>
-              <button type="submit">Submit</button>
-            </VGSCollectForm>
-          </div>
+              }
+            }}
+            onUpdateCallback={onUpdateCallback}
+            onSubmitCallback={onSubmitCallback}
+          >
+            { /**
+             * VGS Collect text field component:
+             * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
+             */}
+            <TextField
+              name="textField"
+              validations={["required"]}
+              css={VGSCollectFieldStyles}
+            />
+            <CardNumberField
+              name="card-number"
+              validations={["required"]}
+              css={VGSCollectFieldStyles}
+            />
+            <input 
+              className="vgs-collect-native-input"
+              type="text"
+              placeholder="Not sensitive data"
+              onChange={(e) => {inputHandler(e)}}
+            />
+            <button type="submit">Submit</button>
+          </VGSCollectForm>
         </div>
       )
       }

@@ -8,36 +8,6 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
   box-sizing: border-box; 
 }
-
-.vgs-collect-iframe-wr {
-  height: 42px;
-  border: solid 1px;
-  border-radius: 4px;
-  margin: 4px 0;
-  width: 100%;
-  padding: 0;
-  overflow: hidden;
-}
-
-.vgs-collect-iframe-wr iframe {
-  width: 100%;
-  height: 100%;
-  padding: 0 4px;
-}
-.vgs-collect-iframe-wr input {
-  width: 100%;
-  height: 100%;
-  border: none; 
-  padding: 0 20px;
-  box-sizing: border-box;
-}
-.vgs-collect-container__focused {
-  border-color: blue;
-}
-.custom-class {
-  height: 100px;
-}
-
 #root {
   margin: 0 auto;
 }
@@ -69,4 +39,41 @@ hr {
 }
 .menu a:hover {
   text-decoration: none;
+}
+
+
+
+.vgs-collect-iframe-wr,
+.vgs-collect-native-input {
+  display: block;
+  height: 42px;
+  border: solid 1px;
+  border-radius: 4px;
+  margin: 6px 0;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+  
+}
+.vgs-collect-iframe-wr iframe {
+  width: 100%;
+  height: 100%;
+}
+
+.vgs-collect-native-input {
+  padding: .5rem 1rem;
+}
+.vgs-collect-native-input::placeholder {
+  color: #686868;
+}
+
+.vgs-collect-native-input:focus, 
+.vgs-collect-container__focused {
+  outline: none;
+  border-color: blue;
+}
+
+.custom-class {
+  height: 100%;
 }
