@@ -2,11 +2,24 @@ import React from 'react';
 import { setFormInstance, getFormInstance } from "./state";
 import { IVGSCollectForm, VGSCollectFormState, ICollectFormProps } from "./types/Form";
 
+import {
+  TextField,
+  CardNumberField,
+  CardExpirationDateField,
+  CardSecurityCodeField,
+  PasswordField,
+  SSNField,
+  ZipCodeField,
+  TextareaField,
+  NumberField,
+} from './Fields';
+
 export const VGSCollectForm = (props: ICollectFormProps) => {
   const {
     vaultId,
     environment = 'sandbox',
     action = '/',
+    cname,
     submitParameters,
     onUpdateCallback,
     onSubmitCallback,
@@ -19,6 +32,10 @@ export const VGSCollectForm = (props: ICollectFormProps) => {
         onUpdateCallback(state);
       }
     });
+
+    if (cname) {
+      form.useCname(cname);
+    }
 
     setFormInstance(form);
   }
@@ -45,3 +62,13 @@ export const VGSCollectForm = (props: ICollectFormProps) => {
     </form>
   )
 }
+
+VGSCollectForm.TextField = TextField;
+VGSCollectForm.CardNumberField = CardNumberField;
+VGSCollectForm.CardExpirationDateField = CardExpirationDateField;
+VGSCollectForm.CardSecurityCodeField = CardSecurityCodeField;
+VGSCollectForm.PasswordField = PasswordField;
+VGSCollectForm.SSNField = SSNField;
+VGSCollectForm.ZipCodeField = ZipCodeField;
+VGSCollectForm.TextareaField = TextareaField;
+VGSCollectForm.NumberField = NumberField;

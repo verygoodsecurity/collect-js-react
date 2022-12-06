@@ -1,4 +1,5 @@
-import { FieldInstance, ClassMap, FieldType } from 'types/Field';
+import { IVGSCollectFieldInstance, ClassMap, FieldType } from './Field';
+import { HttpStatusCode as VGSCollectHttpStatusCode } from './HttpStatusCode';
 
 declare global {
   interface Window {
@@ -9,7 +10,7 @@ declare global {
   }
 }
 
-type VGSVaultEnvironments = 'sandbox' | 'live' | 'live-eu-1';
+type VGSCollectVaultEnvironment = 'sandbox' | 'live' | 'live-eu-1';
 /**
  * Available options for .field() method configuration
  */
@@ -32,9 +33,10 @@ type FormEventTypes = 'enterPress';
 
 interface ICollectFormProps {
   vaultId: string;
-  environment: VGSVaultEnvironments;
+  environment: VGSCollectVaultEnvironment;
   submitParameters?: any;
   action?: string;
+  cname?: string;
   children?: JSX.Element[] | JSX.Element;
   onUpdateCallback?: (state: VGSCollectFormState | null) => void;
   onSubmitCallback?: (status: any, resp: any) => void;
@@ -74,11 +76,7 @@ interface IDefaultFieldOptions {
   inputMode?: InputMode;
 }
 
-type FieldProps<Props extends { type: string }> = {
-  [P in Props as P["type"]]: P
-}
-
-type FieldConfig = FieldProps<
+type FieldConfig =
   IVGSCollectTextField |
   IVGSCollectCardNumberField |
   IVGSCollectCardExpirationField |
@@ -88,7 +86,7 @@ type FieldConfig = FieldProps<
   IVGSCollectPasswordField |
   IVGSCollectNumberField |
   IVGSCollectTextareaField
->
+
 
 interface IVGSCollectTextField extends IDefaultFieldOptions {
   type: 'text';
@@ -174,7 +172,7 @@ interface IVGSCollectForm {
   /**
    * Docs: https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
    */
-  field(selector: string, options: FieldConfig): FieldInstance;
+  field(selector: string, options: FieldConfig): IVGSCollectFieldInstance;
 
   /**
    * Docs: https://www.verygoodsecurity.com/docs/api/collect/#api-fieldon
@@ -189,7 +187,7 @@ interface IVGSCollectForm {
   submit(
     path: string,
     options: Partial<VGSCollectSubmitOptions>,
-    successCallback?: (status: number | null, data: any) => any,
+    successCallback?: (status: VGSCollectHttpStatusCode | null, data: any) => any,
     errorCallback?: (error: VGSCollectFormState) => any
   ): any;
 
@@ -233,7 +231,6 @@ interface IVGSCollect {
 export {
   IVGSCollect,
   IVGSCollectForm,
-  VGSCollectFormState,
   IVGSCollectTextField,
   IVGSCollectCardNumberField,
   IVGSCollectCardExpirationField,
@@ -243,5 +240,9 @@ export {
   IVGSCollectPasswordField,
   IVGSCollectNumberField,
   IVGSCollectTextareaField,
-  ICollectFormProps
+  ICollectFormProps,
+  VGSCollectFormState,
+  VGSCollectStateParams,
+  VGSCollectVaultEnvironment,
+  VGSCollectHttpStatusCode
 }

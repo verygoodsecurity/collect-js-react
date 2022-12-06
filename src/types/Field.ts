@@ -5,7 +5,7 @@ type FieldState =
   | 'invalid'
   | 'focused'
   | 'touched';
-export type FieldType =
+export type VGSCollectFieldType =
   | 'text'
   | 'card-number'
   | 'card-expiration-date'
@@ -21,7 +21,7 @@ export type FieldType =
   | 'textarea';
 export type ClassMap = Partial<Record<FieldState, string>>;
 
-type VGSKeyboardEventData<T = 'keydown' | 'keypress' | 'keyup'> = {
+type VGSCollectKeyboardEventData<T = 'keydown' | 'keypress' | 'keyup'> = {
   type: T;
   timeStamp: number;
   isTrusted: boolean;
@@ -34,13 +34,13 @@ type VGSKeyboardEventData<T = 'keydown' | 'keypress' | 'keyup'> = {
   keyIndex: number;
 };
 
-type VGSFocusEventData<T = 'focus' | 'blur'> = {
+type VGSCollectFocusEventData<T = 'focus' | 'blur'> = {
   type: T;
   timeStamp: number;
   isTrusted: boolean;
 };
 
-export interface FieldInstance {
+interface IVGSCollectFieldInstance {
   classes: ClassMap;
   container: HTMLElement;
   debugId: string;
@@ -49,31 +49,31 @@ export interface FieldInstance {
   formId: string;
   name: string;
   tnt: string;
-  type: FieldType;
+  type: VGSCollectFieldType;
   /**
    * Docs: https://www.verygoodsecurity.com/docs/api/collect/#api-fieldon
    */
   on(
     eventType: 'keydown',
-    callback: (event: VGSKeyboardEventData<'keydown'>) => void
+    callback: (event: VGSCollectKeyboardEventData<'keydown'>) => void
   ): void;
   on(
     eventType: 'keypress',
-    callback: (event: VGSKeyboardEventData<'keypress'>) => void
+    callback: (event: VGSCollectKeyboardEventData<'keypress'>) => void
   ): void;
   on(
     eventType: 'keyup',
-    callback: (event: VGSKeyboardEventData<'keyup'>) => void
+    callback: (event: VGSCollectKeyboardEventData<'keyup'>) => void
   ): void;
   on(eventType: 'delete', callback: () => void): void;
   on(eventType: 'update', callback: (fieldState: any) => void): void;
   on(
     eventType: 'focus',
-    callback: (event: VGSFocusEventData<'focus'>) => void
+    callback: (event: VGSCollectFocusEventData<'focus'>) => void
   ): void;
   on(
     eventType: 'blur',
-    callback: (event: VGSFocusEventData<'blur'>) => void
+    callback: (event: VGSCollectFocusEventData<'blur'>) => void
   ): void;
 
   /**
@@ -81,25 +81,25 @@ export interface FieldInstance {
    */
   off(
     eventType: 'keydown',
-    callback: (event: VGSKeyboardEventData<'keydown'>) => void
+    callback: (event: VGSCollectKeyboardEventData<'keydown'>) => void
   ): void;
   off(
     eventType: 'keypress',
-    callback: (event: VGSKeyboardEventData<'keypress'>) => void
+    callback: (event: VGSCollectKeyboardEventData<'keypress'>) => void
   ): void;
   off(
     eventType: 'keyup',
-    callback: (event: VGSKeyboardEventData<'keyup'>) => void
+    callback: (event: VGSCollectKeyboardEventData<'keyup'>) => void
   ): void;
   off(eventType: 'delete', callback: () => void): void;
   off(eventType: 'update', callback: (fieldState: any) => void): void;
   off(
     eventType: 'focus',
-    callback: (event: VGSFocusEventData<'focus'>) => void
+    callback: (event: VGSCollectFocusEventData<'focus'>) => void
   ): void;
   off(
     eventType: 'blur',
-    callback: (event: VGSFocusEventData<'blur'>) => void
+    callback: (event: VGSCollectFocusEventData<'blur'>) => void
   ): void;
   off(eventType: 'update', callback: (fieldState: any) => void): void;
 
@@ -134,4 +134,10 @@ export interface FieldInstance {
     regExpString: string,
     newSubStr: string
   ): void;
+}
+
+export {
+  VGSCollectKeyboardEventData,
+  VGSCollectFocusEventData,
+  IVGSCollectFieldInstance
 }

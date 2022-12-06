@@ -1,25 +1,6 @@
 import { VGSCollectForm } from "./Form";
-import {
-  TextField,
-  CardNumberField,
-  CardExpirationDateField,
-  CardSecurityCodeField,
-  PasswordField,
-  TextareaField,
-  NumberField,
-  SSNField,
-  ZipCodeField
-} from "./Fields";
 
-export {
-  VGSCollectForm,
-  TextField,
-  CardNumberField,
-  CardExpirationDateField,
-  CardSecurityCodeField,
-  PasswordField,
-  TextareaField,
-  NumberField,
-  SSNField,
-  ZipCodeField
-}
+export * from './types/Form';
+export * from './types/Field';
+
+export { VGSCollectForm };
