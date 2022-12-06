@@ -19,7 +19,7 @@ const VGS_CONFIG = {
   version: '2.18.0'
 }
 
-const AdditionalData = () => {
+const CustomPayload = () => {
   const [isVGSCollectScriptLoaded, setCollectScriptLoaded] = useState(false);
   const [inputValue, setInputValue] = useState('')
   const VGSCollectFieldStyles = {
@@ -64,7 +64,7 @@ const AdditionalData = () => {
     <>
       {isVGSCollectScriptLoaded && (
         <div className="left">
-          <h2>Additional data and custom payload</h2>
+          <h2>Custom payload and additional data</h2>
           {/**
            * VGS Collect form wrapper element. Abstraction over the VGSCollect.create()
            * https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate
@@ -116,4 +116,4 @@ const AdditionalData = () => {
   )
 }
 
-export default AdditionalData;
+export default CustomPayload;

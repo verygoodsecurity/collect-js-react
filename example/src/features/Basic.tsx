@@ -25,7 +25,7 @@ const {
 const VGS_CONFIG = {
   vaultId: 'tntnmemz6i7',
   environment: 'sandbox' as VGSCollectVaultEnvironment,
-  version: '2.18.0'
+  version: '2.18.0',
 }
 
 const Basic = () => {
@@ -34,7 +34,7 @@ const Basic = () => {
     padding: '.5rem 1rem',
     boxSizing: 'border-box',
     '&::placeholder': {
-      color: '#686868'
+      color: '#686868',
     }
   };
 
