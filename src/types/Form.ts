@@ -1,4 +1,8 @@
-import { IVGSCollectFieldInstance, ClassMap, VGSCollectFieldType } from './Field';
+import {
+  IVGSCollectFieldInstance,
+  ClassMap,
+  VGSCollectFieldType
+} from './Field';
 import { HttpStatusCode as VGSCollectHttpStatusCode } from './HttpStatusCode';
 
 declare global {
@@ -24,7 +28,15 @@ type SubmitMethod = 'post' | 'patch' | 'put' | 'delete' | 'get';
 type SubmitSerializer = 'deep' | 'flat';
 type SubmitSerialization = 'json' | 'formData';
 type SubmitMapDotToObject = BooleanValue | 'merge' | 'mergeArray';
-type InputMode = 'none' | 'text' | 'decimal' | 'numeric' | 'tel' | 'search' | 'email' | 'url';
+type InputMode =
+  | 'none'
+  | 'text'
+  | 'decimal'
+  | 'numeric'
+  | 'tel'
+  | 'search'
+  | 'email'
+  | 'url';
 
 /**
  * Available options for the form .on() method
@@ -77,16 +89,15 @@ interface IDefaultFieldOptions {
 }
 
 type FieldConfig =
-  IVGSCollectTextField |
-  IVGSCollectCardNumberField |
-  IVGSCollectCardExpirationField |
-  IVGSCollectCardCVCField |
-  IVGSCollectSSNField |
-  IVGSCollectZipCodeField |
-  IVGSCollectPasswordField |
-  IVGSCollectNumberField |
-  IVGSCollectTextareaField
-
+  | IVGSCollectTextField
+  | IVGSCollectCardNumberField
+  | IVGSCollectCardExpirationField
+  | IVGSCollectCardCVCField
+  | IVGSCollectSSNField
+  | IVGSCollectZipCodeField
+  | IVGSCollectPasswordField
+  | IVGSCollectNumberField
+  | IVGSCollectTextareaField;
 
 interface IVGSCollectTextField extends IDefaultFieldOptions {
   type: 'text';
@@ -187,7 +198,10 @@ interface IVGSCollectForm {
   submit(
     path: string,
     options: Partial<VGSCollectSubmitOptions>,
-    successCallback?: (status: VGSCollectHttpStatusCode | null, data: any) => any,
+    successCallback?: (
+      status: VGSCollectHttpStatusCode | null,
+      data: any
+    ) => any,
     errorCallback?: (error: VGSCollectFormState) => any
   ): any;
 
@@ -232,10 +246,10 @@ type ICollectFieldAlias = {
   __type: string;
   elementIndex: any;
   key: string;
-}
+};
 
 interface ICollectFormPayloadStructure {
-  [key: string]: ICollectFieldAlias
+  [key: string]: ICollectFieldAlias;
 }
 
 export {
@@ -255,5 +269,5 @@ export {
   VGSCollectFormState,
   VGSCollectStateParams,
   VGSCollectVaultEnvironment,
-  VGSCollectHttpStatusCode,
-}
+  VGSCollectHttpStatusCode
+};

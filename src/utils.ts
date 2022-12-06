@@ -11,7 +11,7 @@ const setDefaultName = (() => {
       name = `${type}-${uniqueFieldTypes[type]++}`;
     }
     return name;
-  }
+  };
 })();
 
 export { setDefaultName };

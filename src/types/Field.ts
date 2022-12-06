@@ -121,23 +121,16 @@ interface IVGSCollectFieldInstance {
   /**
    * Docs: https://www.verygoodsecurity.com/docs/api/collect/#api-fieldmask
    */
-  mask(
-    mask: string,
-    maskChar: string,
-    formatChar: string,
-  ): void;
+  mask(mask: string, maskChar: string, formatChar: string): void;
 
   /**
    * Docs: https://www.verygoodsecurity.com/docs/api/collect/#api-fieldreplacepattern
    */
-  replacePattern(
-    regExpString: string,
-    newSubStr: string
-  ): void;
+  replacePattern(regExpString: string, newSubStr: string): void;
 }
 
 export {
   VGSCollectKeyboardEventData,
   VGSCollectFocusEventData,
   IVGSCollectFieldInstance
-}
+};

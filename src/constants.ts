@@ -8,18 +8,18 @@ const FIELD_EVENTS = {
   onKeyUp: 'keyup',
   onKeyDown: 'keydown',
   onKeyPress: 'keypress'
-}
+};
 
 const DEFAULT_CONFIG = {
   TEXT: {
     type: 'text',
     placeholder: 'Cardholder Name',
-    getName: () => setDefaultName('text'),
+    getName: () => setDefaultName('text')
   },
   CARD_NUMBER: {
     type: 'card-number',
     placeholder: 'Credit Card Number',
-    getName: () => setDefaultName('card-number'),
+    getName: () => setDefaultName('card-number')
   },
   CARD_EXPIRATION_DATE: {
     type: 'card-expiration-date',
