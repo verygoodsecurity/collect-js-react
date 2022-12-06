@@ -61,8 +61,8 @@ export const VGSCollectForm = (props: ICollectFormProps) => {
             onSubmitCallback(status, resp);
           }
         },
-        (errors: any) => {
-          throw new Error('@vgs/collect-js-react: Something went wrong. Please, contact a support@verygoodsecurity.com')
+        () => {
+          throw new Error('@vgs/collect-js-react: Something went wrong. Please, contact a support@verygoodsecurity.com');
         }
       );
     } else {
