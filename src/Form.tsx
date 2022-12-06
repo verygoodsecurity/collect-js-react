@@ -26,7 +26,11 @@ export const VGSCollectForm = (props: ICollectFormProps) => {
     children
   } = props;
 
-  if (typeof window !== 'undefined' && window.VGSCollect) {
+  if (
+    typeof window !== 'undefined' && 
+    window.VGSCollect && 
+    Object.keys(getFormInstance()).length === 0
+  ) {
     const form: IVGSCollectForm = window.VGSCollect.create(vaultId, environment, (state: VGSCollectFormState) => {
       if (onUpdateCallback) {
         onUpdateCallback(state);

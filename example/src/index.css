@@ -1,4 +1,4 @@
-body {
+html, body {
   margin: 0;
   padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -6,30 +6,10 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  box-sizing: border-box;
+  box-sizing: border-box; 
 }
-
-.vgs-collect-iframe-wr {
-  height: 42px;
-  border: solid 1px;
-  border-radius: 4px;
-  margin: 4px 0;
-}
-
-.vgs-collect-iframe-wr iframe {
-  width: 100%;
-  height: 100%;
-  padding: 0 4px;
-}
-.vgs-collect-container__focused {
-  border-color: blue;
-}
-.custom-class {
-  height: 100px;
-}
-
 #root {
-  margin: 20px auto;
+  margin: 0 auto;
 }
 .container {
   display: flex;
@@ -44,4 +24,56 @@ body {
   width: 50%;
   /* flex: 1 0 50%; */
   margin: 0 10%;
+}
+hr {
+  margin: 0;
+  padding: 0;
+}
+
+.menu {
+  padding: 20px;
+}
+.menu a {
+  display: inline-block;
+  padding: 4px 8px;
+}
+.menu a:hover {
+  text-decoration: none;
+}
+
+
+
+.vgs-collect-iframe-wr,
+.vgs-collect-native-input {
+  display: block;
+  height: 42px;
+  border: solid 1px;
+  border-radius: 4px;
+  margin: 6px 0;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+  
+}
+.vgs-collect-iframe-wr iframe {
+  width: 100%;
+  height: 100%;
+}
+
+.vgs-collect-native-input {
+  padding: .5rem 1rem;
+}
+.vgs-collect-native-input::placeholder {
+  color: #686868;
+}
+
+.vgs-collect-native-input:focus, 
+.vgs-collect-container__focused {
+  outline: none;
+  border-color: blue;
+}
+
+.custom-class {
+  height: 100%;
 }

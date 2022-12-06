@@ -1,4 +1,4 @@
-import { IVGSCollectFieldInstance, ClassMap, FieldType } from './Field';
+import { IVGSCollectFieldInstance, ClassMap, VGSCollectFieldType } from './Field';
 import { HttpStatusCode as VGSCollectHttpStatusCode } from './HttpStatusCode';
 
 declare global {
@@ -59,7 +59,7 @@ interface VGSCollectStateParams {
 type VGSCollectFormState = Record<string, VGSCollectStateParams> | null;
 
 interface IDefaultFieldOptions {
-  type: FieldType;
+  type: VGSCollectFieldType;
   name: string;
   validations?: string[];
   css?: Record<string, any>;
@@ -228,6 +228,16 @@ interface IVGSCollect {
   ): any;
 }
 
+type ICollectFieldAlias = {
+  __type: string;
+  elementIndex: any;
+  key: string;
+}
+
+interface ICollectFormPayloadStructure {
+  [key: string]: ICollectFieldAlias
+}
+
 export {
   IVGSCollect,
   IVGSCollectForm,
@@ -241,8 +251,9 @@ export {
   IVGSCollectNumberField,
   IVGSCollectTextareaField,
   ICollectFormProps,
+  ICollectFormPayloadStructure,
   VGSCollectFormState,
   VGSCollectStateParams,
   VGSCollectVaultEnvironment,
-  VGSCollectHttpStatusCode
+  VGSCollectHttpStatusCode,
 }
