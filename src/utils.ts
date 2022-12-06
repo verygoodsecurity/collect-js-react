@@ -1,4 +1,4 @@
-import { VGSCollectFieldType } from "./types/Field";
+import { VGSCollectFieldType } from './types/Field';
 
 const setDefaultName = (() => {
   const uniqueFieldTypes = {};
