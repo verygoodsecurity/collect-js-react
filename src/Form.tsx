@@ -1,6 +1,6 @@
 import React from 'react';
-import { setFormInstance, getFormInstance } from "./state";
-import { IVGSCollectForm, VGSCollectFormState, ICollectFormProps } from "./types/Form";
+import { setFormInstance, getFormInstance } from './state';
+import { IVGSCollectForm, VGSCollectFormState, ICollectFormProps } from './types/Form';
 
 import {
   TextField,
@@ -27,8 +27,8 @@ export const VGSCollectForm = (props: ICollectFormProps) => {
   } = props;
 
   if (
-    typeof window !== 'undefined' && 
-    window.VGSCollect && 
+    typeof window !== 'undefined' &&
+    window.VGSCollect &&
     Object.keys(getFormInstance()).length === 0
   ) {
     const form: IVGSCollectForm = window.VGSCollect.create(vaultId, environment, (state: VGSCollectFormState) => {
