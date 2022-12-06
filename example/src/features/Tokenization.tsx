@@ -10,10 +10,12 @@ import {
 const {
   TextField,
   CardNumberField,
+  CardExpirationDateField,
+  CardSecurityCodeField,
 } = VGSCollectForm;
 
 const VGS_CONFIG = {
-  vaultId: 'tntnmemz6i7',
+  vaultId: 'tntux31nzpn',
   environment: 'sandbox' as VGSCollectVaultEnvironment,
   version: '2.18.0',
 }
@@ -41,7 +43,9 @@ const CustomPayload = () => {
     });
   }, []);
   
-  const onSubmitCallback = (status: VGSCollectHttpStatusCode, resp: any) => {
+  const onSubmitCallback = (status: VGSCollectHttpStatusCode, resp: any) => {    
+    console.log(resp);
+    
     /**
      * Receive information about HTTP request
      */
@@ -65,7 +69,8 @@ const CustomPayload = () => {
           <VGSCollectForm
             vaultId={VGS_CONFIG.vaultId}
             environment={VGS_CONFIG.environment}
-            action="/post"
+            // action="/post"
+            tokenizationAPI={true}
             submitParameters={{}}
             onUpdateCallback={onUpdateCallback}
             onSubmitCallback={onSubmitCallback}
@@ -78,13 +83,32 @@ const CustomPayload = () => {
               name="textField"
               validations={["required"]}
               css={VGSCollectFieldStyles}
+              tokenization={{ format: 'UUID', storage: 'PERSISTENT' }}
             />
-            <CardNumberField
-              name="card-number"
-              validations={["required"]}
+            <CardNumberField 
               css={VGSCollectFieldStyles}
             />
-            
+            { /**
+             * VGS Collect card expiration date field component:
+             * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
+             */}
+            <CardExpirationDateField
+              validations={["required", "validCardExpirationDate"]}
+              yearLength={2}
+              css={VGSCollectFieldStyles}
+              tokenization={false}
+            /> 
+            { /**
+             * VGS Collect card security code date field component:
+             * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
+             */}
+            <CardSecurityCodeField
+              validations={["required", "validCardSecurityCode"]}
+              css={VGSCollectFieldStyles}
+              showCardIcon={{
+                right: '1rem'
+              }}
+            />
             <button type="submit">Submit</button>
           </VGSCollectForm>
         </div>

@@ -21,6 +21,7 @@ export const VGSCollectForm = (props: ICollectFormProps) => {
     action = '/',
     cname,
     submitParameters,
+    tokenizationAPI = false,
     onUpdateCallback,
     onSubmitCallback,
     children
@@ -48,15 +49,28 @@ export const VGSCollectForm = (props: ICollectFormProps) => {
     e.preventDefault();
 
     const form: IVGSCollectForm = getFormInstance();
-
-    if (form) {
+    
+    if (!form) {
+      throw new Error('@vgs/collect-js-react: VGS Collect form not found.')
+    }
+    
+    if (tokenizationAPI) {
+      form.tokenize(
+        (status: any, resp: any) => {
+          if (onSubmitCallback) {
+            onSubmitCallback(status, resp);
+          }
+        },
+        (errors: any) => {
+          console.log(errors);
+        }
+      );
+    } else {
       form.submit(action, submitParameters, (status: any, resp: any) => {
         if (onSubmitCallback) {
           onSubmitCallback(status, resp);
         }
       });
-    } else {
-      throw new Error('@vgs/collect-js-react: VGS Collect form not found.')
     }
   }
 
