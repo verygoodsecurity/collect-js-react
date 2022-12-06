@@ -13,18 +13,24 @@ import {
   IVGSCollectNumberField,
   IVGSCollectZipCodeField,
   IVGSCollectTextareaField,
-  IVGSCollectForm
+  IVGSCollectForm,
+  VGSCollectStateParams
 } from './types/Form';
+
+import {
+  VGSCollectKeyboardEventData,
+  VGSCollectFocusEventData,
+} from './types/Field';
 
 type GeneralFieldProps = {
   className: string;
-  onFocus: any;
-  onBlur: any;
-  onUpdate: any;
-  onDelete: any;
-  onKeyUp: any;
-  onKeyDown: any;
-  onKeyPress: any;
+  onFocus: (info: VGSCollectFocusEventData) => void;
+  onBlur: (info: VGSCollectFocusEventData) => void;
+  onUpdate: (state: VGSCollectStateParams) => void;
+  onDelete: () => void;
+  onKeyUp: (info: VGSCollectKeyboardEventData) => void;
+  onKeyDown: (info: VGSCollectKeyboardEventData) => void;
+  onKeyPress: (info: VGSCollectKeyboardEventData) => void;
 }
 
 function RenderField(props: any) {

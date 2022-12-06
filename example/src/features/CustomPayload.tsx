@@ -21,7 +21,7 @@ const VGS_CONFIG = {
 
 const CustomPayload = () => {
   const [isVGSCollectScriptLoaded, setCollectScriptLoaded] = useState(false);
-  const [inputValue, setInputValue] = useState('')
+  const [inputValue, setInputValue] = useState('');
   const VGSCollectFieldStyles = {
     padding: '.5rem 1rem',
     boxSizing: 'border-box',
@@ -58,7 +58,7 @@ const CustomPayload = () => {
   const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value)
   };
-  
+
 
   return (
     <>
@@ -96,16 +96,20 @@ const CustomPayload = () => {
               validations={["required"]}
               css={VGSCollectFieldStyles}
             />
+            { /**
+             * VGS Collect text field component:
+             * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
+             */}
             <CardNumberField
               name="card-number"
               validations={["required"]}
               css={VGSCollectFieldStyles}
             />
-            <input 
+            <input
               className="vgs-collect-native-input"
               type="text"
               placeholder="Not sensitive data"
-              onChange={(e) => {inputHandler(e)}}
+              onChange={(e) => { inputHandler(e) }}
             />
             <button type="submit">Submit</button>
           </VGSCollectForm>
