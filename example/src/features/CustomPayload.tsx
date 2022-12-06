@@ -5,7 +5,7 @@ import {
   VGSCollectVaultEnvironment,
   VGSCollectFormState,
   VGSCollectHttpStatusCode,
-  ICollectFormAdditionalData,
+  ICollectFormPayloadStructure,
 } from 'collect-js-react';
 
 const {
@@ -76,7 +76,7 @@ const CustomPayload = () => {
             submitParameters={{
               // JSON request body generated on the form submission including custom parameters
               // https://www.verygoodsecurity.com/docs/vgs-collect/js/integration#form-submit
-              data: (fields: ICollectFormAdditionalData) => {
+              data: (fields: ICollectFormPayloadStructure) => {
                 return {
                   cusomData: inputValue,
                   textField: fields.textField,

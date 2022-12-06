@@ -228,13 +228,14 @@ interface IVGSCollect {
   ): any;
 }
 
-interface ICollectFormAdditionalData {
-  [key: string]: ICollectFormAdditionalDataField
-}
-type ICollectFormAdditionalDataField = {
+type ICollectFieldAlias = {
   __type: string;
   elementIndex: any;
   key: string;
+}
+
+interface ICollectFormPayloadStructure {
+  [key: string]: ICollectFieldAlias
 }
 
 export {
@@ -250,7 +251,7 @@ export {
   IVGSCollectNumberField,
   IVGSCollectTextareaField,
   ICollectFormProps,
-  ICollectFormAdditionalData,
+  ICollectFormPayloadStructure,
   VGSCollectFormState,
   VGSCollectStateParams,
   VGSCollectVaultEnvironment,
