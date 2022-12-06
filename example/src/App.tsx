@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Routes, Route, Outlet, Link } from 'react-router-dom';
 import Base from './features/Basic';
 import CustomPayload from './features/CustomPayload';
+import Tokenization from './features/Tokenization';
 
 export default function App() {
   return (
@@ -10,6 +11,7 @@ export default function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Base />} />
           <Route path="/custom-payload" element={<CustomPayload />} />
+          <Route path="/tokenization-api" element={<Tokenization />} />
           <Route path="*" element={<NoMatch />} />
         </Route>
       </Routes>
@@ -23,6 +25,7 @@ function Layout() {
       <nav className="menu">
         <Link to="/">Basic</Link>
         <Link to="/custom-payload">Custom Payload</Link>
+        <Link to="/tokenization-api">Tokenization API</Link>
       </nav>
       <hr />
       <main className="container">
