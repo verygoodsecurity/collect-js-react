@@ -1,51 +1,61 @@
 import { setDefaultName } from "./utils";
 
+const FIELD_EVENTS = {
+  onFocus: 'focus',
+  onBlur: 'blur',
+  onUpdate: 'update',
+  onDelete: 'delete',
+  onKeyUp: 'keyup',
+  onKeyDown: 'keydown',
+  onKeyPress: 'keypress'
+}
+
 const DEFAULT_CONFIG = {
   TEXT: {
     type: "text",
-    name: setDefaultName("text"),
     placeholder: "Cardholder Name",
+    getName: () => setDefaultName("text"),
   },
   CARD_NUMBER: {
     type: "card-number",
-    name: setDefaultName("card-number"),
     placeholder: "Credit Card Number",
+    getName: () => setDefaultName("card-number"),
   },
   CARD_EXPIRATION_DATE: {
     type: "card-expiration-date",
-    name: setDefaultName("card-expiration-date"),
-    placeholder: "Card Expiration Date"
+    placeholder: "Card Expiration Date",
+    getName: () => setDefaultName("card-expiration-date")
   },
   CARD_SECURITY_CODE: {
     type: "card-security-code",
-    name: setDefaultName("card-security-code"),
     placeholder: "CVC/CVV",
+    getName: () => setDefaultName("card-security-code")
   },
   PASSWORD: {
     type: "password",
-    name: setDefaultName("password"),
     placeholder: "Enter password",
+    getName: () => setDefaultName("password")
   },
   SSN: {
     type: "ssn",
-    name: setDefaultName("ssn"),
     placeholder: "SSN",
+    getName: () => setDefaultName("ssn")
   },
   ZIP_CODE: {
     type: "zip-code",
-    name: setDefaultName("zip-code"),
     placeholder: "Zip Code",
+    getName: () => setDefaultName("zip-code")
   },
   TEXTAREA: {
     type: "textarea",
-    name: setDefaultName("textarea"),
     placeholder: "Comment",
+    getName: () => setDefaultName("textarea")
   },
   NUMBER: {
     type: "number",
-    name: setDefaultName("number"),
     placeholder: "Number",
+    getName: () => setDefaultName("number")
   }
 };
 
-export { DEFAULT_CONFIG };
+export { DEFAULT_CONFIG, FIELD_EVENTS };

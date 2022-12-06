@@ -1,15 +1,17 @@
-import { getFieldsName, addFieldName } from "state";
+import { VGSCollectFieldType } from "./types/Field";
 
-const setDefaultName = (type: string) => {
-  const fields = getFieldsName()
-  
-  const count = fields.filter((fieldName: string) => {
-    return fieldName.startsWith(type)
-  });
-  addFieldName(type)
-  return `${type}-${count.length + 1}`
-}
+const setDefaultName = (() => {
+  const uniqueFieldTypes = {};
+  return (type: VGSCollectFieldType) => {
+    const count = uniqueFieldTypes[type];
+    let name = type as string;
+    if (!count) {
+      uniqueFieldTypes[type] = 1;
+    } else {
+      name = `${type}-${uniqueFieldTypes[type]++}`;
+    }
+    return name;
+  }
+})();
 
-export {
-  setDefaultName
-}
+export { setDefaultName };

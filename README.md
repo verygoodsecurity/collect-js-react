@@ -29,7 +29,7 @@
 
 ### What is VGS Collect.js?
 
-[VGS Collect.js](https://www.verygoodsecurity.com/docs/vgs-collect/js/overview) is a JavaScript library that allows you to securely collect data via any form. Instantly create custom forms that adhere to PCI, HIPAA, GDPR, or CCPA security requirements. [VGS](https://www.verygoodsecurity.com/) intercepts sensitive data before it hits your servers and replaces it with aliased versions while securing the original data in our vault. The form fields behave like traditional forms while preventing access to the unsecured data by injecting secure iframe components.
+[VGS Collect.js](https://www.verygoodsecurity.com/docs/vgs-collect/js/overview) is a JavaScript library that allows you to securely collect data via any form. Instantly create custom forms that adhere to PCI, HIPAA, GDPR, or CCPA security requirements. [VGS](https://www.verygoodsecurity.com/) intercepts sensitive data before it hits your servers and replaces it with aliased versions while securing the original data in our vault. The form fields behave like traditional forms while preventing access to unsecured data by injecting secure iframe components.
 
 - [Documentation](https://www.verygoodsecurity.com/docs/vgs-collect/js/overview)
 - [Reference Documentation](https://www.verygoodsecurity.com/docs/api/collect/)
@@ -49,54 +49,70 @@ npm install @vgs/collect-js-react
 
 ## How to use
 
-### Import parent form wrapper
+### 1. Define parent form wrapper component
 
 ```
-import { CollectForm } from '@vgs/collect-js-react';
+import { VGSCollectForm } from '@vgs/collect-js-react';
 
 const myApp = () => {
   const onSubmitCallback = (status, data) => {};
   const onUpdateCallback = (state) => {};
 
   return (
-    <CollectForm 
+    <VGSCollectForm 
       vaultId="<vault_id>" // https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate
       environment="<environment>" // https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate
+      action="/post" // endpoint for the HTTP request
       submitParamethers={{}} // https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit (options)
-      onUpdateCallback={} // https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate (stateCallback)
-      onSubmitCallback={} // https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit
+      onUpdateCallback={onUpdateCallback} // https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate (stateCallback)
+      onSubmitCallback={onSubmitCallback} // https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit
     >
       // Add secure fields here
-    </CollectForm>
+    </VGSCollectForm>
   )
 };
 ```
 
-### Import and declare needed input fields
+| Property           | Description                                                |
+|--------------------|------------------------------------------------------------|
+| vaultId            | A string value beginning with the prefix `tnt`.            |
+| environment        | Vault environment: `sanbdox` \| `live` or region specific. |
+| action             | Endpoint for the HTTP request.                             |
+| cname?             | String represents CNAME the request will be submitted to.  |
+| submitParamethers? | HTTP request configuration.                                |
+| onUpdateCallback?  | Returns the form state in the callback.                    |
+| onSubmitCallback?  | Returns status and response data in the callback.          |
 
-| Collect.js input type  | Collect.js React Component   | Default Prop Values                                                                               |
-|------------------------|------------------------------|---------------------------------------------------------------------------------------------------|
-| `text`                 | `<TextField/>`               | ` {   type: 'text',   name: 'text',   placeholder: 'Cardholder Name'   }`                         |
-| `card-number`          | `<CardNumberField/>`         | ` {   type: 'card-number',   name: 'card-number',   placeholder: 'Credit Card Number'   } `       |
-| `card-expiration-date` | `<CardExpirationDateField/>` | ` {   type: 'card-expiration-date',   name: 'card-expiration-date',   placeholder: 'MM/YY'   } `  |
-| `card-security-code`   | `<CardSecurityCodeField/>`   | ` {   type: 'card-security-code',   name: 'card-security-code',   placeholder: 'CVC/CVV'   } `    |
-| `password`             | `<PasswordField/>`           | ` {   type: 'password',   name: 'password',   placeholder: 'Enter Password'   } `                 |
-| `ssn`                  | `<SSNField/>`                | ` {   type: 'ssn',   name: 'ssn',   placeholder: 'SSN'   } `                                      |
-| `zip-code`             | `<ZipCodeField/>`            | ` {   type: 'zip-code',   name: 'zip-code',   placeholder: 'Zip Code'   } `                       |
-| `number`               | `<NumberField/>`             | ` {   type: 'number',   name: 'number',   placeholder: 'Number'   } `                             |
-| `textarea`             | `<TextareaField/>`           | ` {   type: 'textarea',   name: 'textarea',   placeholder: 'Comment'   } `                        |
+<br/>
 
-Full list of supported properties: https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
+### 2. Define secure input fields
+
+| Collect.js input type  | Collect.js React Component                  | Default Prop Values                                                                               |
+|------------------------|---------------------------------------------|---------------------------------------------------------------------------------------------------|
+| `text`                 | `<VGSCollectForm.TextField/>`               | ` {   type: 'text',   name: 'text',   placeholder: 'Cardholder Name'   }`                         |
+| `card-number`          | `<VGSCollectForm.CardNumberField/>`         | ` {   type: 'card-number',   name: 'card-number',   placeholder: 'Credit Card Number'   } `       |
+| `card-expiration-date` | `<VGSCollectForm.CardExpirationDateField/>` | ` {   type: 'card-expiration-date',   name: 'card-expiration-date',   placeholder: 'MM/YY'   } `  |
+| `card-security-code`   | `<VGSCollectForm.CardSecurityCodeField/>`   | ` {   type: 'card-security-code',   name: 'card-security-code',   placeholder: 'CVC/CVV'   } `    |
+| `password`             | `<VGSCollectForm.PasswordField/>`           | ` {   type: 'password',   name: 'password',   placeholder: 'Enter Password'   } `                 |
+| `ssn`                  | `<VGSCollectForm.SSNField/>`                | ` {   type: 'ssn',   name: 'ssn',   placeholder: 'SSN'   } `                                      |
+| `zip-code`             | `<VGSCollectForm.ZipCodeField/>`            | ` {   type: 'zip-code',   name: 'zip-code',   placeholder: 'Zip Code'   } `                       |
+| `number`               | `<VGSCollectForm.NumberField/>`             | ` {   type: 'number',   name: 'number',   placeholder: 'Number'   } `                             |
+| `textarea`             | `<VGSCollectForm/TextareaField/>`           | ` {   type: 'textarea',   name: 'textarea',   placeholder: 'Comment'   } `                        |
+
+
+The complete list of supported properties you can find here: https://www.verygoodsecurity.com/docs/api/collect/#api-formfield.
+All configuration properties available in the Reference Documentation can be passed in the component props using the same name.
 
 *Example:*
 
 ```
-import { 
-  CollectForm,
+import { VGSCollectForm } from '@vgs/collect-js-react';
+
+const { 
   CardNumberField,
   CardExpirationDateField,
   CardSecurityCodeField
-} from '@vgs/collect-js-react';
+} = VGSCollectForm;
 
 const myApp = () => {
   const onSubmitCallback = (status, data) => {};
@@ -106,16 +122,54 @@ const myApp = () => {
     <CollectForm 
       vaultId="<vault_id>"
       environment="<environment>"
-      submitParamethers={{}}
-      onUpdateCallback={}
-      onSubmitCallback={}
+      action="/post"
+      submitParamethers={{
+        headers: {
+          myHeader: 'MyHeader'
+        }
+      }}
+      onUpdateCallback={onUpdateCallback}
+      onSubmitCallback={onSubmitCallback}
     >
-      <CardNumberField validations={["required", "validCardNumber"]} />
-      <CardEpirationDateField validations={["required", validCardExpirationDate"]} />
-      <CardSecurityCodeField validations={["required", "validCardSecurityCode"]} />
+      <CardNumberField 
+        validations={["required", "validCardNumber"]}
+        placeholder="XXXX XXXX XXXX XXXX"
+        showCardIcon={true}
+        css={{}}
+      />
+      <CardEpirationDateField 
+        validations={["required", validCardExpirationDate"]}
+        placeholder="MM / YY"
+        yearLength={2}
+        css={{}}
+      />
+      <CardSecurityCodeField 
+        validations={["required", "validCardSecurityCode"]}
+        placeholder="CVV"
+        css={{}}
+      />
     </CollectForm>
   )
 };
+```
+
+<br/>
+
+### 3. Field event handlers
+
+VGS Collect.js allows listening to input changes. 
+The library exposes the following handlers: `onFocus`, `onBlur`, `onUpdate`, `onDelete`, `onKeyUp`, `onKeyDown`, `onKeyPress`.
+
+```
+<TextField
+  validations={["required"]}
+  onFocus={(info: VGSCollectFocusEventData) => { }}
+  onBlur={(info: VGSCollectFocusEventData) => { }}
+  onUpdate={(info: VGSCollectStateParams) => { }}
+  onKeyUp={(info: VGSCollectKeyboardEventData) => { }}
+  onKeyDown={(info: VGSCollectKeyboardEventData) => { }}
+  onKeyPress={(info: VGSCollectKeyboardEventData) => { }}
+/>
 ```
 
 ## Documentation
