@@ -15,10 +15,10 @@ const {
 } = VGSCollectForm;
 
 const {
-  REACT_APP_VAULT_ID,
   REACT_APP_ENVIRONMENT,
   REACT_APP_COLLECT_VERSION,
 } = process.env; 
+const vaultId = 'tntux31nzpn';
 
 const CustomPayload = () => {
   const [isVGSCollectScriptLoaded, setCollectScriptLoaded] = useState(false);
@@ -35,7 +35,7 @@ const CustomPayload = () => {
      * Loading VGS Collect script from and attaching it to the <head>
      */
     loadVGSCollect({
-      vaultId: REACT_APP_VAULT_ID as string,
+      vaultId: vaultId as string,
       environment: REACT_APP_ENVIRONMENT as VGSCollectVaultEnvironment,
       version: REACT_APP_COLLECT_VERSION as string,
     }).then(() => {
@@ -71,7 +71,7 @@ const CustomPayload = () => {
            * https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate
            */}
           <VGSCollectForm
-            vaultId={REACT_APP_VAULT_ID as string}
+            vaultId={vaultId as string}
             environment={REACT_APP_ENVIRONMENT as VGSCollectVaultEnvironment}
             // action="/post"
             tokenizationAPI={true}
