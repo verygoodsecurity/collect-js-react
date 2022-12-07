@@ -1,5 +1,4 @@
-
-import { IVGSCollectForm } from './types/Form';
+import { IVGSCollectForm } from "./types/Form";
 
 let form = {} as IVGSCollectForm;
 
@@ -11,5 +10,5 @@ const getFormInstance = () => form;
 
 export {
   setFormInstance,
-  getFormInstance,
+  getFormInstance
 };

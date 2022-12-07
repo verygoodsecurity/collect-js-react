@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import { useEffect } from "react";
 import { getFormInstance } from "./state";
 import { DEFAULT_CONFIG, FIELD_EVENTS } from './constants';
@@ -15,6 +15,7 @@ import {
   IVGSCollectTextareaField,
   IVGSCollectForm
 } from './types/Form';
+
 
 type GeneralFieldProps = {
   className: string;
@@ -39,6 +40,7 @@ function RenderField(props: any) {
     onKeyDown,
     ...fieldProps
   } = props;
+
 
   const fieldId = `vgs-${window.crypto.randomUUID()}`;
   const events = {
