@@ -1,4 +1,4 @@
-import { VGSCollectForm } from "./Form";
+import { VGSCollectForm } from './Form';
 
 export * from './types/Form';
 export * from './types/Field';

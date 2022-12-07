@@ -1,10 +1,6 @@
-import React from 'react'
-import { setFormInstance, getFormInstance } from './state'
-import {
-  IVGSCollectForm,
-  VGSCollectFormState,
-  ICollectFormProps
-} from './types/Form'
+import React from 'react';
+import { setFormInstance, getFormInstance } from './state';
+import { IVGSCollectForm, VGSCollectFormState, ICollectFormProps } from './types/Form';
 
 import {
   TextField,
@@ -34,36 +30,37 @@ export function VGSCollectForm(props: ICollectFormProps) {
 
   const [, dispatch] = useVGSState()
 
-  if (typeof window !== 'undefined' && window.VGSCollect) {
-    const form: IVGSCollectForm = window.VGSCollect.create(
-      vaultId,
-      environment,
-      (state: VGSCollectFormState) => {
-        if (onUpdateCallback) {
-          onUpdateCallback(state)
-        }
-        // @ts-ignore
-        dispatch(form)
+  if (
+    typeof window !== 'undefined' &&
+    window.VGSCollect &&
+    Object.keys(getFormInstance()).length === 0
+  ) {
+    const form: IVGSCollectForm = window.VGSCollect.create(vaultId, environment, (state: VGSCollectFormState) => {
+      if (onUpdateCallback) {
+        onUpdateCallback(state);
       }
-    )
+      // @ts-ignore
+      dispatch(form)
+    });
 
     if (cname) {
-      form.useCname(cname)
+      form.useCname(cname);
     }
-    setFormInstance(form)
+
+    setFormInstance(form);
   }
 
   const submitHandler = (e: React.SyntheticEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const form: IVGSCollectForm = getFormInstance()
+    const form: IVGSCollectForm = getFormInstance();
 
     if (form) {
       form.submit(action, submitParameters, (status: any, resp: any) => {
         if (onSubmitCallback) {
-          onSubmitCallback(status, resp)
+          onSubmitCallback(status, resp);
         }
-      })
+      });
     } else {
       throw new Error('@vgs/collect-js-react: VGS Collect form not found.')
     }
@@ -80,12 +77,12 @@ export function VGSCollectForm(props: ICollectFormProps) {
   )
 }
 
-VGSCollectForm.TextField = TextField
-VGSCollectForm.CardNumberField = CardNumberField
-VGSCollectForm.CardExpirationDateField = CardExpirationDateField
-VGSCollectForm.CardSecurityCodeField = CardSecurityCodeField
-VGSCollectForm.PasswordField = PasswordField
-VGSCollectForm.SSNField = SSNField
-VGSCollectForm.ZipCodeField = ZipCodeField
-VGSCollectForm.TextareaField = TextareaField
-VGSCollectForm.NumberField = NumberField
+VGSCollectForm.TextField = TextField;
+VGSCollectForm.CardNumberField = CardNumberField;
+VGSCollectForm.CardExpirationDateField = CardExpirationDateField;
+VGSCollectForm.CardSecurityCodeField = CardSecurityCodeField;
+VGSCollectForm.PasswordField = PasswordField;
+VGSCollectForm.SSNField = SSNField;
+VGSCollectForm.ZipCodeField = ZipCodeField;
+VGSCollectForm.TextareaField = TextareaField;
+VGSCollectForm.NumberField = NumberField;

@@ -2,7 +2,7 @@
   <a href="https://www.verygoodsecurity.com/" rel="nofollow">
     <img src="https://avatars0.githubusercontent.com/u/17788525" width="128" alt="VGS Logo">
   </a>
-  <h3 align="center">VGS Collect.js</h3>
+  <h3 align="center">VGS Collect.js React Wrapper</h3>
 
   <p align="center">
     React wrapper for VGS Collect.js fields
@@ -49,7 +49,17 @@ npm install @vgs/collect-js-react
 
 ## How to use
 
-### 1. Define parent form wrapper component
+### 1. Load VGS Collect.js script:
+
+To stay PCI Compliant it's a mandatory to load js from our `js.verygoodvault.com` domain as a consequence you need to find the most suitable way to download it.
+There are couple of options here:
+
+- [Download file directly from the CDN](https://www.verygoodsecurity.com/docs/vgs-collect/js#quick-start).
+- Use our loading [npm module](https://www.npmjs.com/package/@vgs/collect-js). *[Example](https://github.com/verygoodsecurity/collect-js-react/blob/main/example/src/features/Basic.tsx#L45)*.
+
+<br/>
+
+### 2. Define parent form wrapper component:
 
 ```
 import { VGSCollectForm } from '@vgs/collect-js-react';
@@ -60,12 +70,12 @@ const myApp = () => {
 
   return (
     <VGSCollectForm 
-      vaultId="<vault_id>" // https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate
-      environment="<environment>" // https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate
-      action="/post" // endpoint for the HTTP request
-      submitParamethers={{}} // https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit (options)
-      onUpdateCallback={onUpdateCallback} // https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate (stateCallback)
-      onSubmitCallback={onSubmitCallback} // https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit
+      vaultId="<vault_id>"
+      environment="<environment>"
+      action="/post"
+      submitParamethers={{}}
+      onUpdateCallback={onUpdateCallback}
+      onSubmitCallback={onSubmitCallback}
     >
       // Add secure fields here
     </VGSCollectForm>
@@ -73,19 +83,19 @@ const myApp = () => {
 };
 ```
 
-| Property           | Description                                                |
-|--------------------|------------------------------------------------------------|
-| vaultId            | A string value beginning with the prefix `tnt`.            |
-| environment        | Vault environment: `sanbdox` \| `live` or region specific. |
-| action             | Endpoint for the HTTP request.                             |
-| cname?             | String represents CNAME the request will be submitted to.  |
-| submitParamethers? | HTTP request configuration.                                |
-| onUpdateCallback?  | Returns the form state in the callback.                    |
-| onSubmitCallback?  | Returns status and response data in the callback.          |
+| Property           | Description                                                | Documentation
+|--------------------|------------------------------------------------------------|------------------------------------------------------------------------------------------------------|
+| vaultId            | A string value beginning with the prefix `tnt`.            | [Parameters.vaultId](https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate)        |
+| environment        | Vault environment: `sanbdox` \| `live` or region specific. | [Parameters.environment](https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate)    |
+| action             | Endpoint for the HTTP request.                             | [Parameters.path](https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit)                 |
+| submitParamethers? | HTTP request configuration.                                | [Parameters.options](https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit)              |
+| onUpdateCallback?  | Returns the form state in the callback.                    | [Parameters.stateCallback](https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate)  |
+| onSubmitCallback?  | Returns status and response data in the callback.          | [Parameters.responseCallback](https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit)     |
+| cname?             | String represents CNAME the request will be submitted to.  | [.useCNAME()](https://www.verygoodsecurity.com/docs/api/collect/#api-formusecname)                   |
 
 <br/>
 
-### 2. Define secure input fields
+### 3. Define secure input fields:
 
 | Collect.js input type  | Collect.js React Component                  | Default Prop Values                                                                               |
 |------------------------|---------------------------------------------|---------------------------------------------------------------------------------------------------|
@@ -179,7 +189,8 @@ The library exposes the following handlers: `onFocus`, `onBlur`, `onUpdate`, `on
 
 ## Examples
 
-- [VGS Collect + React](https://stackblitz.com/edit/vgs-collect-js-react?file=src/App.js)
+- [Simple Configuration](https://github.com/verygoodsecurity/collect-js-react/blob/main/example/src/features/Basic.tsx)
+- [Custom Payload Configuration](https://github.com/verygoodsecurity/collect-js-react/blob/main/example/src/features/CustomPayload.tsx)
 
 ## Contact
 
