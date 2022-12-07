@@ -24,6 +24,7 @@ export const VGSCollectForm = (props: ICollectFormProps) => {
     tokenizationAPI = false,
     onUpdateCallback,
     onSubmitCallback,
+    onErrorCalback,
     children
   } = props;
 
@@ -61,16 +62,25 @@ export const VGSCollectForm = (props: ICollectFormProps) => {
             onSubmitCallback(status, resp);
           }
         },
-        () => {
-          throw new Error('@vgs/collect-js-react: Something went wrong. Please, contact a support@verygoodsecurity.com');
+        (errors: any) => {
+          if (onErrorCalback) {
+            onErrorCalback(errors);
+          }
         }
       );
     } else {
-      form.submit(action, submitParameters, (status: any, resp: any) => {
-        if (onSubmitCallback) {
-          onSubmitCallback(status, resp);
+      form.submit(action, submitParameters, 
+        (status: any, resp: any) => {
+          if (onSubmitCallback) {
+            onSubmitCallback(status, resp);
+          }
+        },
+        (errors: any) => {
+          if (onErrorCalback) {
+            onErrorCalback(errors);
+          }
         }
-      });
+      );
     }
   }
 

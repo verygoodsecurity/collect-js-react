@@ -13,11 +13,11 @@ const {
   CardNumberField,
 } = VGSCollectForm;
 
-const VGS_CONFIG = {
-  vaultId: 'tntnmemz6i7',
-  environment: 'sandbox' as VGSCollectVaultEnvironment,
-  version: '2.18.0',
-}
+const {
+  REACT_APP_VAULT_ID,
+  REACT_APP_ENVIRONMENT,
+  REACT_APP_COLLECT_VERSION,
+} = process.env;
 
 const CustomPayload = () => {
   const [isVGSCollectScriptLoaded, setCollectScriptLoaded] = useState(false);
@@ -35,9 +35,9 @@ const CustomPayload = () => {
      * Loading VGS Collect script from and attaching it to the <head>
      */
     loadVGSCollect({
-      vaultId: VGS_CONFIG.vaultId,
-      environment: VGS_CONFIG.environment,
-      version: VGS_CONFIG.version
+      vaultId: REACT_APP_VAULT_ID as string,
+      environment: REACT_APP_ENVIRONMENT as VGSCollectVaultEnvironment,
+      version: REACT_APP_COLLECT_VERSION as string,
     }).then(() => {
       setCollectScriptLoaded(true);
     });
@@ -49,6 +49,12 @@ const CustomPayload = () => {
      */
   };
 
+  const onErrorCallback = (errors: VGSCollectFormState) => {
+    /**
+     * Receive information about Erorrs (client-side validation)
+     */
+  }
+  
   const onUpdateCallback = (state: VGSCollectFormState) => {
     /**
      * Listen to the VGS Collect form state
@@ -70,8 +76,8 @@ const CustomPayload = () => {
            * https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate
            */}
           <VGSCollectForm
-            vaultId={VGS_CONFIG.vaultId}
-            environment={VGS_CONFIG.environment}
+            vaultId={REACT_APP_VAULT_ID as string}
+            environment={REACT_APP_ENVIRONMENT as VGSCollectVaultEnvironment}
             action="/post"
             submitParameters={{
               // JSON request body generated on the form submission including custom parameters
@@ -86,6 +92,7 @@ const CustomPayload = () => {
             }}
             onUpdateCallback={onUpdateCallback}
             onSubmitCallback={onSubmitCallback}
+            onErrorCalback={onErrorCallback}
           >
             { /**
              * VGS Collect text field component:

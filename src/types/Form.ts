@@ -66,6 +66,7 @@ interface ICollectFormProps {
   children?: JSX.Element[] | JSX.Element;
   onUpdateCallback?: (state: VGSCollectFormState | null) => void;
   onSubmitCallback?: (status: any, resp: any) => void;
+  onErrorCalback?: (errors: any) => void;
 }
 
 interface VGSCollectStateParams {
