@@ -10,7 +10,7 @@ import {
   VGSCollectKeyboardEventData
 } from 'collect-js-react';
 
-import { useVGSState } from 'collect-js-react';
+import { useVGSState, useSubmit } from 'collect-js-react';
 
 const {
   TextField,
@@ -37,6 +37,12 @@ const Basic = () => {
    * VGS Collect state hook
    */
   const [state, dispatch] = useVGSState();
+
+  /**
+   * VGS Collect submit hook
+   */
+  const [stateSubmit, dispatchSubmit] = useSubmit();
+
 
   const VGSCollectFieldStyles = {
     padding: '.5rem 1rem',

@@ -1,6 +1,10 @@
 import React from 'react';
 import { setFormInstance, getFormInstance } from './state';
-import { IVGSCollectForm, VGSCollectFormState, ICollectFormProps } from './types/Form';
+import {
+  IVGSCollectForm,
+  VGSCollectFormState,
+  ICollectFormProps
+} from './types/Form';
 
 import {
   TextField,
@@ -14,7 +18,7 @@ import {
   NumberField
 } from './Fields'
 
-import { useVGSState } from './provider'
+import { useSubmit, useVGSState } from "./provider";
 
 export function VGSCollectForm(props: ICollectFormProps) {
   const {
@@ -29,6 +33,9 @@ export function VGSCollectForm(props: ICollectFormProps) {
   } = props
 
   const [, dispatch] = useVGSState()
+  const [, dispatchSubmit] = useSubmit();
+
+
 
   if (
     typeof window !== 'undefined' &&
@@ -41,11 +48,17 @@ export function VGSCollectForm(props: ICollectFormProps) {
       }
       // @ts-ignore
       dispatch(form)
+
+
     });
+
+    // @ts-ignore
+    f(form.submit);
 
     if (cname) {
       form.useCname(cname);
     }
+
 
     setFormInstance(form);
   }
@@ -56,10 +69,14 @@ export function VGSCollectForm(props: ICollectFormProps) {
     const form: IVGSCollectForm = getFormInstance();
 
     if (form) {
+      // @ts-ignore
+
       form.submit(action, submitParameters, (status: any, resp: any) => {
         if (onSubmitCallback) {
           onSubmitCallback(status, resp);
         }
+        // @ts-ignore
+        dispatchSubmit(resp)
       });
     } else {
       throw new Error('@vgs/collect-js-react: VGS Collect form not found.')
