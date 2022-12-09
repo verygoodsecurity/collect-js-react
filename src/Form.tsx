@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { setFormInstance, getFormInstance } from './state';
 import { IVGSCollectForm, VGSCollectFormState, ICollectFormProps } from './types/Form';
 
@@ -59,6 +59,13 @@ export const VGSCollectForm = (props: ICollectFormProps) => {
       throw new Error('@vgs/collect-js-react: VGS Collect form not found.')
     }
   }
+
+  useEffect(() => {
+    return () => {
+      const activeForm = getFormInstance();
+      activeForm.unmount();
+    }
+  }, []);
 
   return (
     <form onSubmit={(event) => { submitHandler(event) }}>
