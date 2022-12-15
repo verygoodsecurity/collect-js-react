@@ -27,8 +27,10 @@ export function VGSCollectForm(props: ICollectFormProps) {
     action = '/',
     cname,
     submitParameters,
+    tokenizationAPI = false,
     onUpdateCallback,
     onSubmitCallback,
+    onErrorCalback,
     children
   } = props
 
@@ -47,7 +49,7 @@ export function VGSCollectForm(props: ICollectFormProps) {
         onUpdateCallback(state);
       }
       // @ts-ignore
-      dispatch(form)
+      dispatch(form);
 
 
     });
@@ -67,19 +69,38 @@ export function VGSCollectForm(props: ICollectFormProps) {
     e.preventDefault();
 
     const form: IVGSCollectForm = getFormInstance();
-
-    if (form) {
-      // @ts-ignore
-
-      form.submit(action, submitParameters, (status: any, resp: any) => {
-        if (onSubmitCallback) {
-          onSubmitCallback(status, resp);
-        }
-        // @ts-ignore
-        dispatchSubmit(resp)
-      });
-    } else {
+    
+    if (!form) {
       throw new Error('@vgs/collect-js-react: VGS Collect form not found.')
+    }
+    
+    if (tokenizationAPI) {
+      form.tokenize(
+        (status: any, resp: any) => {
+          if (onSubmitCallback) {
+            onSubmitCallback(status, resp);
+          }
+        },
+        (errors: any) => {
+          if (onErrorCalback) {
+            onErrorCalback(errors);
+          }
+        }
+      );
+    } else {
+      form.submit(action, submitParameters, 
+        (status: any, resp: any) => {
+          if (onSubmitCallback) {
+            onSubmitCallback(status, resp);
+          }
+          dispatchSubmit(resp);
+        },
+        (errors: any) => {
+          if (onErrorCalback) {
+            onErrorCalback(errors);
+          }
+        }
+      );
     }
   }
 

@@ -28,6 +28,7 @@ type SubmitMethod = 'post' | 'patch' | 'put' | 'delete' | 'get';
 type SubmitSerializer = 'deep' | 'flat';
 type SubmitSerialization = 'json' | 'formData';
 type SubmitMapDotToObject = BooleanValue | 'merge' | 'mergeArray';
+
 type InputMode =
   | 'none'
   | 'text'
@@ -38,6 +39,18 @@ type InputMode =
   | 'email'
   | 'url';
 
+// Available types for Tokenization flow
+type StorageTypes = 'PERSISTENT' | 'VOLATILE';
+type TokenFormats =
+  | 'FPE_ACC_NUM_T_FOUR'
+  | 'FPE_ALPHANUMERIC_ACC_NUM_T_FOUR'
+  | 'FPE_SIX_T_FOUR'
+  | 'FPE_SSN_T_FOUR'
+  | 'FPE_T_FOUR'
+  | 'RAW_UUID'
+  | 'UUID'
+  | 'NUM_LENGTH_PRESERVING'
+  | 'PFPT';
 /**
  * Available options for the form .on() method
  */
@@ -49,9 +62,11 @@ interface ICollectFormProps {
   submitParameters?: any;
   action?: string;
   cname?: string;
+  tokenizationAPI?: boolean;
   children?: JSX.Element[] | JSX.Element;
   onUpdateCallback?: (state: VGSCollectFormState | null) => void;
   onSubmitCallback?: (status: any, resp: any) => void;
+  onErrorCalback?: (errors: any) => void;
 }
 
 interface VGSCollectStateParams {
@@ -69,6 +84,10 @@ interface VGSCollectStateParams {
 }
 
 type VGSCollectFormState = Record<string, VGSCollectStateParams> | null;
+interface IFieldTokenization {
+  format?: TokenFormats;
+  storage?: StorageTypes;
+}
 
 interface IDefaultFieldOptions {
   type: VGSCollectFieldType;
@@ -86,6 +105,7 @@ interface IDefaultFieldOptions {
   ariaLabel?: string;
   readonly?: BooleanValue;
   inputMode?: InputMode;
+  tokenization?:  IFieldTokenization | boolean;
 }
 
 type FieldConfig =

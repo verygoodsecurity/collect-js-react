@@ -3,25 +3,25 @@ import { loadVGSCollect } from '@vgs/collect-js';
 import {
   VGSCollectForm,
   VGSCollectVaultEnvironment,
-  VGSCollectFormState,
   VGSCollectHttpStatusCode,
-  ICollectFormPayloadStructure,
+  VGSCollectFormState,
 } from 'collect-js-react';
 
 const {
   TextField,
   CardNumberField,
+  CardExpirationDateField,
+  CardSecurityCodeField,
 } = VGSCollectForm;
 
 const {
-  REACT_APP_VAULT_ID,
   REACT_APP_ENVIRONMENT,
   REACT_APP_COLLECT_VERSION,
-} = process.env;
+} = process.env; 
+const vaultId = 'tntux31nzpn';
 
 const CustomPayload = () => {
   const [isVGSCollectScriptLoaded, setCollectScriptLoaded] = useState(false);
-  const [inputValue, setInputValue] = useState('');
   const VGSCollectFieldStyles = {
     padding: '.5rem 1rem',
     boxSizing: 'border-box',
@@ -35,17 +35,23 @@ const CustomPayload = () => {
      * Loading VGS Collect script from and attaching it to the <head>
      */
     loadVGSCollect({
-      vaultId: REACT_APP_VAULT_ID as string,
+      vaultId: vaultId as string,
       environment: REACT_APP_ENVIRONMENT as VGSCollectVaultEnvironment,
       version: REACT_APP_COLLECT_VERSION as string,
     }).then(() => {
       setCollectScriptLoaded(true);
     });
   }, []);
-
-  const onSubmitCallback = (status: VGSCollectHttpStatusCode, resp: any) => {
+  
+  const onSubmitCallback = (status: VGSCollectHttpStatusCode, resp: any) => {    
     /**
      * Receive information about HTTP request
+     */
+  };
+
+  const onUpdateCallback = (state: VGSCollectFormState) => {
+    /**
+     * Listen to the VGS Collect form state
      */
   };
 
@@ -54,42 +60,22 @@ const CustomPayload = () => {
      * Receive information about Erorrs (client-side validation)
      */
   }
-  
-  const onUpdateCallback = (state: VGSCollectFormState) => {
-    /**
-     * Listen to the VGS Collect form state
-     */
-  };
-
-  const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value)
-  };
-
 
   return (
     <>
       {isVGSCollectScriptLoaded && (
         <div className="left">
-          <h2>Custom payload and additional data</h2>
+          <h2>Tokenization API</h2>
           {/**
            * VGS Collect form wrapper element. Abstraction over the VGSCollect.create()
            * https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate
            */}
           <VGSCollectForm
-            vaultId={REACT_APP_VAULT_ID as string}
+            vaultId={vaultId as string}
             environment={REACT_APP_ENVIRONMENT as VGSCollectVaultEnvironment}
-            action="/post"
-            submitParameters={{
-              // JSON request body generated on the form submission including custom parameters
-              // https://www.verygoodsecurity.com/docs/vgs-collect/js/integration#form-submit
-              data: (fields: ICollectFormPayloadStructure) => {
-                return {
-                  cusomData: inputValue,
-                  textField: fields.textField,
-                  cardNumber: fields['card-number'],
-                }
-              }
-            }}
+            // action="/post"
+            tokenizationAPI={true}
+            submitParameters={{}}
             onUpdateCallback={onUpdateCallback}
             onSubmitCallback={onSubmitCallback}
             onErrorCalback={onErrorCallback}
@@ -102,21 +88,27 @@ const CustomPayload = () => {
               name="textField"
               validations={["required"]}
               css={VGSCollectFieldStyles}
+              tokenization={{ format: 'UUID', storage: 'PERSISTENT' }}
             />
-            { /**
-             * VGS Collect text field component:
-             * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
-             */}
-            <CardNumberField
-              name="card-number"
-              validations={["required"]}
+            <CardNumberField 
               css={VGSCollectFieldStyles}
             />
-            <input
-              className="vgs-collect-native-input"
-              type="text"
-              placeholder="Not sensitive data"
-              onChange={(e) => { inputHandler(e) }}
+            { /**
+             * VGS Collect card expiration date field component:
+             * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
+             */}
+            <CardExpirationDateField
+              validations={["required", "validCardExpirationDate"]}
+              yearLength={2}
+              css={VGSCollectFieldStyles}
+              tokenization={{ format: 'UUID', storage: 'PERSISTENT' }}
+            /> 
+            <CardSecurityCodeField
+              validations={["required", "validCardSecurityCode"]}
+              css={VGSCollectFieldStyles}
+              showCardIcon={{
+                right: '1rem'
+              }}
             />
             <button type="submit">Submit</button>
           </VGSCollectForm>
