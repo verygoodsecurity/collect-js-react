@@ -10,6 +10,8 @@ import {
   VGSCollectKeyboardEventData
 } from 'collect-js-react';
 
+import { useVGSState, useSubmit } from 'collect-js-react';
+
 const {
   TextField,
   CardNumberField,
@@ -30,6 +32,18 @@ const {
 
 const Basic = () => {
   const [isVGSCollectScriptLoaded, setCollectScriptLoaded] = useState(false);
+
+  /**
+   * VGS Collect state hook
+   */
+  const [state, dispatch] = useVGSState();
+
+  /**
+   * VGS Collect submit hook
+   */
+  const [stateSubmit, dispatchSubmit] = useSubmit();
+
+
   const VGSCollectFieldStyles = {
     padding: '.5rem 1rem',
     boxSizing: 'border-box',

@@ -1,6 +1,10 @@
 import React from 'react';
 import { setFormInstance, getFormInstance } from './state';
-import { IVGSCollectForm, VGSCollectFormState, ICollectFormProps } from './types/Form';
+import {
+  IVGSCollectForm,
+  VGSCollectFormState,
+  ICollectFormProps
+} from './types/Form';
 
 import {
   TextField,
@@ -11,10 +15,12 @@ import {
   SSNField,
   ZipCodeField,
   TextareaField,
-  NumberField,
-} from './Fields';
+  NumberField
+} from './Fields'
 
-export const VGSCollectForm = (props: ICollectFormProps) => {
+import { useSubmit, useVGSState } from "./provider";
+
+export function VGSCollectForm(props: ICollectFormProps) {
   const {
     vaultId,
     environment = 'sandbox',
@@ -26,7 +32,12 @@ export const VGSCollectForm = (props: ICollectFormProps) => {
     onSubmitCallback,
     onErrorCalback,
     children
-  } = props;
+  } = props
+
+  const [, dispatch] = useVGSState()
+  const [, dispatchSubmit] = useSubmit();
+
+
 
   if (
     typeof window !== 'undefined' &&
@@ -37,11 +48,19 @@ export const VGSCollectForm = (props: ICollectFormProps) => {
       if (onUpdateCallback) {
         onUpdateCallback(state);
       }
+      // @ts-ignore
+      dispatch(form);
+
+
     });
+
+    // @ts-ignore
+    f(form.submit);
 
     if (cname) {
       form.useCname(cname);
     }
+
 
     setFormInstance(form);
   }
@@ -74,6 +93,7 @@ export const VGSCollectForm = (props: ICollectFormProps) => {
           if (onSubmitCallback) {
             onSubmitCallback(status, resp);
           }
+          dispatchSubmit(resp);
         },
         (errors: any) => {
           if (onErrorCalback) {
@@ -85,7 +105,11 @@ export const VGSCollectForm = (props: ICollectFormProps) => {
   }
 
   return (
-    <form onSubmit={(event) => { submitHandler(event) }}>
+    <form
+      onSubmit={(event) => {
+        submitHandler(event)
+      }}
+    >
       {children}
     </form>
   )
