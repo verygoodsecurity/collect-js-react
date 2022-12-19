@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
 import { setFormInstance, getFormInstance } from './state';
+import { DispatchStateContext, DispatchSubmitContext } from "./provider";
+import { HttpStatusCode } from './types/HttpStatusCode';
 import {
   IVGSCollectForm,
   VGSCollectFormState,
@@ -16,9 +18,9 @@ import {
   ZipCodeField,
   TextareaField,
   NumberField
-} from './Fields'
+} from './Fields';
 
-import { useSubmit, useVGSState } from "./provider";
+const isBrowser = typeof window !== 'undefined';
 
 export function VGSCollectForm(props: ICollectFormProps) {
   const {
@@ -32,15 +34,13 @@ export function VGSCollectForm(props: ICollectFormProps) {
     onSubmitCallback,
     onErrorCalback,
     children
-  } = props
+  } = props;
 
-  const [, dispatch] = useVGSState()
-  const [, dispatchSubmit] = useSubmit();
-
-
+  const dispatchFormStateUpdate = useContext(DispatchStateContext);
+  const dispatchResponseUpdate = useContext(DispatchSubmitContext);
 
   if (
-    typeof window !== 'undefined' &&
+    isBrowser &&
     window.VGSCollect &&
     Object.keys(getFormInstance()).length === 0
   ) {
@@ -48,35 +48,37 @@ export function VGSCollectForm(props: ICollectFormProps) {
       if (onUpdateCallback) {
         onUpdateCallback(state);
       }
-      // @ts-ignore
-      dispatch(form);
-
-
+      dispatchFormStateUpdate(state);
     });
-
-    // @ts-ignore
-    f(form.submit);
 
     if (cname) {
       form.useCname(cname);
     }
-
-
     setFormInstance(form);
   }
+
+  useEffect(() => {
+    return () => {
+      const activeForm = getFormInstance();
+      activeForm.unmount();
+      setFormInstance({} as IVGSCollectForm);
+      dispatchFormStateUpdate(null);
+      dispatchResponseUpdate(null);
+    }
+  }, []);
 
   const submitHandler = (e: React.SyntheticEvent) => {
     e.preventDefault();
 
     const form: IVGSCollectForm = getFormInstance();
-    
+
     if (!form) {
       throw new Error('@vgs/collect-js-react: VGS Collect form not found.')
     }
-    
+
     if (tokenizationAPI) {
       form.tokenize(
-        (status: any, resp: any) => {
+        (status: HttpStatusCode, resp: any) => {
           if (onSubmitCallback) {
             onSubmitCallback(status, resp);
           }
@@ -88,12 +90,15 @@ export function VGSCollectForm(props: ICollectFormProps) {
         }
       );
     } else {
-      form.submit(action, submitParameters, 
-        (status: any, resp: any) => {
+      form.submit(action, submitParameters,
+        (status: HttpStatusCode, data: any) => {
           if (onSubmitCallback) {
-            onSubmitCallback(status, resp);
+            onSubmitCallback(status, data);
           }
-          dispatchSubmit(resp);
+          dispatchResponseUpdate({
+            status,
+            data
+          });
         },
         (errors: any) => {
           if (onErrorCalback) {
@@ -105,13 +110,15 @@ export function VGSCollectForm(props: ICollectFormProps) {
   }
 
   return (
-    <form
-      onSubmit={(event) => {
-        submitHandler(event)
-      }}
-    >
-      {children}
-    </form>
+    <React.StrictMode>
+      <form
+        onSubmit={(event) => {
+          submitHandler(event)
+        }}
+      >
+        {children}
+      </form>
+    </React.StrictMode>
   )
 }
 

@@ -6,6 +6,8 @@ import {
   VGSCollectFormState,
   VGSCollectHttpStatusCode,
   ICollectFormPayloadStructure,
+  useVGSCollectResponse,
+  useVGSCollectState
 } from 'collect-js-react';
 
 const {
@@ -29,6 +31,21 @@ const CustomPayload = () => {
       color: '#686868'
     }
   };
+
+  const [state] = useVGSCollectState();
+  const [response] = useVGSCollectResponse();
+
+  useEffect(() => {
+    /**
+     * Track form state
+     */
+  }, [state]);
+
+  useEffect(() => {
+    /**
+     * Track response from the VGS Collect form
+     */
+  }, [response]);
 
   useEffect(() => {
     /**
@@ -54,7 +71,7 @@ const CustomPayload = () => {
      * Receive information about Erorrs (client-side validation)
      */
   }
-  
+
   const onUpdateCallback = (state: VGSCollectFormState) => {
     /**
      * Listen to the VGS Collect form state

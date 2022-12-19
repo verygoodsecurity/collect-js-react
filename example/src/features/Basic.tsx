@@ -7,10 +7,10 @@ import {
   VGSCollectFormState,
   VGSCollectStateParams,
   VGSCollectHttpStatusCode,
-  VGSCollectKeyboardEventData
+  VGSCollectKeyboardEventData,
+  useVGSCollectState,
+  useVGSCollectResponse
 } from 'collect-js-react';
-
-import { useVGSState, useSubmit } from 'collect-js-react';
 
 const {
   TextField,
@@ -30,19 +30,18 @@ const {
   REACT_APP_COLLECT_VERSION,
 } = process.env;
 
-const Basic = () => {
+const Basic = React.memo(() => {
   const [isVGSCollectScriptLoaded, setCollectScriptLoaded] = useState(false);
 
   /**
-   * VGS Collect state hook
+   * VGS Collect state hook to retrieve the form state
    */
-  const [state, dispatch] = useVGSState();
+  const [state] = useVGSCollectState();
 
   /**
-   * VGS Collect submit hook
+   * VGS Collect submit hook to retrieve the form response
    */
-  const [stateSubmit, dispatchSubmit] = useSubmit();
-
+  const [response] = useVGSCollectResponse();
 
   const VGSCollectFieldStyles = {
     padding: '.5rem 1rem',
@@ -64,6 +63,18 @@ const Basic = () => {
       setCollectScriptLoaded(true);
     });
   }, []);
+
+  useEffect(() => {
+    /**
+     * Track form state
+     */
+  }, [state]);
+
+  useEffect(() => {
+    /**
+     * Track response from the VGS Collect form
+     */
+  }, [response]);
 
   const onSubmitCallback = (status: VGSCollectHttpStatusCode, resp: any) => {
     /**
@@ -132,6 +143,7 @@ const Basic = () => {
                */
               onKeyPress={(info: VGSCollectKeyboardEventData) => { }}
               css={VGSCollectFieldStyles}
+              name="text"
             />
             { /**
              * VGS Collect card number field component:
@@ -142,6 +154,7 @@ const Basic = () => {
               showCardIcon={{
                 right: '1rem'
               }}
+              name="card-number"
               css={VGSCollectFieldStyles}
             />
             { /**
@@ -152,12 +165,14 @@ const Basic = () => {
               validations={["required", "validCardExpirationDate"]}
               yearLength={2}
               css={VGSCollectFieldStyles}
+              name="exp-date"
             />
             { /**
              * VGS Collect card security code date field component:
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
             <CardSecurityCodeField
+              name="card-security-code"
               validations={["required", "validCardSecurityCode"]}
               css={VGSCollectFieldStyles}
               showCardIcon={{
@@ -169,6 +184,7 @@ const Basic = () => {
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
             <SSNField
+              name="ssn"
               validations={["required", "validSSN"]}
               css={VGSCollectFieldStyles}
             />
@@ -177,6 +193,7 @@ const Basic = () => {
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
             <ZipCodeField
+              name="zip-code"
               validations={["required"]}
               css={VGSCollectFieldStyles}
             />
@@ -185,6 +202,7 @@ const Basic = () => {
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
             <PasswordField
+              name="password"
               validations={["required"]}
               css={VGSCollectFieldStyles}
             />
@@ -193,6 +211,7 @@ const Basic = () => {
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
             <NumberField
+              name="number"
               validations={["required"]}
               css={VGSCollectFieldStyles}
             />
@@ -201,6 +220,7 @@ const Basic = () => {
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
             <TextareaField
+              name="textarea"
               validations={["required"]}
               className="custom-class"
               css={VGSCollectFieldStyles}
@@ -212,6 +232,6 @@ const Basic = () => {
       }
     </>
   )
-}
+});
 
 export default Basic;

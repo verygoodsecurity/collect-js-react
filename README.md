@@ -43,7 +43,7 @@ This package provides a convenient way to use VGS secure frames in the React env
 
 Install the package using `npm`:
 
-```
+```bash
 npm install @vgs/collect-js-react
 ```
 
@@ -61,7 +61,7 @@ There are couple of options here:
 
 ### 2. Define parent form wrapper component:
 
-```
+```javascript
 import { VGSCollectForm } from '@vgs/collect-js-react';
 
 const myApp = () => {
@@ -97,17 +97,17 @@ const myApp = () => {
 
 ### 3. Define secure input fields:
 
-| Collect.js input type  | Collect.js React Component                  | Default Prop Values                                                                               |
-|------------------------|---------------------------------------------|---------------------------------------------------------------------------------------------------|
-| `text`                 | `<VGSCollectForm.TextField/>`               | ` {   type: 'text',   name: 'text',   placeholder: 'Cardholder Name'   }`                         |
-| `card-number`          | `<VGSCollectForm.CardNumberField/>`         | ` {   type: 'card-number',   name: 'card-number',   placeholder: 'Credit Card Number'   } `       |
-| `card-expiration-date` | `<VGSCollectForm.CardExpirationDateField/>` | ` {   type: 'card-expiration-date',   name: 'card-expiration-date',   placeholder: 'MM/YY'   } `  |
-| `card-security-code`   | `<VGSCollectForm.CardSecurityCodeField/>`   | ` {   type: 'card-security-code',   name: 'card-security-code',   placeholder: 'CVC/CVV'   } `    |
-| `password`             | `<VGSCollectForm.PasswordField/>`           | ` {   type: 'password',   name: 'password',   placeholder: 'Enter Password'   } `                 |
-| `ssn`                  | `<VGSCollectForm.SSNField/>`                | ` {   type: 'ssn',   name: 'ssn',   placeholder: 'SSN'   } `                                      |
-| `zip-code`             | `<VGSCollectForm.ZipCodeField/>`            | ` {   type: 'zip-code',   name: 'zip-code',   placeholder: 'Zip Code'   } `                       |
-| `number`               | `<VGSCollectForm.NumberField/>`             | ` {   type: 'number',   name: 'number',   placeholder: 'Number'   } `                             |
-| `textarea`             | `<VGSCollectForm/TextareaField/>`           | ` {   type: 'textarea',   name: 'textarea',   placeholder: 'Comment'   } `                        |
+| Collect.js input type  | Collect.js React Component                  | Default Prop Values                                               |
+|------------------------|---------------------------------------------|-------------------------------------------------------------------|
+| `text`                 | `<VGSCollectForm.TextField/>`               | ` {type: 'text', placeholder: 'Cardholder Name'}`                 |
+| `card-number`          | `<VGSCollectForm.CardNumberField/>`         | ` {type: 'card-number', placeholder: 'Credit Card Number'} `      |
+| `card-expiration-date` | `<VGSCollectForm.CardExpirationDateField/>` | ` {type: 'card-expiration-date', placeholder: 'MM/YY'} `          |
+| `card-security-code`   | `<VGSCollectForm.CardSecurityCodeField/>`   | ` {type: 'card-security-code', placeholder: 'CVC/CVV'} `          |
+| `password`             | `<VGSCollectForm.PasswordField/>`           | ` {type: 'password', placeholder: 'Enter Password'} `             |
+| `ssn`                  | `<VGSCollectForm.SSNField/>`                | ` {type: 'ssn', placeholder: 'SSN'} `                             |
+| `zip-code`             | `<VGSCollectForm.ZipCodeField/>`            | ` {type: 'zip-code', placeholder: 'Zip Code'} `                   |
+| `number`               | `<VGSCollectForm.NumberField/>`             | ` {type: 'number', placeholder: 'Number'} `                       |
+| `textarea`             | `<VGSCollectForm/TextareaField/>`           | ` {type: 'textarea',  placeholder: 'Comment'} `                   |
 
 
 The complete list of supported properties you can find here: https://www.verygoodsecurity.com/docs/api/collect/#api-formfield.
@@ -115,7 +115,7 @@ All configuration properties available in the Reference Documentation can be pas
 
 *Example:*
 
-```
+```javascript
 import { VGSCollectForm } from '@vgs/collect-js-react';
 
 const { 
@@ -142,18 +142,21 @@ const myApp = () => {
       onSubmitCallback={onSubmitCallback}
     >
       <CardNumberField 
+        name="card-number"
         validations={["required", "validCardNumber"]}
         placeholder="XXXX XXXX XXXX XXXX"
         showCardIcon={true}
         css={{}}
       />
       <CardEpirationDateField 
+        name="exp-date"
         validations={["required", validCardExpirationDate"]}
         placeholder="MM / YY"
         yearLength={2}
         css={{}}
       />
-      <CardSecurityCodeField 
+      <CardSecurityCodeField
+        name="cvv"
         validations={["required", "validCardSecurityCode"]}
         placeholder="CVV"
         css={{}}
@@ -170,8 +173,9 @@ const myApp = () => {
 VGS Collect.js allows listening to input changes. 
 The library exposes the following handlers: `onFocus`, `onBlur`, `onUpdate`, `onDelete`, `onKeyUp`, `onKeyDown`, `onKeyPress`.
 
-```
+```javascript
 <TextField
+  name="text"
   validations={["required"]}
   onFocus={(info: VGSCollectFocusEventData) => { }}
   onBlur={(info: VGSCollectFocusEventData) => { }}
@@ -180,6 +184,54 @@ The library exposes the following handlers: `onFocus`, `onBlur`, `onUpdate`, `on
   onKeyDown={(info: VGSCollectKeyboardEventData) => { }}
   onKeyPress={(info: VGSCollectKeyboardEventData) => { }}
 />
+```
+
+### 4. Hooks
+
+In order to access the form state and response from the hook, wrap consumer component with the form in `VGSCollectProvider` context provider.
+
+```javascript
+import { 
+  VGSCollectProvider, 
+  useVGSCollectState,
+  useVGSCollectResponse,
+  VGSCollectForm
+} from "@vgs/collect-js-react";
+
+const { TextField } = VGSCollectForm;
+
+const App = () => {
+  return (
+    <VGSCollectProvider>
+      <VGSCollectForm />
+    </VGSCollectProvider>
+  )
+};
+
+const VGSCollectForm = () => {
+  const [state] = useVGSCollectState();
+  const [response] = useVGSCollectResponse();
+
+  useEffect(() => {
+    if (state) {
+      // do something
+    }
+  }, [state]);
+
+  return (
+    <CollectForm 
+      vaultId="<vault_id>"
+      environment="<environment>"
+      action="/post"
+    >
+      <TextField 
+        name="cardholder-name"
+        validations={["required"]}
+        placeholder="Cardholder name"
+      />
+    </CollectForm>
+  )
+}
 ```
 
 ## Documentation

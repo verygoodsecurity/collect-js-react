@@ -84,6 +84,7 @@ interface VGSCollectStateParams {
 }
 
 type VGSCollectFormState = Record<string, VGSCollectStateParams> | null;
+
 interface IFieldTokenization {
   format?: TokenFormats;
   storage?: StorageTypes;
@@ -105,7 +106,7 @@ interface IDefaultFieldOptions {
   ariaLabel?: string;
   readonly?: BooleanValue;
   inputMode?: InputMode;
-  tokenization?:  IFieldTokenization | boolean;
+  tokenization?: IFieldTokenization | boolean;
 }
 
 type FieldConfig =
@@ -229,7 +230,10 @@ interface IVGSCollectForm {
    * Docs: https://www.verygoodsecurity.com/docs/api/collect/#api-formtokenize
    */
   tokenize(
-    successCallback: (status: number | null, data: any) => any,
+    successCallback: (
+      status: VGSCollectHttpStatusCode | null,
+      data: any
+    ) => any,
     errorCallback: (error: VGSCollectFormState) => any
   ): any;
 
