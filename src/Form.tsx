@@ -109,6 +109,13 @@ export function VGSCollectForm(props: ICollectFormProps) {
     }
   }
 
+  useEffect(() => {
+    return () => {
+      const activeForm = getFormInstance();
+      activeForm.unmount();
+    }
+  }, []);
+
   return (
     <React.StrictMode>
       <form
