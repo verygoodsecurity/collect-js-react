@@ -7,7 +7,9 @@ import {
   VGSCollectFormState,
   VGSCollectStateParams,
   VGSCollectHttpStatusCode,
-  VGSCollectKeyboardEventData
+  VGSCollectKeyboardEventData,
+  useVGSCollectState,
+  useVGSCollectResponse
 } from 'collect-js-react';
 
 const {
@@ -22,14 +24,25 @@ const {
   ZipCodeField,
 } = VGSCollectForm;
 
-const VGS_CONFIG = {
-  vaultId: 'tntnmemz6i7',
-  environment: 'sandbox' as VGSCollectVaultEnvironment,
-  version: '2.18.0',
-}
+const {
+  REACT_APP_VAULT_ID,
+  REACT_APP_ENVIRONMENT,
+  REACT_APP_COLLECT_VERSION,
+} = process.env;
 
-const Basic = () => {
+const Basic = React.memo(() => {
   const [isVGSCollectScriptLoaded, setCollectScriptLoaded] = useState(false);
+
+  /**
+   * VGS Collect state hook to retrieve the form state
+   */
+  const [state] = useVGSCollectState();
+
+  /**
+   * VGS Collect submit hook to retrieve the form response
+   */
+  const [response] = useVGSCollectResponse();
+
   const VGSCollectFieldStyles = {
     padding: '.5rem 1rem',
     boxSizing: 'border-box',
@@ -43,13 +56,25 @@ const Basic = () => {
      * Loading VGS Collect script from and attaching it to the <head>
      */
     loadVGSCollect({
-      vaultId: VGS_CONFIG.vaultId,
-      environment: VGS_CONFIG.environment,
-      version: VGS_CONFIG.version
+      vaultId: REACT_APP_VAULT_ID as string,
+      environment: REACT_APP_ENVIRONMENT as VGSCollectVaultEnvironment,
+      version: REACT_APP_COLLECT_VERSION as string,
     }).then(() => {
       setCollectScriptLoaded(true);
     });
   }, []);
+
+  useEffect(() => {
+    /**
+     * Track form state
+     */
+  }, [state]);
+
+  useEffect(() => {
+    /**
+     * Track response from the VGS Collect form
+     */
+  }, [response]);
 
   const onSubmitCallback = (status: VGSCollectHttpStatusCode, resp: any) => {
     /**
@@ -63,6 +88,12 @@ const Basic = () => {
      */
   };
 
+  const onErrorCallback = (errors: VGSCollectFormState) => {
+    /**
+     * Receive information about Erorrs (client-side validation)
+     */
+  }
+
   return (
     <>
       {isVGSCollectScriptLoaded && (
@@ -73,12 +104,13 @@ const Basic = () => {
            * https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate
            */}
           <VGSCollectForm
-            vaultId={VGS_CONFIG.vaultId}
-            environment={VGS_CONFIG.environment}
+            vaultId={REACT_APP_VAULT_ID as string}
+            environment={REACT_APP_ENVIRONMENT as VGSCollectVaultEnvironment}
             action="/post"
             submitParameters={{}}
             onUpdateCallback={onUpdateCallback}
             onSubmitCallback={onSubmitCallback}
+            onErrorCalback={onErrorCallback}
           >
             { /**
              * VGS Collect text field component:
@@ -111,6 +143,7 @@ const Basic = () => {
                */
               onKeyPress={(info: VGSCollectKeyboardEventData) => { }}
               css={VGSCollectFieldStyles}
+              name="text"
             />
             { /**
              * VGS Collect card number field component:
@@ -121,6 +154,7 @@ const Basic = () => {
               showCardIcon={{
                 right: '1rem'
               }}
+              name="card-number"
               css={VGSCollectFieldStyles}
             />
             { /**
@@ -131,12 +165,14 @@ const Basic = () => {
               validations={["required", "validCardExpirationDate"]}
               yearLength={2}
               css={VGSCollectFieldStyles}
+              name="exp-date"
             />
             { /**
              * VGS Collect card security code date field component:
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
             <CardSecurityCodeField
+              name="card-security-code"
               validations={["required", "validCardSecurityCode"]}
               css={VGSCollectFieldStyles}
               showCardIcon={{
@@ -148,6 +184,7 @@ const Basic = () => {
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
             <SSNField
+              name="ssn"
               validations={["required", "validSSN"]}
               css={VGSCollectFieldStyles}
             />
@@ -156,6 +193,7 @@ const Basic = () => {
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
             <ZipCodeField
+              name="zip-code"
               validations={["required"]}
               css={VGSCollectFieldStyles}
             />
@@ -164,6 +202,7 @@ const Basic = () => {
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
             <PasswordField
+              name="password"
               validations={["required"]}
               css={VGSCollectFieldStyles}
             />
@@ -172,6 +211,7 @@ const Basic = () => {
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
             <NumberField
+              name="number"
               validations={["required"]}
               css={VGSCollectFieldStyles}
             />
@@ -180,6 +220,7 @@ const Basic = () => {
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
             <TextareaField
+              name="textarea"
               validations={["required"]}
               className="custom-class"
               css={VGSCollectFieldStyles}
@@ -191,6 +232,6 @@ const Basic = () => {
       }
     </>
   )
-}
+});
 
 export default Basic;

@@ -46,6 +46,10 @@ function RenderField(props: any) {
     ...fieldProps
   } = props;
 
+  if (!props.name) {
+    throw new Error(`@vgs/collect-js-react: name attribute for ${props.type} is required.`);
+  }
+
   const fieldId = `vgs-${window.crypto.randomUUID()}`;
   const events = {
     onFocus,
@@ -72,7 +76,6 @@ function RenderField(props: any) {
         secureField.off(FIELD_EVENTS[event], (info) => { events[event](info) })
       });
     }
-
   }, []);
 
   return (
@@ -80,104 +83,95 @@ function RenderField(props: any) {
   )
 }
 
-const TextField = (props: Partial<IVGSCollectTextField & GeneralFieldProps>) => {
+const TextField = React.memo((props: Partial<IVGSCollectTextField & GeneralFieldProps>) => {
   return (
     <RenderField
       {...Object.assign({
         ...DEFAULT_CONFIG.TEXT,
-        name: DEFAULT_CONFIG.TEXT.getName()
       }, props)}
     />
   )
-}
+});
 
-const CardNumberField = (props: Partial<IVGSCollectCardNumberField & GeneralFieldProps>) => {
+const CardNumberField = React.memo((props: Partial<IVGSCollectCardNumberField & GeneralFieldProps>) => {
   return (
     <RenderField
       {...Object.assign({
         ...DEFAULT_CONFIG.CARD_NUMBER,
-        name: DEFAULT_CONFIG.CARD_NUMBER.getName()
       }, props)}
     />
   )
-};
+});
 
-const CardExpirationDateField = (props: Partial<IVGSCollectCardExpirationField & GeneralFieldProps>) => {
+const CardExpirationDateField = React.memo((props: Partial<IVGSCollectCardExpirationField & GeneralFieldProps>) => {
   return (
     <RenderField
       {...Object.assign({
         ...DEFAULT_CONFIG.CARD_EXPIRATION_DATE,
-        name: DEFAULT_CONFIG.CARD_EXPIRATION_DATE.getName()
       }, props)}
     />
   )
-};
+});
 
-const CardSecurityCodeField = (props: Partial<IVGSCollectCardCVCField & GeneralFieldProps>) => {
+const CardSecurityCodeField = React.memo((props: Partial<IVGSCollectCardCVCField & GeneralFieldProps>) => {
   return (
     <RenderField
       {...Object.assign({
         ...DEFAULT_CONFIG.CARD_SECURITY_CODE,
-        name: DEFAULT_CONFIG.CARD_SECURITY_CODE.getName()
       }, props)}
     />
   )
-};
+});
 
-const PasswordField = (props: Partial<IVGSCollectPasswordField & GeneralFieldProps>) => {
+const PasswordField = React.memo((props: Partial<IVGSCollectPasswordField & GeneralFieldProps>) => {
   return (
     <RenderField
       {...Object.assign({
         ...DEFAULT_CONFIG.PASSWORD,
-        name: DEFAULT_CONFIG.PASSWORD.getName()
       }, props)}
     />
   )
-};
+});
 
-const SSNField = (props: Partial<IVGSCollectSSNField & GeneralFieldProps>) => {
+const SSNField = React.memo((props: Partial<IVGSCollectSSNField & GeneralFieldProps>) => {
   return (
     <RenderField
       {...Object.assign({
         ...DEFAULT_CONFIG.SSN,
-        name: DEFAULT_CONFIG.SSN.getName()
       }, props)}
     />
   )
-};
+});
 
-const ZipCodeField = (props: Partial<IVGSCollectZipCodeField & GeneralFieldProps>) => {
+const ZipCodeField = React.memo((props: Partial<IVGSCollectZipCodeField & GeneralFieldProps>) => {
   return (
     <RenderField
       {...Object.assign({
         ...DEFAULT_CONFIG.ZIP_CODE,
-        name: DEFAULT_CONFIG.ZIP_CODE.getName()
       }, props)}
     />
   )
-};
+});
 
-const TextareaField = (props: Partial<IVGSCollectTextareaField & GeneralFieldProps>) => {
+const TextareaField = React.memo((props: Partial<IVGSCollectTextareaField & GeneralFieldProps>) => {
   return (
     <RenderField
       {...Object.assign({
         ...DEFAULT_CONFIG.TEXTAREA,
-        name: DEFAULT_CONFIG.TEXTAREA.getName()
       }, props)}
     />
   )
-};
+});
 
-const NumberField = (props: Partial<IVGSCollectNumberField & GeneralFieldProps>) => {
+const NumberField = React.memo((props: Partial<IVGSCollectNumberField & GeneralFieldProps>) => {
   return (
     <RenderField
       {...Object.assign({
         ...DEFAULT_CONFIG.NUMBER,
-        name: DEFAULT_CONFIG.NUMBER.getName()
       }, props)}
     />
   )
-};
+});
 
 export {
   TextField,
