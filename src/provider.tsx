@@ -1,64 +1,64 @@
-import React, { createContext, useContext, useReducer, useMemo } from 'react';
+import React, { createContext, useContext, useReducer, useMemo, Dispatch } from 'react';
+import { HttpStatusCode } from 'types/HttpStatusCode';
+import { VGSCollectFormState } from './types/Form';
+
+type GlobalStateContext = VGSCollectFormState | undefined;
+type GlobalSubmitContext = { status: HttpStatusCode, data: any } | undefined;
 
 export const initialState = undefined;
 
-export const GlobalSubmitContext = createContext(initialState);
-export const DispatchSubmitContext = createContext(undefined);
-export const GlobalStateContext = createContext(initialState);
-export const DispatchStateContext = createContext(undefined);
+export const GlobalSubmitContext = createContext<GlobalSubmitContext>(initialState);
+export const DispatchSubmitContext = createContext({} as Dispatch<any>);
+export const GlobalStateContext = createContext<GlobalStateContext>(initialState);
+export const DispatchStateContext = createContext({} as Dispatch<any>);
 
 export const GlobalStateProvider = ({ children }: any) => {
   const [state, dispatch] = useReducer(
-    (state: any, newValue: any) => ({ ...state, ...newValue }),
+    (_state: GlobalStateContext, newValue: any) => {
+      return newValue ? { ...newValue } : initialState;
+    },
     initialState
   );
   const [response, dispatchSubmit] = useReducer(
-    (state: any, newValue: any) => ({ ...state, ...newValue }),
+    (_state: GlobalSubmitContext, newValue: any) => {
+      return newValue ? { ...newValue } : initialState;
+    },
     initialState
   );
 
   const memoState = useMemo(
-    () => ({
-      state,
-      dispatch
-    }),
+    () => (state),
     [state]
   );
 
   const memoResponse = useMemo(
-    () => ({
-      response,
-      dispatchSubmit
-    }),
-    [state]
+    () => (response),
+    [response]
   );
 
-  // @ts-ignore
   return (
-    // @ts-ignore
-    <GlobalStateContext.Provider value={memoState}>
-      {/* // @ts-ignore */}
-      <DispatchStateContext.Provider value={dispatch}>
-        <GlobalSubmitContext.Provider value={memoResponse}>
-          {/* // @ts-ignore */}
-          <DispatchSubmitContext.Provider value={dispatchSubmit}>
-            {children}
-          </DispatchSubmitContext.Provider>
-        </GlobalSubmitContext.Provider>
-      </DispatchStateContext.Provider>
-    </GlobalStateContext.Provider>
+    <div>
+      <GlobalStateContext.Provider value={memoState}>
+        <DispatchStateContext.Provider value={dispatch}>
+          <GlobalSubmitContext.Provider value={memoResponse}>
+            <DispatchSubmitContext.Provider value={dispatchSubmit}>
+              {children}
+            </DispatchSubmitContext.Provider>
+          </GlobalSubmitContext.Provider>
+        </DispatchStateContext.Provider>
+      </GlobalStateContext.Provider>
+    </div>
   );
 };
 
-export const useVGSState = () => [
+export const useVGSCollectState = () => [
   useContext(GlobalStateContext),
-  useContext(DispatchStateContext)
-];
-export const useSubmit = () => [
-  useContext(GlobalSubmitContext),
-  useContext(DispatchSubmitContext)
 ];
 
-export const VGS = ({ children }: any) => {
+export const useVGSCollectResponse = () => [
+  useContext(GlobalSubmitContext)
+];
+
+export const VGSCollectProvider = ({ children }: any) => {
   return <GlobalStateProvider>{children}</GlobalStateProvider>;
 };

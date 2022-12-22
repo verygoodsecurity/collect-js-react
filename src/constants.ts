@@ -1,5 +1,3 @@
-import { setDefaultName } from './utils';
-
 const FIELD_EVENTS = {
   onFocus: 'focus',
   onBlur: 'blur',
@@ -13,48 +11,39 @@ const FIELD_EVENTS = {
 const DEFAULT_CONFIG = {
   TEXT: {
     type: 'text',
-    placeholder: 'Cardholder Name',
-    getName: () => setDefaultName('text')
+    placeholder: 'Cardholder Name'
   },
   CARD_NUMBER: {
     type: 'card-number',
-    placeholder: 'Credit Card Number',
-    getName: () => setDefaultName('card-number')
+    placeholder: 'Credit Card Number'
   },
   CARD_EXPIRATION_DATE: {
     type: 'card-expiration-date',
-    placeholder: 'Card Expiration Date',
-    getName: () => setDefaultName('card-expiration-date')
+    placeholder: 'Card Expiration Date'
   },
   CARD_SECURITY_CODE: {
     type: 'card-security-code',
-    placeholder: 'CVC/CVV',
-    getName: () => setDefaultName('card-security-code')
+    placeholder: 'CVC/CVV'
   },
   PASSWORD: {
     type: 'password',
-    placeholder: 'Enter password',
-    getName: () => setDefaultName('password')
+    placeholder: 'Enter password'
   },
   SSN: {
     type: 'ssn',
-    placeholder: 'SSN',
-    getName: () => setDefaultName('ssn')
+    placeholder: 'SSN'
   },
   ZIP_CODE: {
     type: 'zip-code',
-    placeholder: 'Zip Code',
-    getName: () => setDefaultName('zip-code')
+    placeholder: 'Zip Code'
   },
   TEXTAREA: {
     type: 'textarea',
-    placeholder: 'Comment',
-    getName: () => setDefaultName('textarea')
+    placeholder: 'Comment'
   },
   NUMBER: {
     type: 'number',
-    placeholder: 'Number',
-    getName: () => setDefaultName('number')
+    placeholder: 'Number'
   }
 };
 

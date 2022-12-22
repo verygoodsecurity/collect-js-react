@@ -17,7 +17,7 @@ const {
 const {
   REACT_APP_ENVIRONMENT,
   REACT_APP_COLLECT_VERSION,
-} = process.env; 
+} = process.env;
 const vaultId = 'tntux31nzpn';
 
 const CustomPayload = () => {
@@ -42,8 +42,8 @@ const CustomPayload = () => {
       setCollectScriptLoaded(true);
     });
   }, []);
-  
-  const onSubmitCallback = (status: VGSCollectHttpStatusCode, resp: any) => {    
+
+  const onSubmitCallback = (status: VGSCollectHttpStatusCode, resp: any) => {
     /**
      * Receive information about HTTP request
      */
@@ -90,7 +90,7 @@ const CustomPayload = () => {
               css={VGSCollectFieldStyles}
               tokenization={{ format: 'UUID', storage: 'PERSISTENT' }}
             />
-            <CardNumberField 
+            <CardNumberField
               css={VGSCollectFieldStyles}
             />
             { /**
@@ -98,12 +98,14 @@ const CustomPayload = () => {
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
             <CardExpirationDateField
+              name="card-expiration-date"
               validations={["required", "validCardExpirationDate"]}
               yearLength={2}
               css={VGSCollectFieldStyles}
               tokenization={{ format: 'UUID', storage: 'PERSISTENT' }}
-            /> 
+            />
             <CardSecurityCodeField
+              name="card-security-code"
               validations={["required", "validCardSecurityCode"]}
               css={VGSCollectFieldStyles}
               showCardIcon={{
