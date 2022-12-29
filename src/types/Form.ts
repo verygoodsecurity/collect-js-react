@@ -276,7 +276,7 @@ interface ICollectFormPayloadStructure {
   [key: string]: ICollectFieldAlias;
 }
 
-export {
+export type {
   IVGSCollect,
   IVGSCollectForm,
   IVGSCollectTextField,

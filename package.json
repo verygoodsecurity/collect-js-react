@@ -18,8 +18,8 @@
     "test:build": "run-s build",
     "test:lint": "eslint --ext .ts src",
     "lint:fix": "eslint --ext .ts src --fix",
-    "test:unit": "cross-env CI=1 react-scripts test --env=jsdom",
-    "test:watch": "react-scripts test --env=jsdom",
+    "test:unit": "jest",
+    "test:watch": "jest --watch",
     "predeploy": "cd example && yarn install && yarn run build",
     "deploy": "gh-pages -d example/build"
   },
@@ -27,6 +27,8 @@
     "react": "^16.0.0"
   },
   "devDependencies": {
+    "@babel/plugin-transform-react-jsx": "^7.20.7",
+    "@testing-library/dom": "6.16.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
@@ -55,7 +57,17 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "^3.4.1",
+    "ts-jest": "^24.3.0",
     "typescript": "^4.9.3"
+  },
+  "babel": {
+    "presets": [
+      "@babel/react",
+      "@babel/env"
+    ],
+    "plugins": [
+      "@babel/plugin-transform-react-jsx"
+    ]
   },
   "files": [
     "dist"

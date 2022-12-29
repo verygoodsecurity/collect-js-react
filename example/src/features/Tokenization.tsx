@@ -73,7 +73,6 @@ const CustomPayload = () => {
           <VGSCollectForm
             vaultId={vaultId as string}
             environment={REACT_APP_ENVIRONMENT as VGSCollectVaultEnvironment}
-            // action="/post"
             tokenizationAPI={true}
             submitParameters={{}}
             onUpdateCallback={onUpdateCallback}
@@ -91,6 +90,7 @@ const CustomPayload = () => {
               tokenization={{ format: 'UUID', storage: 'PERSISTENT' }}
             />
             <CardNumberField
+              name="card-number"
               css={VGSCollectFieldStyles}
             />
             { /**
