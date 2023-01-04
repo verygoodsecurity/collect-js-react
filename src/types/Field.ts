@@ -129,7 +129,7 @@ interface IVGSCollectFieldInstance {
   replacePattern(regExpString: string, newSubStr: string): void;
 }
 
-export {
+export type {
   VGSCollectKeyboardEventData,
   VGSCollectFocusEventData,
   IVGSCollectFieldInstance

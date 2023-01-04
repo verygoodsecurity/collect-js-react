@@ -36,6 +36,10 @@ export function VGSCollectForm(props: ICollectFormProps) {
     children
   } = props;
 
+  if (!vaultId) {
+    throw new Error(`@vgs/collect-js-react: vaultId is required.`);
+  }
+
   const dispatchFormStateUpdate = useContext(DispatchStateContext);
   const dispatchResponseUpdate = useContext(DispatchSubmitContext);
 
@@ -60,8 +64,10 @@ export function VGSCollectForm(props: ICollectFormProps) {
   useEffect(() => {
     return () => {
       const activeForm = getFormInstance();
-      activeForm.unmount();
-      setFormInstance({} as IVGSCollectForm);
+      if (Object.keys(activeForm).length !== 0) {
+        activeForm.unmount();
+        setFormInstance({} as IVGSCollectForm);
+      }
       dispatchFormStateUpdate(null);
       dispatchResponseUpdate(null);
     }
@@ -78,7 +84,7 @@ export function VGSCollectForm(props: ICollectFormProps) {
 
     if (tokenizationAPI) {
       form.tokenize(
-        (status: HttpStatusCode, resp: any) => {
+        (status: HttpStatusCode | null, resp: any) => {
           if (onSubmitCallback) {
             onSubmitCallback(status, resp);
           }
@@ -91,7 +97,7 @@ export function VGSCollectForm(props: ICollectFormProps) {
       );
     } else {
       form.submit(action, submitParameters,
-        (status: HttpStatusCode, data: any) => {
+        (status: HttpStatusCode | null, data: any) => {
           if (onSubmitCallback) {
             onSubmitCallback(status, data);
           }
