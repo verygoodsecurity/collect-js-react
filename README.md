@@ -24,6 +24,7 @@
 * [Documentation](#documentation)
 * [Examples](#examples)
 * [Contact](#contact)
+* [License](#license)
 
 ## Overview
 
@@ -248,3 +249,7 @@ const VGSCollectForm = () => {
 
 If you have any questions please reach out to [support](mailto:support@verygoodsecurity.com) or open issue [here](https://github.com/verygoodsecurity/vgs-collect-js/issues).
 
+## License
+
+This project is licensed under the MIT license. See the [LICENSE](LICENSE) file
+for details.
