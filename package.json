@@ -73,6 +73,7 @@
     "dist"
   ],
   "resolutions": {
-    "nth-check": "2.1.1"
+    "nth-check": "2.1.1",
+    "postcss": "8.4.21"
   }
 }
