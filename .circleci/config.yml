@@ -15,6 +15,12 @@ jobs:
     executor: node/default
     steps:
       - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - run:
+          name: Build
+          command: |
+            yarn build    
       - run:
           name: Authenticate with NPM
           command: |
