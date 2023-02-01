@@ -65,7 +65,7 @@ There are couple of options here:
 ```javascript
 import { VGSCollectForm } from '@vgs/collect-js-react';
 
-const myApp = () => {
+const App = () => {
   const onSubmitCallback = (status, data) => {};
   const onUpdateCallback = (state) => {};
 
@@ -74,7 +74,7 @@ const myApp = () => {
       vaultId="<vault_id>"
       environment="<environment>"
       action="/post"
-      submitParamethers={{}}
+      submitParameters={{}}
       onUpdateCallback={onUpdateCallback}
       onSubmitCallback={onSubmitCallback}
     >
@@ -82,16 +82,17 @@ const myApp = () => {
     </VGSCollectForm>
   )
 };
+export default App;
 ```
 
 | Property           | Description                                                | Documentation
 |--------------------|------------------------------------------------------------|------------------------------------------------------------------------------------------------------|
-| vaultId            | A string value beginning with the prefix `tnt`.            | [Parameters.vaultId](https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate)        |
+| vaultId            | A string value beginning with the prefix `tnt` and related to VGS vault identifier            | [Parameters.vaultId](https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate)        |
 | environment        | Vault environment: `sanbdox` \| `live` or region specific. | [Parameters.environment](https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate)    |
-| action             | Endpoint for the HTTP request.                             | [Parameters.path](https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit)                 |
-| submitParamethers? | HTTP request configuration.                                | [Parameters.options](https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit)              |
+| action             | Endpoint for the HTTPS request.                             | [Parameters.path](https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit)                 |
+| submitParamethers? | HTTPS request configuration.                                | [Parameters.options](https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit)              |
 | onUpdateCallback?  | Returns the form state in the callback.                    | [Parameters.stateCallback](https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate)  |
-| onSubmitCallback?  | Returns status and response data in the callback.          | [Parameters.responseCallback](https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit)     |
+| onSubmitCallback?  | Returns status code and response data in the callback.          | [Parameters.responseCallback](https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit)     |
 | cname?             | String represents CNAME the request will be submitted to.  | [.useCNAME()](https://www.verygoodsecurity.com/docs/api/collect/#api-formusecname)                   |
 
 <br/>
@@ -130,7 +131,7 @@ const myApp = () => {
   const onUpdateCallback = (state) => {};
 
   return (
-    <CollectForm 
+    <VGSCollectForm 
       vaultId="<vault_id>"
       environment="<environment>"
       action="/post"
@@ -151,7 +152,7 @@ const myApp = () => {
       />
       <CardEpirationDateField 
         name="exp-date"
-        validations={["required", validCardExpirationDate"]}
+        validations={["required", "validCardExpirationDate"]}
         placeholder="MM / YY"
         yearLength={2}
         css={{}}
@@ -162,7 +163,7 @@ const myApp = () => {
         placeholder="CVV"
         css={{}}
       />
-    </CollectForm>
+    </VGSCollectForm>
   )
 };
 ```
@@ -204,12 +205,12 @@ const { TextField } = VGSCollectForm;
 const App = () => {
   return (
     <VGSCollectProvider>
-      <VGSCollectForm />
+      <VGSCollectSecureForm />
     </VGSCollectProvider>
   )
 };
 
-const VGSCollectForm = () => {
+const VGSCollectSecureForm = () => {
   const [state] = useVGSCollectState();
   const [response] = useVGSCollectResponse();
 
@@ -220,7 +221,7 @@ const VGSCollectForm = () => {
   }, [state]);
 
   return (
-    <CollectForm 
+    <VGSCollectForm 
       vaultId="<vault_id>"
       environment="<environment>"
       action="/post"
@@ -230,7 +231,7 @@ const VGSCollectForm = () => {
         validations={["required"]}
         placeholder="Cardholder name"
       />
-    </CollectForm>
+    </VGSCollectForm>
   )
 }
 ```
