@@ -65,16 +65,19 @@ function RenderField(props: any) {
 
   useEffect(() => {
     const collectFormInstance = getFormInstance() as IVGSCollectForm;
-    const secureField = collectFormInstance.field(`#${fieldId}`, fieldProps);
 
-    eventsToListen.forEach(event => {
-      secureField.on(FIELD_EVENTS[event], (info) => { events[event](info) })
-    });
+    if (Object.keys(collectFormInstance).length !== 0) {
+      const secureField = collectFormInstance.field(`#${fieldId}`, fieldProps);
 
-    return () => {
       eventsToListen.forEach(event => {
-        secureField.off(FIELD_EVENTS[event], (info) => { events[event](info) })
+        secureField.on(FIELD_EVENTS[event], (info) => { events[event](info) })
       });
+
+      return () => {
+        eventsToListen.forEach(event => {
+          secureField.off(FIELD_EVENTS[event], (info) => { events[event](info) })
+        });
+      }
     }
   }, []);
 

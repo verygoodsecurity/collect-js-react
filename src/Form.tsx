@@ -43,6 +43,12 @@ export function VGSCollectForm(props: ICollectFormProps) {
   const dispatchFormStateUpdate = useContext(DispatchStateContext);
   const dispatchResponseUpdate = useContext(DispatchSubmitContext);
 
+
+  const isProviderExists = (
+    typeof dispatchResponseUpdate === 'function' &&
+    typeof dispatchResponseUpdate === 'function'
+  )
+
   if (
     isBrowser &&
     window.VGSCollect &&
@@ -51,8 +57,8 @@ export function VGSCollectForm(props: ICollectFormProps) {
     const form: IVGSCollectForm = window.VGSCollect.create(vaultId, environment, (state: VGSCollectFormState) => {
       if (onUpdateCallback) {
         onUpdateCallback(state);
-      }
-      dispatchFormStateUpdate(state);
+      };
+      isProviderExists && dispatchFormStateUpdate(state);
     });
 
     if (cname) {
@@ -68,8 +74,10 @@ export function VGSCollectForm(props: ICollectFormProps) {
         activeForm.unmount();
         setFormInstance({} as IVGSCollectForm);
       }
-      dispatchFormStateUpdate(null);
-      dispatchResponseUpdate(null);
+      if (isProviderExists) {
+        dispatchFormStateUpdate(null);
+        dispatchResponseUpdate(null);
+      }
     }
   }, []);
 
@@ -116,15 +124,13 @@ export function VGSCollectForm(props: ICollectFormProps) {
   }
 
   return (
-    <React.StrictMode>
-      <form
-        onSubmit={(event) => {
-          submitHandler(event)
-        }}
-      >
-        {children}
-      </form>
-    </React.StrictMode>
+    <form
+      onSubmit={(event) => {
+        submitHandler(event)
+      }}
+    >
+      {children}
+    </form>
   )
 }
 
