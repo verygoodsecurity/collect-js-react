@@ -13,7 +13,7 @@
     "declaration": true,
     "declarationDir": "./dist",
     "esModuleInterop": true,
-    "noImplicitReturns": true,
+    "noImplicitReturns": false,
     "noImplicitThis": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
