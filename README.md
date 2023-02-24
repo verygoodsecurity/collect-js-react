@@ -198,7 +198,7 @@ import {
   useVGSCollectState,
   useVGSCollectResponse,
   VGSCollectForm
-} from "@vgs/collect-js-react";
+} from '@vgs/collect-js-react';
 
 const { TextField } = VGSCollectForm;
 
