@@ -30,6 +30,7 @@
     "react/jsx-fragments": 0,
     "react/no-unused-prop-types": 0,
     "import/export": 0,
+    "quotes": [2, "single", { "avoidEscape": true, "allowTemplateLiterals": true }],
     "no-unused-vars": "off"
   }
 }
