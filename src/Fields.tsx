@@ -18,7 +18,7 @@ import {
 
 import {
   VGSCollectKeyboardEventData,
-  VGSCollectFocusEventData,
+  VGSCollectFocusEventData
 } from './types/Field';
 
 type GeneralFieldProps = {
@@ -30,7 +30,7 @@ type GeneralFieldProps = {
   onKeyUp: (info: VGSCollectKeyboardEventData) => void;
   onKeyDown: (info: VGSCollectKeyboardEventData) => void;
   onKeyPress: (info: VGSCollectKeyboardEventData) => void;
-}
+};
 
 function RenderField(props: any) {
   const {
@@ -184,5 +184,5 @@ export {
   SSNField,
   ZipCodeField,
   TextareaField,
-  NumberField,
+  NumberField
 };
