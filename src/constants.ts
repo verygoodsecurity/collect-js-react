@@ -7,43 +7,52 @@ const FIELD_EVENTS = {
   onKeyDown: 'keydown',
   onKeyPress: 'keypress'
 };
-
+const framework = 'react-wrapper'
 const DEFAULT_CONFIG = {
   TEXT: {
     type: 'text',
-    placeholder: 'Cardholder Name'
+    placeholder: 'Cardholder Name',
+    framework,
   },
   CARD_NUMBER: {
     type: 'card-number',
-    placeholder: 'Credit Card Number'
+    placeholder: 'Credit Card Number',
+    framework,
   },
   CARD_EXPIRATION_DATE: {
     type: 'card-expiration-date',
-    placeholder: 'Card Expiration Date'
+    placeholder: 'Card Expiration Date',
+    framework,
   },
   CARD_SECURITY_CODE: {
     type: 'card-security-code',
-    placeholder: 'CVC/CVV'
+    placeholder: 'CVC/CVV',
+    framework,
   },
   PASSWORD: {
     type: 'password',
-    placeholder: 'Enter password'
+    placeholder: 'Enter password',
+    framework,
   },
   SSN: {
     type: 'ssn',
-    placeholder: 'SSN'
+    placeholder: 'SSN',
+    framework,
   },
   ZIP_CODE: {
     type: 'zip-code',
-    placeholder: 'Zip Code'
+    placeholder: 'Zip Code',
+    framework,
   },
   TEXTAREA: {
     type: 'textarea',
-    placeholder: 'Comment'
+    placeholder: 'Comment',
+    framework,
   },
   NUMBER: {
     type: 'number',
-    placeholder: 'Number'
+    placeholder: 'Number',
+    framework,
   }
 };
 

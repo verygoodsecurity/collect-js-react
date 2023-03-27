@@ -107,6 +107,7 @@ interface IDefaultFieldOptions {
   readonly?: BooleanValue;
   inputMode?: InputMode;
   tokenization?: IFieldTokenization | boolean;
+  framework?: 'react-wrapper';
 }
 
 type FieldConfig =
