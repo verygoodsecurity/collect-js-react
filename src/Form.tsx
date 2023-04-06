@@ -64,6 +64,12 @@ export function VGSCollectForm(props: ICollectFormProps) {
     if (cname) {
       form.useCname(cname);
     }
+    
+    if (form.insightsConfig) { 
+      form.insightsConfig({
+        framework: 'react'
+      })
+    }
     setFormInstance(form);
   }
 

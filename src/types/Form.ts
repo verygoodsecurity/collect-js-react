@@ -107,7 +107,6 @@ interface IDefaultFieldOptions {
   readonly?: BooleanValue;
   inputMode?: InputMode;
   tokenization?: IFieldTokenization | boolean;
-  framework?: 'react-wrapper';
 }
 
 type FieldConfig =
@@ -201,12 +200,16 @@ interface VGSCollectSubmitOptions {
   withCredentials: BooleanValue;
 }
 
+interface VGSCollectInsightsConfig {
+  framework?: string;
+}
 interface IVGSCollectForm {
   /**
    * Docs: https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
    */
   field(selector: string, options: FieldConfig): IVGSCollectFieldInstance;
-
+  
+  insightsConfig(insightParameters: VGSCollectInsightsConfig): void;
   /**
    * Docs: https://www.verygoodsecurity.com/docs/api/collect/#api-fieldon
    *       https://www.verygoodsecurity.com/docs/api/collect/#api-fieldoff
