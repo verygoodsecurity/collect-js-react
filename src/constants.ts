@@ -7,43 +7,42 @@ const FIELD_EVENTS = {
   onKeyDown: 'keydown',
   onKeyPress: 'keypress'
 };
-
 const DEFAULT_CONFIG = {
   TEXT: {
     type: 'text',
-    placeholder: 'Cardholder Name'
+    placeholder: 'Cardholder Name',
   },
   CARD_NUMBER: {
     type: 'card-number',
-    placeholder: 'Credit Card Number'
+    placeholder: 'Credit Card Number',
   },
   CARD_EXPIRATION_DATE: {
     type: 'card-expiration-date',
-    placeholder: 'Card Expiration Date'
+    placeholder: 'Card Expiration Date',
   },
   CARD_SECURITY_CODE: {
     type: 'card-security-code',
-    placeholder: 'CVC/CVV'
+    placeholder: 'CVC/CVV',
   },
   PASSWORD: {
     type: 'password',
-    placeholder: 'Enter password'
+    placeholder: 'Enter password',
   },
   SSN: {
     type: 'ssn',
-    placeholder: 'SSN'
+    placeholder: 'SSN',
   },
   ZIP_CODE: {
     type: 'zip-code',
-    placeholder: 'Zip Code'
+    placeholder: 'Zip Code',
   },
   TEXTAREA: {
     type: 'textarea',
-    placeholder: 'Comment'
+    placeholder: 'Comment',
   },
   NUMBER: {
     type: 'number',
-    placeholder: 'Number'
+    placeholder: 'Number',
   }
 };
 
