@@ -17,7 +17,9 @@ import {
   SSNField,
   ZipCodeField,
   TextareaField,
-  NumberField
+  NumberField,
+  DateField,
+  FileField
 } from './Fields';
 
 const isBrowser = typeof window !== 'undefined';
@@ -143,3 +145,5 @@ VGSCollectForm.SSNField = SSNField;
 VGSCollectForm.ZipCodeField = ZipCodeField;
 VGSCollectForm.TextareaField = TextareaField;
 VGSCollectForm.NumberField = NumberField;
+VGSCollectForm.FileField = FileField;
+VGSCollectForm.DateField = DateField;
