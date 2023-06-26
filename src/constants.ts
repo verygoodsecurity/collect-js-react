@@ -44,6 +44,14 @@ const DEFAULT_CONFIG = {
   NUMBER: {
     type: 'number',
     placeholder: 'Number'
+  },
+  FILE: {
+    type: 'file',
+    placeholder: ''
+  },
+  DATE: {
+    type: 'date',
+    placeholder: ''
   }
 };
 

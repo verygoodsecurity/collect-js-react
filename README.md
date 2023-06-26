@@ -18,13 +18,13 @@
 
 [![CircleCI](https://circleci.com/gh/verygoodsecurity/collect-js-react.svg?style=svg)](https://circleci.com/gh/circleci/circleci-docs)
 
-* [Overview](#overview)
-* [Installation](#installation)
-* [How to use](#how-to-use)
-* [Documentation](#documentation)
-* [Examples](#examples)
-* [Contact](#contact)
-* [License](#license)
+- [Overview](#overview)
+- [Installation](#installation)
+- [How to use](#how-to-use)
+- [Documentation](#documentation)
+- [Examples](#examples)
+- [Contact](#contact)
+- [License](#license)
 
 ## Overview
 
@@ -56,7 +56,7 @@ To stay PCI Compliant it's a mandatory to load js from our `js.verygoodvault.com
 There are couple of options here:
 
 - [Download file directly from the CDN](https://www.verygoodsecurity.com/docs/vgs-collect/js#quick-start).
-- Use our loading [npm module](https://www.npmjs.com/package/@vgs/collect-js). *[Example](https://github.com/verygoodsecurity/collect-js-react/blob/main/example/src/features/Basic.tsx#L45)*.
+- Use our loading [npm module](https://www.npmjs.com/package/@vgs/collect-js). _[Example](https://github.com/verygoodsecurity/collect-js-react/blob/main/example/src/features/Basic.tsx#L45)_.
 
 <br/>
 
@@ -70,72 +70,70 @@ const App = () => {
   const onUpdateCallback = (state) => {};
 
   return (
-    <VGSCollectForm 
-      vaultId="<vault_id>"
-      environment="<environment>"
-      action="/post"
+    <VGSCollectForm
+      vaultId='<vault_id>'
+      environment='<environment>'
+      action='/post'
       submitParameters={{}}
       onUpdateCallback={onUpdateCallback}
       onSubmitCallback={onSubmitCallback}
     >
       // Add secure fields here
     </VGSCollectForm>
-  )
+  );
 };
 export default App;
 ```
 
-| Property           | Description                                                | Documentation
-|--------------------|------------------------------------------------------------|------------------------------------------------------------------------------------------------------|
-| vaultId            | A string value beginning with the prefix `tnt` and related to VGS vault identifier            | [Parameters.vaultId](https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate)        |
-| environment        | Vault environment: `sanbdox` \| `live` or region specific. | [Parameters.environment](https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate)    |
-| action             | Endpoint for the HTTPS request.                             | [Parameters.path](https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit)                 |
-| submitParamethers? | HTTPS request configuration.                                | [Parameters.options](https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit)              |
-| onUpdateCallback?  | Returns the form state in the callback.                    | [Parameters.stateCallback](https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate)  |
-| onSubmitCallback?  | Returns status code and response data in the callback.          | [Parameters.responseCallback](https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit)     |
-| cname?             | String represents CNAME the request will be submitted to.  | [.useCNAME()](https://www.verygoodsecurity.com/docs/api/collect/#api-formusecname)                   |
+| Property           | Description                                                | Documentation                                                                                       |
+| ------------------ | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| vaultId            | A string value beginning with the prefix `tnt`.            | [Parameters.vaultId](https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate)       |
+| environment        | Vault environment: `sanbdox` \| `live` or region specific. | [Parameters.environment](https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate)   |
+| action             | Endpoint for the HTTP request.                             | [Parameters.path](https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit)                |
+| submitParamethers? | HTTP request configuration.                                | [Parameters.options](https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit)             |
+| onUpdateCallback?  | Returns the form state in the callback.                    | [Parameters.stateCallback](https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate) |
+| onSubmitCallback?  | Returns status and response data in the callback.          | [Parameters.responseCallback](https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit)    |
+| cname?             | String represents CNAME the request will be submitted to.  | [.useCNAME()](https://www.verygoodsecurity.com/docs/api/collect/#api-formusecname)                  |
 
 <br/>
 
 ### 3. Define secure input fields:
 
-| Collect.js input type  | Collect.js React Component                  | Default Prop Values                                               |
-|------------------------|---------------------------------------------|-------------------------------------------------------------------|
-| `text`                 | `<VGSCollectForm.TextField/>`               | ` {type: 'text', placeholder: 'Cardholder Name'}`                 |
-| `card-number`          | `<VGSCollectForm.CardNumberField/>`         | ` {type: 'card-number', placeholder: 'Credit Card Number'} `      |
-| `card-expiration-date` | `<VGSCollectForm.CardExpirationDateField/>` | ` {type: 'card-expiration-date', placeholder: 'MM/YY'} `          |
-| `card-security-code`   | `<VGSCollectForm.CardSecurityCodeField/>`   | ` {type: 'card-security-code', placeholder: 'CVC/CVV'} `          |
-| `password`             | `<VGSCollectForm.PasswordField/>`           | ` {type: 'password', placeholder: 'Enter Password'} `             |
-| `ssn`                  | `<VGSCollectForm.SSNField/>`                | ` {type: 'ssn', placeholder: 'SSN'} `                             |
-| `zip-code`             | `<VGSCollectForm.ZipCodeField/>`            | ` {type: 'zip-code', placeholder: 'Zip Code'} `                   |
-| `number`               | `<VGSCollectForm.NumberField/>`             | ` {type: 'number', placeholder: 'Number'} `                       |
-| `textarea`             | `<VGSCollectForm/TextareaField/>`           | ` {type: 'textarea',  placeholder: 'Comment'} `                   |
-
+| Collect.js input type  | Collect.js React Component                  | Default Prop Values                                        |
+| ---------------------- | ------------------------------------------- | ---------------------------------------------------------- |
+| `text`                 | `<VGSCollectForm.TextField/>`               | ` {type: 'text', placeholder: 'Cardholder Name'}`          |
+| `card-number`          | `<VGSCollectForm.CardNumberField/>`         | `{type: 'card-number', placeholder: 'Credit Card Number'}` |
+| `card-expiration-date` | `<VGSCollectForm.CardExpirationDateField/>` | `{type: 'card-expiration-date', placeholder: 'MM/YY'}`     |
+| `card-security-code`   | `<VGSCollectForm.CardSecurityCodeField/>`   | `{type: 'card-security-code', placeholder: 'CVC/CVV'}`     |
+| `password`             | `<VGSCollectForm.PasswordField/>`           | `{type: 'password', placeholder: 'Enter Password'}`        |
+| `ssn`                  | `<VGSCollectForm.SSNField/>`                | `{type: 'ssn', placeholder: 'SSN'}`                        |
+| `zip-code`             | `<VGSCollectForm.ZipCodeField/>`            | `{type: 'zip-code', placeholder: 'Zip Code'}`              |
+| `number`               | `<VGSCollectForm.NumberField/>`             | `{type: 'number', placeholder: 'Number'}`                  |
+| `textarea`             | `<VGSCollectForm/TextareaField/>`           | `{type: 'textarea',  placeholder: 'Comment'}`              |
+| `file`                 | `<VGSCollectForm/FileField/>`               | `{type: 'file',  placeholder: ''}`                         |
+| `date`                 | `<VGSCollectForm/DateField/>`               | `{type: 'date',  placeholder: ''}`                         |
 
 The complete list of supported properties you can find here: https://www.verygoodsecurity.com/docs/api/collect/#api-formfield.
 All configuration properties available in the Reference Documentation can be passed in the component props using the same name.
 
-*Example:*
+_Example:_
 
 ```javascript
 import { VGSCollectForm } from '@vgs/collect-js-react';
 
-const { 
-  CardNumberField,
-  CardExpirationDateField,
-  CardSecurityCodeField
-} = VGSCollectForm;
+const { CardNumberField, CardExpirationDateField, CardSecurityCodeField } =
+  VGSCollectForm;
 
 const myApp = () => {
   const onSubmitCallback = (status, data) => {};
   const onUpdateCallback = (state) => {};
 
   return (
-    <VGSCollectForm 
-      vaultId="<vault_id>"
-      environment="<environment>"
-      action="/post"
-      submitParameters={{
+    <VGSCollectForm
+      vaultId='<vault_id>'
+      environment='<environment>'
+      action='/post'
+      submitParamethers={{
         headers: {
           myHeader: 'MyHeader'
         }
@@ -143,28 +141,28 @@ const myApp = () => {
       onUpdateCallback={onUpdateCallback}
       onSubmitCallback={onSubmitCallback}
     >
-      <CardNumberField 
-        name="card-number"
-        validations={["required", "validCardNumber"]}
-        placeholder="XXXX XXXX XXXX XXXX"
+      <CardNumberField
+        name='card-number'
+        validations={['required', 'validCardNumber']}
+        placeholder='XXXX XXXX XXXX XXXX'
         showCardIcon={true}
         css={{}}
       />
-      <CardEpirationDateField 
-        name="exp-date"
-        validations={["required", "validCardExpirationDate"]}
-        placeholder="MM / YY"
+      <CardEpirationDateField
+        name='exp-date'
+        validations={['required', 'validCardExpirationDate']}
+        placeholder='MM / YY'
         yearLength={2}
         css={{}}
       />
       <CardSecurityCodeField
-        name="cvv"
-        validations={["required", "validCardSecurityCode"]}
-        placeholder="CVV"
+        name='cvv'
+        validations={['required', 'validCardSecurityCode']}
+        placeholder='CVV'
         css={{}}
       />
     </VGSCollectForm>
-  )
+  );
 };
 ```
 
@@ -172,19 +170,19 @@ const myApp = () => {
 
 ### 3. Field event handlers
 
-VGS Collect.js allows listening to input changes. 
+VGS Collect.js allows listening to input changes.
 The library exposes the following handlers: `onFocus`, `onBlur`, `onUpdate`, `onDelete`, `onKeyUp`, `onKeyDown`, `onKeyPress`.
 
 ```javascript
 <TextField
-  name="text"
-  validations={["required"]}
-  onFocus={(info: VGSCollectFocusEventData) => { }}
-  onBlur={(info: VGSCollectFocusEventData) => { }}
-  onUpdate={(info: VGSCollectStateParams) => { }}
-  onKeyUp={(info: VGSCollectKeyboardEventData) => { }}
-  onKeyDown={(info: VGSCollectKeyboardEventData) => { }}
-  onKeyPress={(info: VGSCollectKeyboardEventData) => { }}
+  name='text'
+  validations={['required']}
+  onFocus={(info: VGSCollectFocusEventData) => {}}
+  onBlur={(info: VGSCollectFocusEventData) => {}}
+  onUpdate={(info: VGSCollectStateParams) => {}}
+  onKeyUp={(info: VGSCollectKeyboardEventData) => {}}
+  onKeyDown={(info: VGSCollectKeyboardEventData) => {}}
+  onKeyPress={(info: VGSCollectKeyboardEventData) => {}}
 />
 ```
 
@@ -193,12 +191,12 @@ The library exposes the following handlers: `onFocus`, `onBlur`, `onUpdate`, `on
 In order to access the form state and response from the hook, wrap consumer component with the form in `VGSCollectProvider` context provider.
 
 ```javascript
-import { 
-  VGSCollectProvider, 
+import {
+  VGSCollectProvider,
   useVGSCollectState,
   useVGSCollectResponse,
   VGSCollectForm
-} from "@vgs/collect-js-react";
+} from '@vgs/collect-js-react';
 
 const { TextField } = VGSCollectForm;
 
@@ -207,7 +205,7 @@ const App = () => {
     <VGSCollectProvider>
       <VGSCollectSecureForm />
     </VGSCollectProvider>
-  )
+  );
 };
 
 const VGSCollectSecureForm = () => {
@@ -221,19 +219,19 @@ const VGSCollectSecureForm = () => {
   }, [state]);
 
   return (
-    <VGSCollectForm 
-      vaultId="<vault_id>"
-      environment="<environment>"
-      action="/post"
+    <VGSCollectForm
+      vaultId='<vault_id>'
+      environment='<environment>'
+      action='/post'
     >
-      <TextField 
-        name="cardholder-name"
-        validations={["required"]}
-        placeholder="Cardholder name"
+      <TextField
+        name='cardholder-name'
+        validations={['required']}
+        placeholder='Cardholder name'
       />
     </VGSCollectForm>
-  )
-}
+  );
+};
 ```
 
 ## Documentation

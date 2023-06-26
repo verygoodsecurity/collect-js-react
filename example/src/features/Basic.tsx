@@ -22,6 +22,8 @@ const {
   NumberField,
   SSNField,
   ZipCodeField,
+  FileField,
+  DateField
 } = VGSCollectForm;
 
 const {
@@ -223,6 +225,25 @@ const Basic = React.memo(() => {
               name="textarea"
               validations={["required"]}
               className="custom-class"
+              css={VGSCollectFieldStyles}
+            />
+            { /**
+             * VGS Collect textarea field component:
+             * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
+             */}
+            <DateField
+              name="date"
+              validations={["required"]}
+              css={VGSCollectFieldStyles}
+            />
+            { /**
+             * VGS Collect textarea field component:
+             * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
+             */}
+            <FileField
+              name="file"
+              validations={["required"]}
+              serializers={[{ name: "toBase64" }]}
               css={VGSCollectFieldStyles}
             />
             <button type="submit">Submit</button>

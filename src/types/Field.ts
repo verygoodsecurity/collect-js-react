@@ -18,7 +18,8 @@ export type VGSCollectFieldType =
   | 'checkbox'
   | 'radio'
   | 'dropdown'
-  | 'textarea';
+  | 'textarea'
+  | 'date';
 export type ClassMap = Partial<Record<FieldState, string>>;
 
 type VGSCollectKeyboardEventData<T = 'keydown' | 'keypress' | 'keyup'> = {

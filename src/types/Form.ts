@@ -181,6 +181,21 @@ interface IVGSCollectTextareaField extends IDefaultFieldOptions {
   hideValue?: BooleanValue;
 }
 
+interface IVGSCollectFileField extends IDefaultFieldOptions {
+  type: 'file';
+  multiple: boolean;
+  accept: string[];
+  capture: 'user' | 'environment';
+  maxFileSize: number;
+  maxFiled: number;
+}
+
+interface IVGSCollectDateField extends IDefaultFieldOptions {
+  type: 'date';
+  min?: number;
+  max?: number;
+}
+
 interface CardInfo {
   type: string;
   pattern: RegExp;
@@ -288,6 +303,8 @@ export type {
   IVGSCollectPasswordField,
   IVGSCollectNumberField,
   IVGSCollectTextareaField,
+  IVGSCollectDateField,
+  IVGSCollectFileField,
   ICollectFormProps,
   ICollectFormPayloadStructure,
   VGSCollectFormState,

@@ -13,8 +13,10 @@ import {
   IVGSCollectNumberField,
   IVGSCollectZipCodeField,
   IVGSCollectTextareaField,
+  IVGSCollectFileField,
+  IVGSCollectDateField,
   IVGSCollectForm,
-  VGSCollectStateParams
+  VGSCollectStateParams,
 } from './types/Form';
 
 import {
@@ -176,6 +178,26 @@ const NumberField = React.memo((props: Partial<IVGSCollectNumberField & GeneralF
   )
 });
 
+const DateField = React.memo((props: Partial<IVGSCollectDateField & GeneralFieldProps>) => {
+  return (
+    <RenderField
+      {...Object.assign({
+        ...DEFAULT_CONFIG.DATE,
+      }, props)}
+    />
+  )
+});
+
+const FileField = React.memo((props: Partial<IVGSCollectFileField & GeneralFieldProps>) => {
+  return (
+    <RenderField
+      {...Object.assign({
+        ...DEFAULT_CONFIG.FILE,
+      }, props)}
+    />
+  )
+});
+
 export {
   TextField,
   CardNumberField,
@@ -186,4 +208,6 @@ export {
   ZipCodeField,
   TextareaField,
   NumberField,
+  FileField,
+  DateField
 };
