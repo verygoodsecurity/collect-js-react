@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from 'react';
 import { setFormInstance, getFormInstance } from './state';
-import { DispatchStateContext, DispatchSubmitContext } from "./provider";
+import { DispatchStateContext, DispatchSubmitContext } from './provider';
 import { HttpStatusCode } from './types/HttpStatusCode';
 import {
   IVGSCollectForm,
