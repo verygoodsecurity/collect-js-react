@@ -291,6 +291,10 @@ interface ICollectFormPayloadStructure {
   [key: string]: ICollectFieldAlias;
 }
 
+interface VGSCollectFormRef {
+  unmount: () => void;
+}
+
 export type {
   IVGSCollect,
   IVGSCollectForm,
@@ -310,5 +314,6 @@ export type {
   VGSCollectFormState,
   VGSCollectStateParams,
   VGSCollectVaultEnvironment,
-  VGSCollectHttpStatusCode
+  VGSCollectHttpStatusCode,
+  VGSCollectFormRef
 };

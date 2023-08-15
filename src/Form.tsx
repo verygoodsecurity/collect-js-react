@@ -1,11 +1,17 @@
-import React, { useEffect, useContext } from 'react';
+import React, {
+  useEffect,
+  useContext,
+  forwardRef,
+  useImperativeHandle
+} from 'react';
 import { setFormInstance, getFormInstance } from './state';
-import { DispatchStateContext, DispatchSubmitContext } from "./provider";
+import { DispatchStateContext, DispatchSubmitContext } from './provider';
 import { HttpStatusCode } from './types/HttpStatusCode';
 import {
   IVGSCollectForm,
   VGSCollectFormState,
-  ICollectFormProps
+  ICollectFormProps,
+  VGSCollectFormRef
 } from './types/Form';
 
 import {
@@ -24,7 +30,10 @@ import {
 
 const isBrowser = typeof window !== 'undefined';
 
-export function VGSCollectForm(props: ICollectFormProps) {
+const Form = forwardRef<
+  VGSCollectFormRef | undefined | null,
+  ICollectFormProps
+>(function (props, ref) {
   const {
     vaultId,
     environment = 'sandbox',
@@ -45,29 +54,43 @@ export function VGSCollectForm(props: ICollectFormProps) {
   const dispatchFormStateUpdate = useContext(DispatchStateContext);
   const dispatchResponseUpdate = useContext(DispatchSubmitContext);
 
-
-  const isProviderExists = (
+  const isProviderExists =
     typeof dispatchResponseUpdate === 'function' &&
-    typeof dispatchResponseUpdate === 'function'
-  )
+    typeof dispatchResponseUpdate === 'function';
 
   if (
     isBrowser &&
     window.VGSCollect &&
     Object.keys(getFormInstance()).length === 0
   ) {
-    const form: IVGSCollectForm = window.VGSCollect.create(vaultId, environment, (state: VGSCollectFormState) => {
-      if (onUpdateCallback) {
-        onUpdateCallback(state);
-      };
-      isProviderExists && dispatchFormStateUpdate(state);
-    });
+    const form: IVGSCollectForm = window.VGSCollect.create(
+      vaultId,
+      environment,
+      (state: VGSCollectFormState) => {
+        if (onUpdateCallback) {
+          onUpdateCallback(state);
+        }
+        isProviderExists && dispatchFormStateUpdate(state);
+      }
+    );
 
     if (cname) {
       form.useCname(cname);
     }
     setFormInstance(form);
   }
+
+  useImperativeHandle(ref, () => ({
+    unmount: () => {
+      const activeForm = getFormInstance();
+
+      if (!activeForm) {
+        throw new Error('@vgs/collect-js-react: VGS Collect form not found.');
+      }
+
+      activeForm.unmount();
+    }
+  }));
 
   useEffect(() => {
     return () => {
@@ -80,7 +103,7 @@ export function VGSCollectForm(props: ICollectFormProps) {
         dispatchFormStateUpdate(null);
         dispatchResponseUpdate(null);
       }
-    }
+    };
   }, []);
 
   const submitHandler = (e: React.SyntheticEvent) => {
@@ -89,7 +112,7 @@ export function VGSCollectForm(props: ICollectFormProps) {
     const form: IVGSCollectForm = getFormInstance();
 
     if (!form) {
-      throw new Error('@vgs/collect-js-react: VGS Collect form not found.')
+      throw new Error('@vgs/collect-js-react: VGS Collect form not found.');
     }
 
     if (tokenizationAPI) {
@@ -106,7 +129,9 @@ export function VGSCollectForm(props: ICollectFormProps) {
         }
       );
     } else {
-      form.submit(action, submitParameters,
+      form.submit(
+        action,
+        submitParameters,
         (status: HttpStatusCode | null, data: any) => {
           if (onSubmitCallback) {
             onSubmitCallback(status, data);
@@ -123,18 +148,34 @@ export function VGSCollectForm(props: ICollectFormProps) {
         }
       );
     }
-  }
+  };
 
   return (
     <form
       onSubmit={(event) => {
-        submitHandler(event)
+        submitHandler(event);
       }}
     >
       {children}
     </form>
-  )
-}
+  );
+});
+
+type VGSCollectForm = typeof Form & {
+  TextField: typeof TextField;
+  CardNumberField: typeof CardNumberField;
+  CardExpirationDateField: typeof CardExpirationDateField;
+  CardSecurityCodeField: typeof CardSecurityCodeField;
+  PasswordField: typeof PasswordField;
+  SSNField: typeof SSNField;
+  ZipCodeField: typeof ZipCodeField;
+  TextareaField: typeof TextareaField;
+  NumberField: typeof NumberField;
+  FileField: typeof FileField;
+  DateField: typeof DateField;
+};
+
+const VGSCollectForm = Form as VGSCollectForm;
 
 VGSCollectForm.TextField = TextField;
 VGSCollectForm.CardNumberField = CardNumberField;
@@ -147,3 +188,5 @@ VGSCollectForm.TextareaField = TextareaField;
 VGSCollectForm.NumberField = NumberField;
 VGSCollectForm.FileField = FileField;
 VGSCollectForm.DateField = DateField;
+
+export { VGSCollectForm };
