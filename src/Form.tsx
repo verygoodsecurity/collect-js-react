@@ -54,9 +54,10 @@ const Form = forwardRef<
   const dispatchFormStateUpdate = useContext(DispatchStateContext);
   const dispatchResponseUpdate = useContext(DispatchSubmitContext);
 
-  const isProviderExists =
+  const isProviderExists = (
     typeof dispatchResponseUpdate === 'function' &&
-    typeof dispatchResponseUpdate === 'function';
+    typeof dispatchResponseUpdate === 'function'
+  )
 
   if (
     isBrowser &&
@@ -108,7 +109,7 @@ const Form = forwardRef<
     const form: IVGSCollectForm = getFormInstance();
 
     if (!form) {
-      throw new Error('@vgs/collect-js-react: VGS Collect form not found.');
+      throw new Error('@vgs/collect-js-react: VGS Collect form not found.')
     }
 
     if (tokenizationAPI) {
