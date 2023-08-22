@@ -53,7 +53,7 @@ function RenderField(props: any) {
     );
   }
 
-  const fieldId = `vgs-${window.crypto.randomUUID()}`;
+  const [fieldId] = React.useState(() => `vgs-${window.crypto.randomUUID()}`);
   const events = {
     onFocus,
     onBlur,
