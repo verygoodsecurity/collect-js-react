@@ -80,8 +80,10 @@ function RenderField(props: any) {
           secureField?.delete?.();
         } catch (error) {
           if (
-            error instanceof Error &&
-            error.message !== `The field ${fieldProps.id} is already deleted`
+            !(error instanceof Error) ||
+            (error instanceof Error &&
+              error.message !==
+                `The field '${fieldProps?.name}' is already deleted`)
           ) {
             throw error;
           }
