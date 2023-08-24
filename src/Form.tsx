@@ -1,26 +1,26 @@
-import React, { useEffect, useContext } from 'react';
-import { setFormInstance, getFormInstance } from './state';
-import { DispatchStateContext, DispatchSubmitContext } from "./provider";
-import { HttpStatusCode } from './types/HttpStatusCode';
 import {
-  IVGSCollectForm,
-  VGSCollectFormState,
-  ICollectFormProps
-} from './types/Form';
-
-import {
-  TextField,
-  CardNumberField,
   CardExpirationDateField,
+  CardNumberField,
   CardSecurityCodeField,
+  DateField,
+  FileField,
+  NumberField,
   PasswordField,
   SSNField,
-  ZipCodeField,
+  TextField,
   TextareaField,
-  NumberField,
-  DateField,
-  FileField
+  ZipCodeField
 } from './Fields';
+import { DispatchStateContext, DispatchSubmitContext } from './provider';
+import {
+  ICollectFormProps,
+  IVGSCollectForm,
+  VGSCollectFormState
+} from './types/Form';
+import React, { useContext, useEffect } from 'react';
+import { getFormInstance, setFormInstance } from './state';
+
+import { HttpStatusCode } from './types/HttpStatusCode';
 
 const isBrowser = typeof window !== 'undefined';
 
@@ -34,7 +34,7 @@ export function VGSCollectForm(props: ICollectFormProps) {
     tokenizationAPI = false,
     onUpdateCallback,
     onSubmitCallback,
-    onErrorCalback,
+    onErrorCallback,
     children
   } = props;
 
@@ -45,23 +45,25 @@ export function VGSCollectForm(props: ICollectFormProps) {
   const dispatchFormStateUpdate = useContext(DispatchStateContext);
   const dispatchResponseUpdate = useContext(DispatchSubmitContext);
 
-
-  const isProviderExists = (
+  const isProviderExists =
     typeof dispatchResponseUpdate === 'function' &&
-    typeof dispatchResponseUpdate === 'function'
-  )
+    typeof dispatchResponseUpdate === 'function';
 
   if (
     isBrowser &&
     window.VGSCollect &&
     Object.keys(getFormInstance()).length === 0
   ) {
-    const form: IVGSCollectForm = window.VGSCollect.create(vaultId, environment, (state: VGSCollectFormState) => {
-      if (onUpdateCallback) {
-        onUpdateCallback(state);
-      };
-      isProviderExists && dispatchFormStateUpdate(state);
-    });
+    const form: IVGSCollectForm = window.VGSCollect.create(
+      vaultId,
+      environment,
+      (state: VGSCollectFormState) => {
+        if (onUpdateCallback) {
+          onUpdateCallback(state);
+        }
+        isProviderExists && dispatchFormStateUpdate(state);
+      }
+    );
 
     if (cname) {
       form.useCname(cname);
@@ -80,7 +82,7 @@ export function VGSCollectForm(props: ICollectFormProps) {
         dispatchFormStateUpdate(null);
         dispatchResponseUpdate(null);
       }
-    }
+    };
   }, []);
 
   const submitHandler = (e: React.SyntheticEvent) => {
@@ -89,7 +91,7 @@ export function VGSCollectForm(props: ICollectFormProps) {
     const form: IVGSCollectForm = getFormInstance();
 
     if (!form) {
-      throw new Error('@vgs/collect-js-react: VGS Collect form not found.')
+      throw new Error('@vgs/collect-js-react: VGS Collect form not found.');
     }
 
     if (tokenizationAPI) {
@@ -100,13 +102,15 @@ export function VGSCollectForm(props: ICollectFormProps) {
           }
         },
         (errors: any) => {
-          if (onErrorCalback) {
-            onErrorCalback(errors);
+          if (onErrorCallback) {
+            onErrorCallback(errors);
           }
         }
       );
     } else {
-      form.submit(action, submitParameters,
+      form.submit(
+        action,
+        submitParameters,
         (status: HttpStatusCode | null, data: any) => {
           if (onSubmitCallback) {
             onSubmitCallback(status, data);
@@ -117,23 +121,23 @@ export function VGSCollectForm(props: ICollectFormProps) {
           });
         },
         (errors: any) => {
-          if (onErrorCalback) {
-            onErrorCalback(errors);
+          if (onErrorCallback) {
+            onErrorCallback(errors);
           }
         }
       );
     }
-  }
+  };
 
   return (
     <form
       onSubmit={(event) => {
-        submitHandler(event)
+        submitHandler(event);
       }}
     >
       {children}
     </form>
-  )
+  );
 }
 
 VGSCollectForm.TextField = TextField;

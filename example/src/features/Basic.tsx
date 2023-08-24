@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { loadVGSCollect } from '@vgs/collect-js';
 import {
-  VGSCollectForm,
   VGSCollectFocusEventData,
-  VGSCollectVaultEnvironment,
+  VGSCollectForm,
   VGSCollectFormState,
-  VGSCollectStateParams,
   VGSCollectHttpStatusCode,
   VGSCollectKeyboardEventData,
-  useVGSCollectState,
-  useVGSCollectResponse
+  VGSCollectStateParams,
+  VGSCollectVaultEnvironment,
+  useVGSCollectResponse,
+  useVGSCollectState
 } from 'collect-js-react';
+
+import { loadVGSCollect } from '@vgs/collect-js';
 
 const {
   TextField,
@@ -26,11 +27,8 @@ const {
   DateField
 } = VGSCollectForm;
 
-const {
-  REACT_APP_VAULT_ID,
-  REACT_APP_ENVIRONMENT,
-  REACT_APP_COLLECT_VERSION,
-} = process.env;
+const { REACT_APP_VAULT_ID, REACT_APP_ENVIRONMENT, REACT_APP_COLLECT_VERSION } =
+  process.env;
 
 const Basic = React.memo(() => {
   const [isVGSCollectScriptLoaded, setCollectScriptLoaded] = useState(false);
@@ -49,7 +47,7 @@ const Basic = React.memo(() => {
     padding: '.5rem 1rem',
     boxSizing: 'border-box',
     '&::placeholder': {
-      color: '#686868',
+      color: '#686868'
     }
   };
 
@@ -60,7 +58,7 @@ const Basic = React.memo(() => {
     loadVGSCollect({
       vaultId: REACT_APP_VAULT_ID as string,
       environment: REACT_APP_ENVIRONMENT as VGSCollectVaultEnvironment,
-      version: REACT_APP_COLLECT_VERSION as string,
+      version: REACT_APP_COLLECT_VERSION as string
     }).then(() => {
       setCollectScriptLoaded(true);
     });
@@ -94,12 +92,12 @@ const Basic = React.memo(() => {
     /**
      * Receive information about Erorrs (client-side validation)
      */
-  }
+  };
 
   return (
     <>
       {isVGSCollectScriptLoaded && (
-        <div className="left">
+        <div className='left'>
           <h2>Basic example</h2>
           {/**
            * VGS Collect form wrapper element. Abstraction over the VGSCollect.create()
@@ -108,151 +106,150 @@ const Basic = React.memo(() => {
           <VGSCollectForm
             vaultId={REACT_APP_VAULT_ID as string}
             environment={REACT_APP_ENVIRONMENT as VGSCollectVaultEnvironment}
-            action="/post"
+            action='/post'
             submitParameters={{}}
             onUpdateCallback={onUpdateCallback}
             onSubmitCallback={onSubmitCallback}
-            onErrorCalback={onErrorCallback}
+            onErrorCallback={onErrorCallback}
           >
-            { /**
+            {/**
              * VGS Collect text field component:
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
             <TextField
-              validations={["required"]}
+              validations={['required']}
               /**
                * Track field focus event
                */
-              onFocus={(info: VGSCollectFocusEventData) => { }}
+              onFocus={(info: VGSCollectFocusEventData) => {}}
               /**
                * Track field blur event
                */
-              onBlur={(info: VGSCollectFocusEventData) => { }}
+              onBlur={(info: VGSCollectFocusEventData) => {}}
               /**
                * Track field update event. State of the field will be returned in the callback
                */
-              onUpdate={(info: VGSCollectStateParams) => { }}
+              onUpdate={(info: VGSCollectStateParams) => {}}
               /**
                * Track field keyup event.
                */
-              onKeyUp={(info: VGSCollectKeyboardEventData) => { }}
+              onKeyUp={(info: VGSCollectKeyboardEventData) => {}}
               /**
                * Track field keydown event.
                */
-              onKeyDown={(info: VGSCollectKeyboardEventData) => { }}
+              onKeyDown={(info: VGSCollectKeyboardEventData) => {}}
               /**
                * Track field keypress event.
                */
-              onKeyPress={(info: VGSCollectKeyboardEventData) => { }}
+              onKeyPress={(info: VGSCollectKeyboardEventData) => {}}
               css={VGSCollectFieldStyles}
-              name="text"
+              name='text'
             />
-            { /**
+            {/**
              * VGS Collect card number field component:
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
             <CardNumberField
-              validations={["required", "validCardNumber"]}
+              validations={['required', 'validCardNumber']}
               showCardIcon={{
                 right: '1rem'
               }}
-              name="card-number"
+              name='card-number'
               css={VGSCollectFieldStyles}
             />
-            { /**
+            {/**
              * VGS Collect card expiration date field component:
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
             <CardExpirationDateField
-              validations={["required", "validCardExpirationDate"]}
+              validations={['required', 'validCardExpirationDate']}
               yearLength={2}
               css={VGSCollectFieldStyles}
-              name="exp-date"
+              name='exp-date'
             />
-            { /**
+            {/**
              * VGS Collect card security code date field component:
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
             <CardSecurityCodeField
-              name="card-security-code"
-              validations={["required", "validCardSecurityCode"]}
+              name='card-security-code'
+              validations={['required', 'validCardSecurityCode']}
               css={VGSCollectFieldStyles}
               showCardIcon={{
                 right: '1rem'
               }}
             />
-            { /**
+            {/**
              * VGS Collect ssn field component:
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
             <SSNField
-              name="ssn"
-              validations={["required", "validSSN"]}
+              name='ssn'
+              validations={['required', 'validSSN']}
               css={VGSCollectFieldStyles}
             />
-            { /**
+            {/**
              * VGS Collect zip code field component:
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
             <ZipCodeField
-              name="zip-code"
-              validations={["required"]}
+              name='zip-code'
+              validations={['required']}
               css={VGSCollectFieldStyles}
             />
-            { /**
+            {/**
              * VGS Collect password field component:
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
             <PasswordField
-              name="password"
-              validations={["required"]}
+              name='password'
+              validations={['required']}
               css={VGSCollectFieldStyles}
             />
-            { /**
+            {/**
              * VGS Collect number field component:
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
             <NumberField
-              name="number"
-              validations={["required"]}
+              name='number'
+              validations={['required']}
               css={VGSCollectFieldStyles}
             />
-            { /**
+            {/**
              * VGS Collect textarea field component:
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
             <TextareaField
-              name="textarea"
-              validations={["required"]}
-              className="custom-class"
+              name='textarea'
+              validations={['required']}
+              className='custom-class'
               css={VGSCollectFieldStyles}
             />
-            { /**
+            {/**
              * VGS Collect textarea field component:
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
             <DateField
-              name="date"
-              validations={["required"]}
+              name='date'
+              validations={['required']}
               css={VGSCollectFieldStyles}
             />
-            { /**
+            {/**
              * VGS Collect textarea field component:
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
             <FileField
-              name="file"
-              validations={["required"]}
-              serializers={[{ name: "toBase64" }]}
+              name='file'
+              validations={['required']}
+              serializers={[{ name: 'toBase64' }]}
               css={VGSCollectFieldStyles}
             />
-            <button type="submit">Submit</button>
+            <button type='submit'>Submit</button>
           </VGSCollectForm>
         </div>
-      )
-      }
+      )}
     </>
-  )
+  );
 });
 
 export default Basic;

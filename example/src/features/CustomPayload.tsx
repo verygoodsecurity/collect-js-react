@@ -1,25 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { loadVGSCollect } from '@vgs/collect-js';
 import {
+  ICollectFormPayloadStructure,
   VGSCollectForm,
-  VGSCollectVaultEnvironment,
   VGSCollectFormState,
   VGSCollectHttpStatusCode,
-  ICollectFormPayloadStructure,
+  VGSCollectVaultEnvironment,
   useVGSCollectResponse,
   useVGSCollectState
 } from 'collect-js-react';
+import React, { useEffect, useState } from 'react';
 
-const {
-  TextField,
-  CardNumberField,
-} = VGSCollectForm;
+import { loadVGSCollect } from '@vgs/collect-js';
 
-const {
-  REACT_APP_VAULT_ID,
-  REACT_APP_ENVIRONMENT,
-  REACT_APP_COLLECT_VERSION,
-} = process.env;
+const { TextField, CardNumberField } = VGSCollectForm;
+
+const { REACT_APP_VAULT_ID, REACT_APP_ENVIRONMENT, REACT_APP_COLLECT_VERSION } =
+  process.env;
 
 const CustomPayload = () => {
   const [isVGSCollectScriptLoaded, setCollectScriptLoaded] = useState(false);
@@ -54,7 +49,7 @@ const CustomPayload = () => {
     loadVGSCollect({
       vaultId: REACT_APP_VAULT_ID as string,
       environment: REACT_APP_ENVIRONMENT as VGSCollectVaultEnvironment,
-      version: REACT_APP_COLLECT_VERSION as string,
+      version: REACT_APP_COLLECT_VERSION as string
     }).then(() => {
       setCollectScriptLoaded(true);
     });
@@ -70,7 +65,7 @@ const CustomPayload = () => {
     /**
      * Receive information about Erorrs (client-side validation)
      */
-  }
+  };
 
   const onUpdateCallback = (state: VGSCollectFormState) => {
     /**
@@ -79,14 +74,13 @@ const CustomPayload = () => {
   };
 
   const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value)
+    setInputValue(event.target.value);
   };
-
 
   return (
     <>
       {isVGSCollectScriptLoaded && (
-        <div className="left">
+        <div className='left'>
           <h2>Custom payload and additional data</h2>
           {/**
            * VGS Collect form wrapper element. Abstraction over the VGSCollect.create()
@@ -95,7 +89,7 @@ const CustomPayload = () => {
           <VGSCollectForm
             vaultId={REACT_APP_VAULT_ID as string}
             environment={REACT_APP_ENVIRONMENT as VGSCollectVaultEnvironment}
-            action="/post"
+            action='/post'
             submitParameters={{
               // JSON request body generated on the form submission including custom parameters
               // https://www.verygoodsecurity.com/docs/vgs-collect/js/integration#form-submit
@@ -103,45 +97,46 @@ const CustomPayload = () => {
                 return {
                   cusomData: inputValue,
                   textField: fields.textField,
-                  cardNumber: fields['card-number'],
-                }
+                  cardNumber: fields['card-number']
+                };
               }
             }}
             onUpdateCallback={onUpdateCallback}
             onSubmitCallback={onSubmitCallback}
-            onErrorCalback={onErrorCallback}
+            onErrorCallback={onErrorCallback}
           >
-            { /**
+            {/**
              * VGS Collect text field component:
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
             <TextField
-              name="textField"
-              validations={["required"]}
+              name='textField'
+              validations={['required']}
               css={VGSCollectFieldStyles}
             />
-            { /**
+            {/**
              * VGS Collect text field component:
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
             <CardNumberField
-              name="card-number"
-              validations={["required"]}
+              name='card-number'
+              validations={['required']}
               css={VGSCollectFieldStyles}
             />
             <input
-              className="vgs-collect-native-input"
-              type="text"
-              placeholder="Not sensitive data"
-              onChange={(e) => { inputHandler(e) }}
+              className='vgs-collect-native-input'
+              type='text'
+              placeholder='Not sensitive data'
+              onChange={(e) => {
+                inputHandler(e);
+              }}
             />
-            <button type="submit">Submit</button>
+            <button type='submit'>Submit</button>
           </VGSCollectForm>
         </div>
-      )
-      }
+      )}
     </>
-  )
-}
+  );
+};
 
 export default CustomPayload;
