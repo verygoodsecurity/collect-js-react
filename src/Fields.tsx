@@ -77,7 +77,7 @@ function RenderField(props: any) {
 
       return () => {
         try {
-          secureField.delete();
+          secureField?.delete?.();
         } catch (error) {
           if (
             error instanceof Error &&
