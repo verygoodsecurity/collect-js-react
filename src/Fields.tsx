@@ -81,7 +81,16 @@ function RenderField(props: any) {
       });
 
       return () => {
-        secureField.delete();
+        try {
+          secureField.delete();
+        } catch (error) {
+          if (
+            error instanceof Error &&
+            error.message !== `The field ${fieldProps.id} is already deleted`
+          ) {
+            throw error;
+          }
+        }
         eventsToListen.forEach((event) => {
           secureField.off(FIELD_EVENTS[event], (info) => {
             events[event](info);
