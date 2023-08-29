@@ -52,7 +52,7 @@ function RenderField(props: any) {
     throw new Error(`@vgs/collect-js-react: name attribute for ${props.type} is required.`);
   }
 
-  const fieldId = `vgs-${window.crypto.randomUUID()}`;
+  const [fieldId] = React.useState(() => `vgs-${window.crypto.randomUUID()}`);
   const events = {
     onFocus,
     onBlur,
@@ -76,6 +76,18 @@ function RenderField(props: any) {
       });
 
       return () => {
+        try {
+          secureField?.delete?.();
+        } catch (error) {
+          if (
+            !(error instanceof Error) ||
+            (error instanceof Error &&
+              error.message !==
+                `The field '${fieldProps?.name}' is already deleted`)
+          ) {
+            throw error;
+          }
+        }
         eventsToListen.forEach(event => {
           secureField.off(FIELD_EVENTS[event], (info) => { events[event](info) })
         });
