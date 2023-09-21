@@ -29,11 +29,57 @@ jobs:
           name: Publish package
           command: |
             npm publish --access public
+  
+  scan-sast-pr:
+    parameters:
+      default_branch:
+        type: string
+        default: master
+    environment:
+      SEMGREP_REPO_URL: << pipeline.project.git_url >>
+      SEMGREP_BRANCH: << pipeline.git.branch >>
+      SEMGREP_BASELINE_REF: << parameters.default_branch >>
+    docker:
+      - image: returntocorp/semgrep
+    steps:
+      - checkout
+      - run:
+          name: "Semgrep diff scan"
+          command: semgrep ci
+
+  scan-sast-full:
+    parameters:
+      default_branch:
+        type: string
+        default: master
+    environment:
+      SEMGREP_REPO_URL: << pipeline.project.git_url >>
+      SEMGREP_BRANCH: << pipeline.git.branch >>
+    docker:
+      - image: returntocorp/semgrep
+    steps:
+      - checkout
+      - run:
+          name: "Semgrep full scan"
+          command: semgrep ci
 workflows:
-  version: 2
   test-and-publish:
+    when:
+      not: << pipeline.parameters.nightly-security-scan >>
     jobs:
       - test
+      - scan-sast-pr:
+          context:
+            - security-tools
+            - frontend-deploy
+      - scan-sast-full:
+          filters:
+            # ignore any commit on any branch by default
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
+              
       - publish:
           context: frontend-deploy
           filters:
@@ -41,3 +87,11 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v.*/
+  
+  scheduled-security-scan:
+    when: << pipeline.parameters.nightly-security-scan >>
+    jobs:
+      - scan-sast-full:
+          context:
+            - security-tools
+            - frontend-deploy
