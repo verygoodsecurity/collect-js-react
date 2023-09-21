@@ -3,6 +3,12 @@ version: 2.1
 orbs:
   node: circleci/node@5.0.3
 
+# === Scheduled Pipeline Parameters ===
+parameters:
+  nightly-security-scan:
+    type: boolean
+    default: false
+
 jobs:
   test:
     executor: node/default
@@ -79,7 +85,7 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v.*/
-              
+
       - publish:
           context: frontend-deploy
           filters:
