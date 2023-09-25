@@ -74,7 +74,6 @@ workflows:
     when:
       not: << pipeline.parameters.nightly-security-scan >>
     jobs:
-      - test
       - scan-sast-pr:
           context:
             - security-tools
@@ -88,6 +87,7 @@ workflows:
             tags:
               only: /^v.*/
 
+      - test      
       - publish:
           context: frontend-deploy
           filters:
@@ -104,3 +104,4 @@ workflows:
             - security-tools
             - frontend-deploy
             - circleci
+
