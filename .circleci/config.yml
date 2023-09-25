@@ -76,8 +76,8 @@ workflows:
     jobs:
       - scan-sast-pr:
           context:
-            - security-tools
             - frontend-deploy
+            - security-tools
             - circleci
       - scan-sast-full:
           filters:
