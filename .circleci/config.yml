@@ -68,6 +68,7 @@ jobs:
       - run:
           name: "Semgrep full scan"
           command: semgrep ci
+
 workflows:
   test-and-publish:
     when:
@@ -76,9 +77,9 @@ workflows:
       - test
       - scan-sast-pr:
           context:
+            - security-tools
             - frontend-deploy
             - circleci
-            - security-tools
       - scan-sast-full:
           filters:
             # ignore any commit on any branch by default
