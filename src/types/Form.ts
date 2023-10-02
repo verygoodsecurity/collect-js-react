@@ -1,8 +1,9 @@
 import {
-  IVGSCollectFieldInstance,
   ClassMap,
+  IVGSCollectFieldInstance,
   VGSCollectFieldType
 } from './Field';
+
 import { HttpStatusCode as VGSCollectHttpStatusCode } from './HttpStatusCode';
 
 declare global {
@@ -66,7 +67,7 @@ interface ICollectFormProps {
   children?: JSX.Element[] | JSX.Element;
   onUpdateCallback?: (state: VGSCollectFormState | null) => void;
   onSubmitCallback?: (status: any, resp: any) => void;
-  onErrorCalback?: (errors: any) => void;
+  onErrorCallback?: (errors: any) => void;
 }
 
 interface VGSCollectStateParams {
