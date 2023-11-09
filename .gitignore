@@ -36,3 +36,5 @@ dist/
 
 #Other
 react-app-env.d.ts
+
+.cache
