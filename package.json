@@ -1,6 +1,6 @@
 {
   "name": "@vgs/collect-js-react",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "VGS Collect.js React wrapper",
   "author": "vgs",
   "license": "MIT",
@@ -15,6 +15,7 @@
     "start": "microbundle-crl watch --no-compress --format modern,cjs",
     "prepare": "run-s build",
     "test": "run-s test:unit test:lint test:build",
+    "test:react-17": "REACT_VERSION=17 npm test",
     "test:build": "run-s build",
     "test:lint": "eslint --ext .ts src",
     "lint:fix": "eslint --ext .ts src --fix",
@@ -24,9 +25,11 @@
     "deploy": "gh-pages -d example/build"
   },
   "peerDependencies": {
-    "react": "^16.0.0"
+    "react": "^16.0 || ^17.0",
+    "react-dom": "^16.0 || ^17.0"
   },
   "devDependencies": {
+    "react-17": "npm:react@^17",
     "@babel/plugin-transform-react-jsx": "^7.20.7",
     "@testing-library/dom": "6.16.0",
     "@testing-library/jest-dom": "^4.2.4",
