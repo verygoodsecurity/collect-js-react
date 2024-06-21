@@ -1,8 +1,8 @@
 import React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import { getFormInstance } from './state';
 import { DEFAULT_CONFIG, FIELD_EVENTS } from './constants';
-
+import { DispatchFormContext } from './provider';
 import {
   IVGSCollectTextField,
   IVGSCollectCardNumberField,
@@ -63,13 +63,26 @@ function RenderField(props: any) {
     onDelete
   };
 
+  const dispatchFormСontext = useContext(DispatchFormContext);
+
+  if (!dispatchFormСontext) {
+    // TODO: add error message
+    throw new Error('DispatchFormContext wrapper is required!');
+  }
+  const { formState } = dispatchFormСontext;
+
   const eventsToListen = Object.keys(events).filter(e => events[e] !== undefined);
 
   useEffect(() => {
+    console.log("Fields.tsx -> useEffect -> formState --->", formState)
+    console.log("Fields.tsx -> useEffect -> getFormInstance() --->", Object.keys(getFormInstance()).length);
     const collectFormInstance = getFormInstance() as IVGSCollectForm;
 
-    if (Object.keys(collectFormInstance).length !== 0) {
+    if (Object.keys(collectFormInstance).length !== 0 && formState?.formCreated === true) {
+      // check as ref object.
+      // how to create component that works with selector. 
       const secureField = collectFormInstance.field(`#${fieldId}`, fieldProps);
+      console.log("secureField --->", secureField)
 
       eventsToListen.forEach(event => {
         secureField.on(FIELD_EVENTS[event], (info) => { events[event](info) })
@@ -77,6 +90,7 @@ function RenderField(props: any) {
 
       return () => {
         try {
+          console.log("secureField.delete() --->", secureField)
           secureField?.delete?.();
         } catch (error) {
           if (
@@ -85,6 +99,7 @@ function RenderField(props: any) {
               error.message !==
                 `The field '${fieldProps?.name}' is already deleted`)
           ) {
+            console.error(error);
             throw error;
           }
         }
@@ -93,7 +108,7 @@ function RenderField(props: any) {
         });
       }
     }
-  }, []);
+  }, [formState?.formCreated]);
 
   return (
     <div className={`vgs-collect-iframe-wr ${className ? className : ''}`} id={fieldId} data-testid="vgs-collect-field-wrapper"></div>

@@ -24,6 +24,13 @@ jobs:
       - node/install-packages:
           pkg-manager: yarn
       - run: yarn test:react-17
+  test-react-18:
+    executor: node/default
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - run: yarn test:react-18
   publish:
     executor: node/default
     steps:
@@ -96,6 +103,7 @@ workflows:
 
       - test     
       - test-react-17
+      - test-react-18
       - publish:
           context: frontend-deploy
           filters:

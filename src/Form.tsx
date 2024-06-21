@@ -11,18 +11,19 @@ import {
   TextareaField,
   ZipCodeField
 } from './Fields';
-import { DispatchStateContext, DispatchSubmitContext } from './provider';
+import { DispatchStateContext, DispatchSubmitContext, DispatchFormContext, Action } from './provider';
 import {
   ICollectFormProps,
   IVGSCollectForm,
   VGSCollectFormState
 } from './types/Form';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, Dispatch } from 'react';
 import { getFormInstance, setFormInstance } from './state';
 
 import { HttpStatusCode } from './types/HttpStatusCode';
 
 const isBrowser = typeof window !== 'undefined';
+
 
 export function VGSCollectForm(props: ICollectFormProps) {
   const {
@@ -45,42 +46,73 @@ export function VGSCollectForm(props: ICollectFormProps) {
   const dispatchFormStateUpdate = useContext(DispatchStateContext);
   const dispatchResponseUpdate = useContext(DispatchSubmitContext);
 
-  const isProviderExists =
-    typeof dispatchResponseUpdate === 'function' &&
-    typeof dispatchResponseUpdate === 'function';
+  //test
+  const dispatchFormСontext = useContext(DispatchFormContext);
 
-  if (
-    isBrowser &&
-    window.VGSCollect &&
-    Object.keys(getFormInstance()).length === 0
-  ) {
-    const form: IVGSCollectForm = window.VGSCollect.create(
-      vaultId,
-      environment,
-      (state: VGSCollectFormState) => {
-        if (onUpdateCallback) {
-          onUpdateCallback(state);
-        }
-        isProviderExists && dispatchFormStateUpdate(state);
-      }
-    );
-
-    if (cname) {
-      form.useCname(cname);
-    }
-    setFormInstance(form);
+  let dispatchFormState: Dispatch<Action> | undefined  = undefined;
+  if (dispatchFormСontext) {
+    dispatchFormState = dispatchFormСontext.dispatchFormState;
   }
+  
+  //test
+  console.log('dispatchFormStateUpdate ->', dispatchFormStateUpdate);
+  console.log('dispatchResponseUpdate ->', dispatchResponseUpdate);
+  console.log('dispatchFormCreated ->', dispatchFormСontext);
+
+  const isProviderExists =
+    typeof dispatchFormStateUpdate === 'function' &&
+    typeof dispatchResponseUpdate === 'function';
+  console.log('isProviderExists ->', isProviderExists);
 
   useEffect(() => {
+    console.log("Lets init the form, shall we?")
+    console.log("Object.keys(getFormInstance()).length ->", Object.keys(getFormInstance()).length)
+    if (
+      isBrowser &&
+      window.VGSCollect &&
+      Object.keys(getFormInstance()).length === 0
+    ) {
+      const form: IVGSCollectForm = window.VGSCollect.create(
+        vaultId,
+        environment,
+        (state: VGSCollectFormState) => {
+          if (onUpdateCallback) {
+            onUpdateCallback(state);
+          } 
+          isProviderExists && dispatchFormStateUpdate(state);
+        }
+      );
+      console.log('created form is --->', form);
+      
+      // TEST
+      if (dispatchFormState) {
+        dispatchFormState({ type: 'FORM_MOUNTED' });
+      }
+      // TEST
+
+      if (cname) {
+        form.useCname(cname);
+      }
+      setFormInstance(form);
+    }
+
+    // CLEAR BLOCK
     return () => {
+      console.log('Object.keys(activeForm).length INSIDE CLEAN FUNCTION', (Object.keys(getFormInstance()).length));
       const activeForm = getFormInstance();
       if (Object.keys(activeForm).length !== 0) {
+        console.log('activeForm.unmount() -> we will unmount!');
         activeForm.unmount();
         setFormInstance({} as IVGSCollectForm);
       }
       if (isProviderExists) {
         dispatchFormStateUpdate(null);
         dispatchResponseUpdate(null);
+        // TEST
+        if (dispatchFormState) {
+          dispatchFormState({ type: 'FORM_UNMOUNTED' });
+        }
+      // TEST
       }
     };
   }, []);

@@ -16,6 +16,7 @@
     "prepare": "run-s build",
     "test": "run-s test:unit test:lint test:build",
     "test:react-17": "REACT_VERSION=17 npm test",
+    "test:react-18": "REACT_VERSION=18 npm test",
     "test:build": "run-s build",
     "test:lint": "eslint --ext .ts src",
     "lint:fix": "eslint --ext .ts src --fix",
@@ -25,18 +26,16 @@
     "deploy": "gh-pages -d example/build"
   },
   "peerDependencies": {
-    "react": "^16.0 || ^17.0",
-    "react-dom": "^16.0 || ^17.0"
+    "react": "^16.0 || ^17.0 || ^18.0",
+    "react-dom": "^16.0 || ^17.0 || ^18.0"
   },
   "devDependencies": {
-    "react-17": "npm:react@^17",
     "@babel/plugin-transform-react-jsx": "^7.20.7",
     "@testing-library/dom": "6.16.0",
     "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "@types/jest": "^25.1.4",
-    "@types/node": "^12.12.38", 
+    "@types/node": "^12.12.38",
     "@types/react": "^16.9.27",
     "@types/react-dom": "^16.9.7",
     "@typescript-eslint/eslint-plugin": "^2.26.0",
@@ -58,6 +57,8 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^2.0.4",
     "react": "^16.13.1",
+    "react-17": "npm:react@^17",
+    "react-18": "npm:react@^18",
     "react-dom": "^16.13.1",
     "react-scripts": "5.0.1",
     "ts-jest": "27.0.1",
@@ -78,5 +79,8 @@
   "resolutions": {
     "nth-check": "2.1.1",
     "postcss": "8.4.21"
+  },
+  "dependencies": {
+    "@testing-library/react": "13.0.0"
   }
 }

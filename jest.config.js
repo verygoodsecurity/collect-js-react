@@ -15,3 +15,13 @@ if (process.env.REACT_VERSION === '17') {
     '^react((\\/.*)?)$': 'react-17$1'
   };
 }
+
+if (process.env.REACT_VERSION === '18') {
+  console.log('Testing with React 18');
+
+  module.exports.cacheDirectory = '.cache/jest-cache-react-18';
+  module.exports.moduleNameMapper = {
+    ...module.exports.moduleNameMapper,
+    '^react((\\/.*)?)$': 'react-18$1'
+  };
+}
