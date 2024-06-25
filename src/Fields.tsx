@@ -1,8 +1,8 @@
 import React from 'react';
-import { useEffect, useContext } from 'react';
+import { useEffect } from 'react';
 import { getFormInstance } from './state';
 import { DEFAULT_CONFIG, FIELD_EVENTS } from './constants';
-import { DispatchFormContext } from './provider';
+import { useVGSCollectFormState } from './formStateProvider';
 import {
   IVGSCollectTextField,
   IVGSCollectCardNumberField,
@@ -62,20 +62,11 @@ function RenderField(props: any) {
     onKeyPress,
     onDelete
   };
-
-  const dispatchFormСontext = useContext(DispatchFormContext);
-
-  if (!dispatchFormСontext) {
-    // TODO: add error message
-    throw new Error('DispatchFormContext wrapper is required!');
-  }
-  const { formState } = dispatchFormСontext;
+  const [ formState ] = useVGSCollectFormState();
 
   const eventsToListen = Object.keys(events).filter(e => events[e] !== undefined);
 
   useEffect(() => {
-    console.log("Fields.tsx -> useEffect -> formState --->", formState)
-    console.log("Fields.tsx -> useEffect -> getFormInstance() --->", Object.keys(getFormInstance()).length);
     const collectFormInstance = getFormInstance() as IVGSCollectForm;
 
     if (Object.keys(collectFormInstance).length !== 0 && formState?.formCreated === true) {
@@ -90,7 +81,6 @@ function RenderField(props: any) {
 
       return () => {
         try {
-          console.log("secureField.delete() --->", secureField)
           secureField?.delete?.();
         } catch (error) {
           if (

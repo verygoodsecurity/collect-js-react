@@ -11,13 +11,14 @@ import {
   TextareaField,
   ZipCodeField
 } from './Fields';
-import { DispatchStateContext, DispatchSubmitContext, DispatchFormContext, Action } from './provider';
+import { DispatchStateContext, DispatchSubmitContext } from './provider';
+import { FormStateProvider, DispatchFormContext } from './formStateProvider';
 import {
   ICollectFormProps,
   IVGSCollectForm,
   VGSCollectFormState
 } from './types/Form';
-import React, { useContext, useEffect, Dispatch } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { getFormInstance, setFormInstance } from './state';
 
 import { HttpStatusCode } from './types/HttpStatusCode';
@@ -25,7 +26,7 @@ import { HttpStatusCode } from './types/HttpStatusCode';
 const isBrowser = typeof window !== 'undefined';
 
 
-export function VGSCollectForm(props: ICollectFormProps) {
+function CollectForm(props: ICollectFormProps) {
   const {
     vaultId,
     environment = 'sandbox',
@@ -45,28 +46,13 @@ export function VGSCollectForm(props: ICollectFormProps) {
 
   const dispatchFormStateUpdate = useContext(DispatchStateContext);
   const dispatchResponseUpdate = useContext(DispatchSubmitContext);
-
-  //test
   const dispatchFormСontext = useContext(DispatchFormContext);
-
-  let dispatchFormState: Dispatch<Action> | undefined  = undefined;
-  if (dispatchFormСontext) {
-    dispatchFormState = dispatchFormСontext.dispatchFormState;
-  }
-  
-  //test
-  console.log('dispatchFormStateUpdate ->', dispatchFormStateUpdate);
-  console.log('dispatchResponseUpdate ->', dispatchResponseUpdate);
-  console.log('dispatchFormCreated ->', dispatchFormСontext);
 
   const isProviderExists =
     typeof dispatchFormStateUpdate === 'function' &&
     typeof dispatchResponseUpdate === 'function';
-  console.log('isProviderExists ->', isProviderExists);
 
   useEffect(() => {
-    console.log("Lets init the form, shall we?")
-    console.log("Object.keys(getFormInstance()).length ->", Object.keys(getFormInstance()).length)
     if (
       isBrowser &&
       window.VGSCollect &&
@@ -82,14 +68,9 @@ export function VGSCollectForm(props: ICollectFormProps) {
           isProviderExists && dispatchFormStateUpdate(state);
         }
       );
-      console.log('created form is --->', form);
       
-      // TEST
-      if (dispatchFormState) {
-        dispatchFormState({ type: 'FORM_MOUNTED' });
-      }
-      // TEST
-
+      dispatchFormСontext({ type: 'FORM_MOUNTED' });
+      
       if (cname) {
         form.useCname(cname);
       }
@@ -98,22 +79,16 @@ export function VGSCollectForm(props: ICollectFormProps) {
 
     // CLEAR BLOCK
     return () => {
-      console.log('Object.keys(activeForm).length INSIDE CLEAN FUNCTION', (Object.keys(getFormInstance()).length));
       const activeForm = getFormInstance();
       if (Object.keys(activeForm).length !== 0) {
-        console.log('activeForm.unmount() -> we will unmount!');
         activeForm.unmount();
         setFormInstance({} as IVGSCollectForm);
       }
       if (isProviderExists) {
         dispatchFormStateUpdate(null);
         dispatchResponseUpdate(null);
-        // TEST
-        if (dispatchFormState) {
-          dispatchFormState({ type: 'FORM_UNMOUNTED' });
-        }
-      // TEST
       }
+      dispatchFormСontext({ type: 'FORM_UNMOUNTED' });
     };
   }, []);
 
@@ -170,6 +145,14 @@ export function VGSCollectForm(props: ICollectFormProps) {
       {children}
     </form>
   );
+}
+
+export function VGSCollectForm(props: ICollectFormProps) {
+  return (
+    <FormStateProvider>
+      <CollectForm {...props} />
+    </FormStateProvider>
+  )
 }
 
 VGSCollectForm.TextField = TextField;
