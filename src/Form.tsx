@@ -77,7 +77,6 @@ function CollectForm(props: ICollectFormProps) {
       setFormInstance(form);
     }
 
-    // CLEAR BLOCK
     return () => {
       const activeForm = getFormInstance();
       if (Object.keys(activeForm).length !== 0) {

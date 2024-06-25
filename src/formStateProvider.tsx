@@ -9,7 +9,6 @@ export const initialFormState = { formCreated: false };
 export const GlobalFormContext = createContext<GlobalFormContext>(initialFormState);
 export const DispatchFormContext = createContext({} as Dispatch<any>);
 
-// type + reducer for form mount state.
 type Action = { type: 'FORM_MOUNTED' } | { type: 'FORM_UNMOUNTED' };
 
 const formReducer = (state: GlobalFormContext, action: Action) => {

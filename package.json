@@ -79,8 +79,5 @@
   "resolutions": {
     "nth-check": "2.1.1",
     "postcss": "8.4.21"
-  },
-  "dependencies": {
-    "@testing-library/react": "13.0.0"
   }
 }
