@@ -70,10 +70,7 @@ function RenderField(props: any) {
     const collectFormInstance = getFormInstance() as IVGSCollectForm;
 
     if (Object.keys(collectFormInstance).length !== 0 && formState?.formCreated === true) {
-      // check as ref object.
-      // how to create component that works with selector. 
       const secureField = collectFormInstance.field(`#${fieldId}`, fieldProps);
-      console.log("secureField --->", secureField)
 
       eventsToListen.forEach(event => {
         secureField.on(FIELD_EVENTS[event], (info) => { events[event](info) })
