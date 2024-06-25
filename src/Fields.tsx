@@ -86,7 +86,6 @@ function RenderField(props: any) {
               error.message !==
                 `The field '${fieldProps?.name}' is already deleted`)
           ) {
-            console.error(error);
             throw error;
           }
         }
