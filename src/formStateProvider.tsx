@@ -2,8 +2,6 @@ import React, { createContext, useContext, useReducer, useMemo, Dispatch } from 
 
 type GlobalFormContext = { formCreated: boolean } | undefined;
 
-export const initialState = undefined;
-
 export const initialFormState = { formCreated: false };
 
 export const GlobalFormContext = createContext<GlobalFormContext>(initialFormState);
