@@ -12,6 +12,7 @@ import {
   ZipCodeField
 } from './Fields';
 import { DispatchStateContext, DispatchSubmitContext } from './provider';
+import { FormStateProvider, DispatchFormContext } from './formStateProvider';
 import {
   ICollectFormProps,
   IVGSCollectForm,
@@ -24,7 +25,8 @@ import { HttpStatusCode } from './types/HttpStatusCode';
 
 const isBrowser = typeof window !== 'undefined';
 
-export function VGSCollectForm(props: ICollectFormProps) {
+
+function CollectForm(props: ICollectFormProps) {
   const {
     vaultId,
     environment = 'sandbox',
@@ -44,34 +46,37 @@ export function VGSCollectForm(props: ICollectFormProps) {
 
   const dispatchFormStateUpdate = useContext(DispatchStateContext);
   const dispatchResponseUpdate = useContext(DispatchSubmitContext);
+  const dispatchFormСontext = useContext(DispatchFormContext);
 
   const isProviderExists =
-    typeof dispatchResponseUpdate === 'function' &&
+    typeof dispatchFormStateUpdate === 'function' &&
     typeof dispatchResponseUpdate === 'function';
 
-  if (
-    isBrowser &&
-    window.VGSCollect &&
-    Object.keys(getFormInstance()).length === 0
-  ) {
-    const form: IVGSCollectForm = window.VGSCollect.create(
-      vaultId,
-      environment,
-      (state: VGSCollectFormState) => {
-        if (onUpdateCallback) {
-          onUpdateCallback(state);
-        }
-        isProviderExists && dispatchFormStateUpdate(state);
-      }
-    );
-
-    if (cname) {
-      form.useCname(cname);
-    }
-    setFormInstance(form);
-  }
-
   useEffect(() => {
+    if (
+      isBrowser &&
+      window.VGSCollect &&
+      Object.keys(getFormInstance()).length === 0
+    ) {
+      const form: IVGSCollectForm = window.VGSCollect.create(
+        vaultId,
+        environment,
+        (state: VGSCollectFormState) => {
+          if (onUpdateCallback) {
+            onUpdateCallback(state);
+          } 
+          isProviderExists && dispatchFormStateUpdate(state);
+        }
+      );
+      
+      dispatchFormСontext({ type: 'FORM_MOUNTED' });
+      
+      if (cname) {
+        form.useCname(cname);
+      }
+      setFormInstance(form);
+    }
+
     return () => {
       const activeForm = getFormInstance();
       if (Object.keys(activeForm).length !== 0) {
@@ -82,6 +87,7 @@ export function VGSCollectForm(props: ICollectFormProps) {
         dispatchFormStateUpdate(null);
         dispatchResponseUpdate(null);
       }
+      dispatchFormСontext({ type: 'FORM_UNMOUNTED' });
     };
   }, []);
 
@@ -138,6 +144,14 @@ export function VGSCollectForm(props: ICollectFormProps) {
       {children}
     </form>
   );
+}
+
+export function VGSCollectForm(props: ICollectFormProps) {
+  return (
+    <FormStateProvider>
+      <CollectForm {...props} />
+    </FormStateProvider>
+  )
 }
 
 VGSCollectForm.TextField = TextField;
