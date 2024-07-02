@@ -18,7 +18,7 @@
     "test:build": "run-s build",
     "test:lint": "eslint --ext .ts src",
     "lint:fix": "eslint --ext .ts src --fix",
-    "test:unit": "jest",
+    "test:unit": "jest --coverage --coverageReporters json-summary",
     "test:watch": "jest --watch",
     "predeploy": "cd example && yarn install && yarn run build",
     "deploy": "gh-pages -d example/build"

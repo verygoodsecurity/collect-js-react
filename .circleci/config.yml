@@ -17,6 +17,9 @@ jobs:
       - node/install-packages:
           pkg-manager: yarn
       - run: yarn test
+      - run:
+          name: Send code coverage to Compass
+          command: ./scripts/publish-code-coverage.sh
   publish:
     executor: node/default
     steps:
