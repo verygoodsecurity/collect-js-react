@@ -148,7 +148,7 @@ const myApp = () => {
         showCardIcon={true}
         css={{}}
       />
-      <CardEpirationDateField
+      <CardExpirationDateField
         name='exp-date'
         validations={['required', 'validCardExpirationDate']}
         placeholder='MM / YY'
