@@ -1,0 +1,28 @@
+name: VGS Collect Loader
+id: 'ari:cloud:compass:83673fa7-fd28-4f4a-9738-f584064570a7:component/db43f86d-85fe-42e1-954d-457f5a4082b8/af3e4561-6bb9-40e3-8c38-e0d5da870dcf'
+description: |-
+  VGS Collect React Wrapper
+  ReactJS wrapper for the VGS Collect.js.
+configVersion: 1
+typeId: LIBRARY
+ownerId: 'ari:cloud:teams::team/61e34c25-3af2-4d60-bfed-39429d934c8b'
+fields:
+  lifecycle: Active
+  tier: 1
+links:
+  - name: null
+    type: REPOSITORY
+    url: 'https://github.com/verygoodsecurity/collect-js-react'
+  - name: ShowJS Public Docs
+    type: DOCUMENT
+    url: 'https://www.npmjs.com/package/@vgs/collect-js-react'
+  - name: CircleCI
+    type: PROJECT
+    url: 'https://app.circleci.com/pipelines/github/verygoodsecurity/collect-js-react'
+  - name: Jira
+    type: PROJECT
+    url: 'https://verygoodsecurity.atlassian.net/browse/DEVX'
+relationships: {}
+labels:
+  - 'language:javascript'
+customFields: null
