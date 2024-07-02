@@ -98,8 +98,10 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v.*/
-
-      - test     
+      - test:
+          context:
+            - frontend-deploy
+            - circleci    
       - test-react-17
       - publish:
           context: frontend-deploy
