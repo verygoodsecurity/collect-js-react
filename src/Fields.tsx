@@ -2,7 +2,7 @@ import React from 'react';
 import { useEffect } from 'react';
 import { getFormInstance } from './state';
 import { DEFAULT_CONFIG, FIELD_EVENTS } from './constants';
-
+import { useVGSCollectFormState } from './formStateProvider';
 import {
   IVGSCollectTextField,
   IVGSCollectCardNumberField,
@@ -62,13 +62,14 @@ function RenderField(props: any) {
     onKeyPress,
     onDelete
   };
+  const [ formState ] = useVGSCollectFormState();
 
   const eventsToListen = Object.keys(events).filter(e => events[e] !== undefined);
 
   useEffect(() => {
     const collectFormInstance = getFormInstance() as IVGSCollectForm;
 
-    if (Object.keys(collectFormInstance).length !== 0) {
+    if (Object.keys(collectFormInstance).length !== 0 && formState?.formCreated === true) {
       const secureField = collectFormInstance.field(`#${fieldId}`, fieldProps);
 
       eventsToListen.forEach(event => {
@@ -93,7 +94,7 @@ function RenderField(props: any) {
         });
       }
     }
-  }, []);
+  }, [formState?.formCreated]);
 
   return (
     <div className={`vgs-collect-iframe-wr ${className ? className : ''}`} id={fieldId} data-testid="vgs-collect-field-wrapper"></div>
