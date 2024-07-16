@@ -16,6 +16,9 @@ links:
   - name: ShowJS Public Docs
     type: DOCUMENT
     url: 'https://www.npmjs.com/package/@vgs/collect-js-react'
+  - name: CircleCI
+    type: PROJECT
+    url: 'https://app.circleci.com/pipelines/github/verygoodsecurity/collect-js-react'
   - name: Jira
     type: PROJECT
     url: 'https://verygoodsecurity.atlassian.net/browse/DEVX'
