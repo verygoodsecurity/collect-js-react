@@ -71,7 +71,7 @@ const CustomPayload = () => {
           <VGSCollectForm
             vaultId={vaultId as string}
             environment={REACT_APP_ENVIRONMENT as VGSCollectVaultEnvironment}
-            tokenizationAPI={true}
+            tokenizationAPI
             submitParameters={{}}
             onUpdateCallback={onUpdateCallback}
             onSubmitCallback={onSubmitCallback}
