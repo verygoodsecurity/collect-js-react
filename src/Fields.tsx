@@ -1,5 +1,6 @@
 import React from 'react';
 import { useEffect } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { getFormInstance } from './state';
 import { DEFAULT_CONFIG, FIELD_EVENTS } from './constants';
 import { useVGSCollectFormState } from './formStateProvider';
@@ -52,7 +53,7 @@ function RenderField(props: any) {
     throw new Error(`@vgs/collect-js-react: name attribute for ${props.type} is required.`);
   }
 
-  const [fieldId] = React.useState(() => `vgs-${window.crypto.randomUUID()}`);
+  const [fieldId] = React.useState(() => `vgs-${uuidv4()}`);
   const events = {
     onFocus,
     onBlur,

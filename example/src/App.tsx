@@ -8,11 +8,11 @@ export default function App() {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<Layout />}>
+        <Route path='/' element={<Layout />}>
           <Route index element={<Base />} />
-          <Route path="/custom-payload" element={<CustomPayload />} />
-          <Route path="/tokenization-api" element={<Tokenization />} />
-          <Route path="*" element={<NoMatch />} />
+          <Route path='/custom-payload' element={<CustomPayload />} />
+          <Route path='/tokenization-api' element={<Tokenization />} />
+          <Route path='*' element={<NoMatch />} />
         </Route>
       </Routes>
     </div>
@@ -22,13 +22,13 @@ export default function App() {
 function Layout() {
   return (
     <>
-      <nav className="menu">
-        <Link to="/">Basic</Link>
-        <Link to="/custom-payload">Custom Payload</Link>
-        <Link to="/tokenization-api">Tokenization API</Link>
+      <nav className='menu'>
+        <Link to='/'>Basic</Link>
+        <Link to='/custom-payload'>Custom Payload</Link>
+        <Link to='/tokenization-api'>Tokenization API</Link>
       </nav>
       <hr />
-      <main className="container">
+      <main className='container'>
         <Outlet />
       </main>
     </>
@@ -40,7 +40,7 @@ function NoMatch() {
     <>
       <h2>Nothing to see here!</h2>
       <p>
-        <Link to="/">Go to the home page</Link>
+        <Link to='/'>Go to the home page</Link>
       </p>
     </>
   );
