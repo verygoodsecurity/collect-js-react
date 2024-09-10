@@ -113,6 +113,7 @@ interface IDefaultFieldOptions {
   readonly?: BooleanValue;
   inputMode?: InputMode;
   tokenization?: IFieldTokenization | boolean;
+  defaultValue?: string
 }
 
 type FieldConfig =
@@ -197,7 +198,6 @@ interface IVGSCollectFileField extends IDefaultFieldOptions {
 }
 
 interface IVGSCollectDropdownField extends IDefaultFieldOptions {
-  defaultValue?: string
   options?: IDropdownOption[]
 }
 
