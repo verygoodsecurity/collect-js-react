@@ -91,6 +91,11 @@ interface IFieldTokenization {
   storage?: StorageTypes;
 }
 
+interface IDropdownOption {
+  value: string,
+  text: string
+}
+
 interface IDefaultFieldOptions {
   type: VGSCollectFieldType;
   name: string;
@@ -189,6 +194,11 @@ interface IVGSCollectFileField extends IDefaultFieldOptions {
   capture: 'user' | 'environment';
   maxFileSize: number;
   maxFiled: number;
+}
+
+interface IVGSCollectDropdownField extends IDefaultFieldOptions {
+  defaultValue?: string
+  options?: IDropdownOption[]
 }
 
 interface IVGSCollectDateField extends IDefaultFieldOptions {
@@ -306,6 +316,7 @@ export type {
   IVGSCollectTextareaField,
   IVGSCollectDateField,
   IVGSCollectFileField,
+  IVGSCollectDropdownField,
   ICollectFormProps,
   ICollectFormPayloadStructure,
   VGSCollectFormState,
