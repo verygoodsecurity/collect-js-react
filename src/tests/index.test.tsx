@@ -10,6 +10,8 @@ import { getFormInstance } from '../state';
 
 import { VGSCollectInstanceMock } from './mocks';
 
+import { generateUUID } from '../utils';
+
 
 const COLLECT_CONFIG = {
   VAULT_ID: 'tnt1234567',
@@ -67,4 +69,22 @@ test('Generate <div> wrapper element for each iframe', () => {
     </VGSCollectProvider>
   )
   expect(screen.getAllByTestId('vgs-collect-field-wrapper')).toHaveLength(3);
+});
+
+describe('generateUUID', () => {
+  it('should generate a valid UUID', () => {
+    const uuid = generateUUID();
+    
+    // Проверяем, что UUID соответствует формату XXXXXXXX-XXXX-4XXX-YXXX-XXXXXXXXXXXX
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    expect(uuid).toMatch(uuidRegex);
+  });
+
+  it('should generate unique UUIDs', () => {
+    const uuid1 = generateUUID();
+    const uuid2 = generateUUID();
+    
+    // Проверяем, что разные вызовы функции генерируют разные UUID
+    expect(uuid1).not.toBe(uuid2);
+  });
 });

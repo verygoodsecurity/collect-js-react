@@ -78,7 +78,5 @@
     "postcss": "8.4.21",
     "webpack": "5.76.0"
   },
-  "dependencies": {
-    "nanoid": "^5.0.7"
-  }
+  "dependencies": {}
 }
