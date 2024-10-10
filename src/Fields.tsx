@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect } from 'react';
-import { generateUUID } from 'utils';
+import { generateUUID } from './utils';
 import { getFormInstance } from './state';
 import { DEFAULT_CONFIG, FIELD_EVENTS } from './constants';
 import { useVGSCollectFormState } from './formStateProvider';

@@ -8,12 +8,18 @@ function generateUUID() {
   }
 
   return (
-    getRandomHex(8) + '-' +
-    getRandomHex(4) + '-' +
-    '4' + getRandomHex(3) + '-' +  // Версия 4 UUID
-    ((Math.floor(Math.random() * 4) + 8).toString(16)) + getRandomHex(3) + '-' +  // Вариант UUID
+    getRandomHex(8) +
+    '-' +
+    getRandomHex(4) +
+    '-' +
+    '4' +
+    getRandomHex(3) +
+    '-' +
+    (Math.floor(Math.random() * 4) + 8).toString(16) +
+    getRandomHex(3) +
+    '-' +
     getRandomHex(12)
   );
 }
 
-export { generateUUID } 
+export { generateUUID };
