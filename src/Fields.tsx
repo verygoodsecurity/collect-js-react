@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect } from 'react';
-import { nanoid } from 'nanoid'
+import { generateUUID } from 'utils';
 import { getFormInstance } from './state';
 import { DEFAULT_CONFIG, FIELD_EVENTS } from './constants';
 import { useVGSCollectFormState } from './formStateProvider';
@@ -53,7 +53,7 @@ function RenderField(props: any) {
     throw new Error(`@vgs/collect-js-react: name attribute for ${props.type} is required.`);
   }
 
-  const [fieldId] = React.useState(() => `vgs-${nanoid()}`);
+  const [fieldId] = React.useState(() => `vgs-${generateUUID()}`);
   const events = {
     onFocus,
     onBlur,
