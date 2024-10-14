@@ -75,7 +75,7 @@ describe('generateUUID', () => {
   it('should generate a valid UUID', () => {
     const uuid = generateUUID();
     
-    // Проверяем, что UUID соответствует формату XXXXXXXX-XXXX-4XXX-YXXX-XXXXXXXXXXXX
+    // validate format of the UUID XXXXXXXX-XXXX-4XXX-YXXX-XXXXXXXXXXXX
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     expect(uuid).toMatch(uuidRegex);
   });
@@ -84,7 +84,7 @@ describe('generateUUID', () => {
     const uuid1 = generateUUID();
     const uuid2 = generateUUID();
     
-    // Проверяем, что разные вызовы функции генерируют разные UUID
+    // Validate that we have two unique UUID
     expect(uuid1).not.toBe(uuid2);
   });
 });
