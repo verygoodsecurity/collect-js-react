@@ -52,6 +52,10 @@ const DEFAULT_CONFIG = {
   DATE: {
     type: 'date',
     placeholder: ''
+  },
+  DROPDOWN: {
+    type: 'dropdown',
+    placeholder: '',
   }
 };
 

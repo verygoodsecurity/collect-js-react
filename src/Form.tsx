@@ -9,7 +9,8 @@ import {
   SSNField,
   TextField,
   TextareaField,
-  ZipCodeField
+  ZipCodeField,
+  DropdownField
 } from './Fields';
 import { DispatchStateContext, DispatchSubmitContext } from './provider';
 import { FormStateProvider, DispatchFormContext } from './formStateProvider';
@@ -165,3 +166,4 @@ VGSCollectForm.TextareaField = TextareaField;
 VGSCollectForm.NumberField = NumberField;
 VGSCollectForm.FileField = FileField;
 VGSCollectForm.DateField = DateField;
+VGSCollectForm.DropdownField = DropdownField

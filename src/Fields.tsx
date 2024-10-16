@@ -18,6 +18,7 @@ import {
   IVGSCollectDateField,
   IVGSCollectForm,
   VGSCollectStateParams,
+  IVGSCollectDropdownField,
 } from './types/Form';
 
 import {
@@ -212,6 +213,16 @@ const FileField = React.memo((props: Partial<IVGSCollectFileField & GeneralField
   )
 });
 
+const DropdownField = React.memo((props: Partial<IVGSCollectDropdownField & GeneralFieldProps>) => {
+  return (
+    <RenderField
+      {...Object.assign({
+        ...DEFAULT_CONFIG.FILE,
+      }, props)}
+    />
+  )
+});
+
 export {
   TextField,
   CardNumberField,
@@ -223,5 +234,6 @@ export {
   TextareaField,
   NumberField,
   FileField,
-  DateField
+  DateField,
+  DropdownField
 };
