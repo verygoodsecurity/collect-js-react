@@ -64,13 +64,13 @@ function CollectForm(props: ICollectFormProps) {
         (state: VGSCollectFormState) => {
           if (onUpdateCallback) {
             onUpdateCallback(state);
-          } 
+          }
           isProviderExists && dispatchFormStateUpdate(state);
         }
       );
-      
+
       dispatchFormСontext({ type: 'FORM_MOUNTED' });
-      
+
       if (cname) {
         form.useCname(cname);
       }
@@ -91,7 +91,7 @@ function CollectForm(props: ICollectFormProps) {
     };
   }, []);
 
-  const submitHandler = (e: React.SyntheticEvent) => {
+  const submitHandler = async (e: React.SyntheticEvent) => {
     e.preventDefault();
 
     const form: IVGSCollectForm = getFormInstance();
@@ -116,7 +116,7 @@ function CollectForm(props: ICollectFormProps) {
     } else {
       form.submit(
         action,
-        submitParameters,
+        await submitParameters(),
         (status: HttpStatusCode | null, data: any) => {
           if (onSubmitCallback) {
             onSubmitCallback(status, data);
