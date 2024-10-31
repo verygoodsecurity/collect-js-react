@@ -27,6 +27,7 @@ import {
 
 type GeneralFieldProps = {
   className: string;
+  style: string;
   onFocus: (info: VGSCollectFocusEventData) => void;
   onBlur: (info: VGSCollectFocusEventData) => void;
   onUpdate: (state: VGSCollectStateParams) => void;
@@ -37,6 +38,27 @@ type GeneralFieldProps = {
 }
 
 function RenderField(props: any) {
+
+  // const { style, ...restProps } = props;
+  // const newProps = {
+  //   ...restProps,
+  //   css: style || null,
+  // };
+
+  // const {
+  //   className,
+  //   onFocus,
+  //   onBlur,
+  //   onUpdate,
+  //   onDelete,
+  //   onKeyPress,
+  //   onKeyUp,
+  //   onKeyDown,
+  //   ...fieldProps
+  // } = newProps;
+
+  // console.log('newProps props in common', newProps)
+
   const {
     className,
     onFocus,
@@ -46,8 +68,14 @@ function RenderField(props: any) {
     onKeyPress,
     onKeyUp,
     onKeyDown,
-    ...fieldProps
+    style,
+    ...fieldPropsRaw
   } = props;
+  
+  const fieldProps = {
+    ...fieldPropsRaw,
+    ...(style && { css: style }), // Добавляем css, если style существует
+  };
 
   if (!props.name) {
     throw new Error(`@vgs/collect-js-react: name attribute for ${props.type} is required.`);

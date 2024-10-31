@@ -108,6 +108,7 @@ interface IDefaultFieldOptions {
   readonly?: BooleanValue;
   inputMode?: InputMode;
   tokenization?: IFieldTokenization | boolean;
+  style?: Record<string, any>;
 }
 
 type FieldConfig =
