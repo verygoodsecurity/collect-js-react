@@ -38,27 +38,6 @@ type GeneralFieldProps = {
 }
 
 function RenderField(props: any) {
-
-  // const { style, ...restProps } = props;
-  // const newProps = {
-  //   ...restProps,
-  //   css: style || null,
-  // };
-
-  // const {
-  //   className,
-  //   onFocus,
-  //   onBlur,
-  //   onUpdate,
-  //   onDelete,
-  //   onKeyPress,
-  //   onKeyUp,
-  //   onKeyDown,
-  //   ...fieldProps
-  // } = newProps;
-
-  // console.log('newProps props in common', newProps)
-
   const {
     className,
     onFocus,

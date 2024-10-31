@@ -50,7 +50,6 @@ interface IVGSCollectFieldInstance {
   formId: string;
   name: string;
   tnt: string;
-  style: string;
   type: VGSCollectFieldType;
   /**
    * Docs: https://www.verygoodsecurity.com/docs/api/collect/#api-fieldon
