@@ -82,9 +82,9 @@ const CustomPayload = () => {
       setTimeout(() => {
         resolve({
           'X-Custom-1': '1',
-          'X-cusomt-2': '3'
+          'X-Custom-2': '3'
         });
-        
+
         // For testing rejection; it is handled in onErrorCallback().
         // reject(new Error('Failed to fetch headers'));
       }, 1000);
