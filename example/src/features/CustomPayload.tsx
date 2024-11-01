@@ -63,7 +63,7 @@ const CustomPayload = () => {
 
   const onErrorCallback = (errors: VGSCollectFormState) => {
     /**
-     * Receive information about Erorrs (client-side validation)
+     * Receive information about Erorrs (client-side validation, or rejection in async headers function)
      */
   };
 
@@ -75,6 +75,20 @@ const CustomPayload = () => {
 
   const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
+  };
+
+  const fetchHeaders = async (): Promise<Record<string, string>> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve({
+          'X-Custom-1': '1',
+          'X-Custom-2': '3'
+        });
+
+        // For testing rejection; it is handled in onErrorCallback().
+        // reject(new Error('Failed to fetch headers'));
+      }, 1000);
+    });
   };
 
   return (
@@ -99,7 +113,8 @@ const CustomPayload = () => {
                   textField: fields.textField,
                   cardNumber: fields['card-number']
                 };
-              }
+              },
+              headers: fetchHeaders
             }}
             onUpdateCallback={onUpdateCallback}
             onSubmitCallback={onSubmitCallback}
