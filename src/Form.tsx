@@ -59,7 +59,6 @@ function CollectForm(props: ICollectFormProps) {
       window.VGSCollect &&
       Object.keys(getFormInstance()).length === 0
     ) {
-      console.log('HERE!!!', props, routeId);
       const form: IVGSCollectForm = window.VGSCollect.create(
         vaultId,
         environment,
