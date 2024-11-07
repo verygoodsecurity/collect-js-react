@@ -32,6 +32,7 @@ function CollectForm(props: ICollectFormProps) {
     environment = 'sandbox',
     action = '/',
     cname,
+    routeId,
     submitParameters,
     tokenizationAPI = false,
     onUpdateCallback,
@@ -58,6 +59,7 @@ function CollectForm(props: ICollectFormProps) {
       window.VGSCollect &&
       Object.keys(getFormInstance()).length === 0
     ) {
+      console.log('HERE!!!', props, routeId);
       const form: IVGSCollectForm = window.VGSCollect.create(
         vaultId,
         environment,
@@ -74,6 +76,11 @@ function CollectForm(props: ICollectFormProps) {
       if (cname) {
         form.useCname(cname);
       }
+
+      if (routeId) {
+        form.setRouteId(routeId);
+      }
+
       setFormInstance(form);
     }
 

@@ -16,7 +16,8 @@ import { generateUUID } from '../utils';
 const COLLECT_CONFIG = {
   VAULT_ID: 'tnt1234567',
   ENVIRONMENT: 'sandbox' as VGSCollectVaultEnvironment,
-  CNAME: 'my_domain.com'
+  CNAME: 'my_domain.com',
+  ROUTE_ID: '4dfja6ec-b5e2-002e-828d-388dfd169997f'
 }
 
 test('Throw error when vaultId is not in received props', () => {
@@ -57,6 +58,16 @@ test('VGSCollectForm calls .useCname() method when CNAME is passed in the props'
   expect(VGSCollectInstanceMock.useCname).toHaveBeenCalledWith(COLLECT_CONFIG.CNAME);
 });
 
+test('VGSCollectForm calls .setRouteId() method when routeID is passed in the props', () => {
+  render(
+    <VGSCollectProvider>
+      <VGSCollectForm 
+        vaultId={COLLECT_CONFIG.VAULT_ID} routeId={COLLECT_CONFIG.ROUTE_ID} environment={COLLECT_CONFIG.ENVIRONMENT}/>
+    </VGSCollectProvider>
+  )
+
+  expect(VGSCollectInstanceMock.setRouteId).toHaveBeenCalledWith(COLLECT_CONFIG.ROUTE_ID);
+});
 
 test('Generate <div> wrapper element for each iframe', () => {
   render(
