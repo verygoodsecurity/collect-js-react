@@ -32,6 +32,7 @@ function CollectForm(props: ICollectFormProps) {
     environment = 'sandbox',
     action = '/',
     cname,
+    routeId,
     submitParameters,
     tokenizationAPI = false,
     onUpdateCallback,
@@ -74,6 +75,11 @@ function CollectForm(props: ICollectFormProps) {
       if (cname) {
         form.useCname(cname);
       }
+
+      if (routeId) {
+        form.setRouteId(routeId);
+      }
+
       setFormInstance(form);
     }
 

@@ -94,6 +94,7 @@ export default App;
 | onUpdateCallback?  | Returns the form state in the callback.                    | [Parameters.stateCallback](https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate) |
 | onSubmitCallback?  | Returns status and response data in the callback.          | [Parameters.responseCallback](https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit)    |
 | cname?             | String represents CNAME the request will be submitted to.  | [.useCNAME()](https://www.verygoodsecurity.com/docs/api/collect/#api-formusecname)                  |
+| routeId?           | Inbound Route ID.                                          | [.setRouteId()](https://www.verygoodsecurity.com/docs/api/collect/#api-formsetrouteid)              |
 
 <br/>
 
@@ -240,6 +241,30 @@ const VGSCollectSecureForm = () => {
 - [Collect.js Reference Documentation](https://www.verygoodsecurity.com/docs/api/collect)
 
 ## Examples
+
+To run exmaples locally, in the core folder run:
+
+```sh
+yarn install
+yarn start
+```
+
+Switch the folder to `example` and configure `.env` file, simply rename `.env.example` and replace values
+
+```sh
+REACT_APP_VAULT_ID=<vault_id>
+REACT_APP_ENVIRONMENT=<env>
+REACT_APP_COLLECT_VERSION=<collect_version>
+```
+
+From `example` folder run:
+
+```sh
+yarn install
+yarn start
+```
+
+Open [http://localhost:3000/](http://localhost:3000/)
 
 - [Simple Configuration](https://github.com/verygoodsecurity/collect-js-react/blob/main/example/src/features/Basic.tsx)
 - [Custom Payload Configuration](https://github.com/verygoodsecurity/collect-js-react/blob/main/example/src/features/CustomPayload.tsx)

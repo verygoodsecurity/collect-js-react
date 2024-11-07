@@ -63,6 +63,7 @@ interface ICollectFormProps {
   submitParameters?: any;
   action?: string;
   cname?: string;
+  routeId?: string;
   tokenizationAPI?: boolean;
   children?: JSX.Element[] | JSX.Element;
   onUpdateCallback?: (state: VGSCollectFormState | null) => void;
@@ -273,6 +274,11 @@ interface IVGSCollectForm {
    * Docs: https://www.verygoodsecurity.com/docs/vgs-collect/js/integration#vgs-collect-with-cname
    */
   useCname(cname: string): void;
+
+  /**
+   * Docs: https://www.verygoodsecurity.com/docs/api/collect#api-formsetrouteid
+   */
+  setRouteId(routeId: string): void;
 }
 
 interface IVGSCollect {
