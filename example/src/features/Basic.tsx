@@ -46,6 +46,7 @@ const Basic = React.memo(() => {
   const VGSCollectFieldStyles = {
     padding: '.5rem 1rem',
     boxSizing: 'border-box',
+    fontFamily: '"PT Mono", monospace',
     '&::placeholder': {
       color: '#686868'
     }

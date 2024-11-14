@@ -27,7 +27,6 @@ import {
 
 type GeneralFieldProps = {
   className: string;
-  style: string;
   onFocus: (info: VGSCollectFocusEventData) => void;
   onBlur: (info: VGSCollectFocusEventData) => void;
   onUpdate: (state: VGSCollectStateParams) => void;
