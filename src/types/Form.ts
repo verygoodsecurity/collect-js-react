@@ -66,6 +66,7 @@ interface ICollectFormProps {
   routeId?: string;
   tokenizationAPI?: boolean;
   children?: JSX.Element[] | JSX.Element;
+  onCustomSubmit?: (event: React.SyntheticEvent) => void;
   onUpdateCallback?: (state: VGSCollectFormState | null) => void;
   onSubmitCallback?: (status: any, resp: any) => void;
   onErrorCallback?: (errors: any) => void;

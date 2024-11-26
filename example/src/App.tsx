@@ -3,6 +3,7 @@ import { Routes, Route, Outlet, Link } from 'react-router-dom';
 import Base from './features/Basic';
 import CustomPayload from './features/CustomPayload';
 import Tokenization from './features/Tokenization';
+import SubmitHandling from './features/SubmitHandling';
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
           <Route index element={<Base />} />
           <Route path='/custom-payload' element={<CustomPayload />} />
           <Route path='/tokenization-api' element={<Tokenization />} />
+          <Route path='/submit-handling' element={<SubmitHandling />} />
           <Route path='*' element={<NoMatch />} />
         </Route>
       </Routes>
@@ -26,6 +28,7 @@ function Layout() {
         <Link to='/'>Basic</Link>
         <Link to='/custom-payload'>Custom Payload</Link>
         <Link to='/tokenization-api'>Tokenization API</Link>
+        <Link to='/submit-handling'>Submit Handling</Link>
       </nav>
       <hr />
       <main className='container'>

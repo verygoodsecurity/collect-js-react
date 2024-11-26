@@ -70,7 +70,6 @@ function RenderField(props: any) {
     onDelete
   };
   const [ formState ] = useVGSCollectFormState();
-
   const eventsToListen = Object.keys(events).filter(e => events[e] !== undefined);
 
   useEffect(() => {
@@ -229,5 +228,6 @@ export {
   TextareaField,
   NumberField,
   FileField,
-  DateField
+  DateField,
+  getFormInstance
 };

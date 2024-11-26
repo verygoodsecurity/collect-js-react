@@ -11,7 +11,7 @@ import {
   TextareaField,
   ZipCodeField
 } from './Fields';
-import { DispatchStateContext, DispatchSubmitContext } from './provider';
+import { DispatchStateContext, DispatchSubmitContext, DispatchFormInstanceContext } from './provider';
 import { FormStateProvider, DispatchFormContext } from './formStateProvider';
 import {
   ICollectFormProps,
@@ -35,10 +35,11 @@ function CollectForm(props: ICollectFormProps) {
     routeId,
     submitParameters,
     tokenizationAPI = false,
+    onCustomSubmit,
     onUpdateCallback,
     onSubmitCallback,
     onErrorCallback,
-    children
+    children,
   } = props;
 
   if (!vaultId) {
@@ -48,6 +49,7 @@ function CollectForm(props: ICollectFormProps) {
   const dispatchFormStateUpdate = useContext(DispatchStateContext);
   const dispatchResponseUpdate = useContext(DispatchSubmitContext);
   const dispatchFormСontext = useContext(DispatchFormContext);
+  const dispatchFormInstanceContextUpdate = useContext(DispatchFormInstanceContext);
 
   const isProviderExists =
     typeof dispatchFormStateUpdate === 'function' &&
@@ -81,6 +83,7 @@ function CollectForm(props: ICollectFormProps) {
       }
 
       setFormInstance(form);
+      dispatchFormInstanceContextUpdate(getFormInstance());
     }
 
     return () => {
@@ -98,14 +101,12 @@ function CollectForm(props: ICollectFormProps) {
   }, []);
 
   const submitHandler = (e: React.SyntheticEvent) => {
-    e.preventDefault();
-
+    e.preventDefault();    
     const form: IVGSCollectForm = getFormInstance();
 
     if (!form) {
       throw new Error('@vgs/collect-js-react: VGS Collect form not found.');
     }
-
     if (tokenizationAPI) {
       form.tokenize(
         (status: HttpStatusCode | null, resp: any) => {
@@ -142,10 +143,8 @@ function CollectForm(props: ICollectFormProps) {
   };
 
   return (
-    <form
-      onSubmit={(event) => {
-        submitHandler(event);
-      }}
+    <form 
+      onSubmit={(event) => (onCustomSubmit || submitHandler)(event)}
     >
       {children}
     </form>
