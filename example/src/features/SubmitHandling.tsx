@@ -61,12 +61,6 @@ const SubmitHandling = (e: any) => {
     });
   }, []);
 
-  const onSubmitCallback = (status: VGSCollectHttpStatusCode, resp: any) => {
-    /**
-     * Receive information about HTTP request
-     */
-  };
-
   const onErrorCallback = (errors: VGSCollectFormState) => {
     /**
      * Receive information about Erorrs (client-side validation, or rejection in async headers function)
@@ -83,10 +77,18 @@ const SubmitHandling = (e: any) => {
     event.preventDefault();
     if (!isFormSubmitting && formInstance) {
       setFormSubmitting(true);
-      formInstance.submit('/post', {}, (status, data) => {
-        console.log('Response:', status, data);
-        setFormSubmitting(false);
-      });
+      formInstance.submit(
+        '/post',
+        {},
+        (status, data) => {
+          console.log('Response:', status, data);
+          setFormSubmitting(false);
+        },
+        (errors) => {
+          console.log(errors);
+          setFormSubmitting(false);
+        }
+      );
     }
   };
 
@@ -104,7 +106,6 @@ const SubmitHandling = (e: any) => {
             environment={REACT_APP_ENVIRONMENT as VGSCollectVaultEnvironment}
             onCustomSubmit={customHandling}
             onUpdateCallback={onUpdateCallback}
-            onSubmitCallback={onSubmitCallback}
             onErrorCallback={onErrorCallback}
           >
             {/**

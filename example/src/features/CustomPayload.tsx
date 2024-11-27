@@ -75,6 +75,7 @@ const CustomPayload = () => {
     /**
      * Receive information about Erorrs (client-side validation, or rejection in async headers function)
      */
+    console.log(errors)
   };
 
   const onUpdateCallback = (state: VGSCollectFormState) => {
