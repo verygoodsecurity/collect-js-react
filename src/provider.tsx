@@ -4,6 +4,7 @@ import { VGSCollectFormState } from './types/Form';
 
 type GlobalStateContext = VGSCollectFormState | undefined;
 type GlobalSubmitContext = { status: HttpStatusCode, data: any } | undefined;
+type GlobalFormInstanceContext = any;
 
 export const initialState = undefined;
 
@@ -11,6 +12,9 @@ export const GlobalSubmitContext = createContext<GlobalSubmitContext>(initialSta
 export const DispatchSubmitContext = createContext({} as Dispatch<any>);
 export const GlobalStateContext = createContext<GlobalStateContext>(initialState);
 export const DispatchStateContext = createContext({} as Dispatch<any>);
+export const GlobalFormInstanceContext = createContext<GlobalFormInstanceContext>(false);
+export const DispatchFormInstanceContext = createContext({} as Dispatch<any>);
+
 
 export const GlobalStateProvider = ({ children }: any) => {
   const [state, dispatch] = useReducer(
@@ -26,6 +30,13 @@ export const GlobalStateProvider = ({ children }: any) => {
     initialState
   );
 
+  const [formInstance, dispatchFormInstance] = useReducer(
+    (_form: any, formInstance: any) => {
+      return formInstance ? formInstance : null
+    },
+    null
+  );
+
   const memoState = useMemo(
     () => (state),
     [state]
@@ -36,13 +47,22 @@ export const GlobalStateProvider = ({ children }: any) => {
     [response]
   );
 
+  const memoFormInstance = useMemo(
+    () => (formInstance),
+    [formInstance]
+  );
+
   return (
     <div>
       <GlobalStateContext.Provider value={memoState}>
         <DispatchStateContext.Provider value={dispatch}>
           <GlobalSubmitContext.Provider value={memoResponse}>
             <DispatchSubmitContext.Provider value={dispatchSubmit}>
-              {children}
+              <GlobalFormInstanceContext.Provider value={memoFormInstance}>
+                <DispatchFormInstanceContext.Provider value={dispatchFormInstance}>
+                  {children}
+                </DispatchFormInstanceContext.Provider>
+              </GlobalFormInstanceContext.Provider>
             </DispatchSubmitContext.Provider>
           </GlobalSubmitContext.Provider>
         </DispatchStateContext.Provider>
@@ -59,6 +79,11 @@ export const useVGSCollectResponse = () => [
   useContext(GlobalSubmitContext)
 ];
 
+export const useVGSCollectFormInstance = () => [
+  useContext(GlobalFormInstanceContext)
+];
+
 export const VGSCollectProvider = ({ children }: any) => {
   return <GlobalStateProvider>{children}</GlobalStateProvider>;
 };
+
