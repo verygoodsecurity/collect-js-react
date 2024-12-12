@@ -46,6 +46,7 @@ const SubmitHandling = (e: any) => {
 
   useEffect(() => {
     setFormInstance(form);
+    console.log('formInstance', formInstance)
   }, [form]);
 
   useEffect(() => {
@@ -75,6 +76,7 @@ const SubmitHandling = (e: any) => {
 
   const customHandling = (event: any) => {
     event.preventDefault();
+    console.log('HERE')
     if (!isFormSubmitting && formInstance) {
       setFormSubmitting(true);
       formInstance.submit(
@@ -104,7 +106,7 @@ const SubmitHandling = (e: any) => {
           <VGSCollectForm
             vaultId={REACT_APP_VAULT_ID as string}
             environment={REACT_APP_ENVIRONMENT as VGSCollectVaultEnvironment}
-            onCustomSubmit={customHandling}
+            // onCustomSubmit={customHandling}
             onUpdateCallback={onUpdateCallback}
             onErrorCallback={onErrorCallback}
           >

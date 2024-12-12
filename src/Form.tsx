@@ -53,8 +53,8 @@ function CollectForm(props: ICollectFormProps) {
 
   const isProviderExists =
     typeof dispatchFormStateUpdate === 'function' &&
-    typeof dispatchResponseUpdate === 'function';
-
+    typeof dispatchResponseUpdate === 'function';    // typeof dispatchFormInstanceContextUpdate === 'function';
+  
   useEffect(() => {
     if (
       isBrowser &&
@@ -69,11 +69,13 @@ function CollectForm(props: ICollectFormProps) {
             onUpdateCallback(state);
           } 
           isProviderExists && dispatchFormStateUpdate(state);
+          // isProviderExists && dispatchFormInstanceContextUpdate({qwe:1});
+          // console.log('tyoe of dispatchFormСontext', typeof dispatchFormСontext, '-->', typeof dispatchFormStateUpdate, '--->dispatchFormInstanceContextUpdate', typeof dispatchFormInstanceContextUpdate)
         }
       );
       
       dispatchFormСontext({ type: 'FORM_MOUNTED' });
-      
+
       if (cname) {
         form.useCname(cname);
       }
@@ -83,7 +85,13 @@ function CollectForm(props: ICollectFormProps) {
       }
 
       setFormInstance(form);
-      dispatchFormInstanceContextUpdate(getFormInstance());
+
+      // console.log('qweqweqw',dispatchFormСontext,  dispatchFormInstanceContextUpdate)
+      // if (typeof dispatchFormInstanceContextUpdate === 'function') {
+        dispatchFormInstanceContextUpdate({qwe: 1});
+      // } else {
+        // console.log('ELSE', dispatchFormInstanceContextUpdate, dispatchResponseUpdate, dispatchFormStateUpdate, getFormInstance())
+      // }
     }
 
     return () => {
@@ -102,6 +110,7 @@ function CollectForm(props: ICollectFormProps) {
 
   const submitHandler = (e: React.SyntheticEvent) => {
     e.preventDefault();    
+    console.log('Default submitHandler SDK', submitHandler)
     const form: IVGSCollectForm = getFormInstance();
 
     if (!form) {
@@ -145,6 +154,7 @@ function CollectForm(props: ICollectFormProps) {
   return (
     <form 
       onSubmit={(event) => (onCustomSubmit || submitHandler)(event)}
+      // onSubmit={(event) => {submitHandler(event)}} 
     >
       {children}
     </form>
