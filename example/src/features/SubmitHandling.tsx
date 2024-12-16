@@ -46,6 +46,7 @@ const SubmitHandling = (e: any) => {
 
   useEffect(() => {
     setFormInstance(form);
+    console.log('formInstance', formInstance, form)
   }, [form]);
 
   useEffect(() => {
@@ -75,6 +76,7 @@ const SubmitHandling = (e: any) => {
 
   const customHandling = (event: any) => {
     event.preventDefault();
+    console.log('HERE', formInstance)
     if (!isFormSubmitting && formInstance) {
       setFormSubmitting(true);
       formInstance.submit(
