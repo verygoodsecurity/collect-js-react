@@ -31,7 +31,8 @@ export const GlobalStateProvider = ({ children }: any) => {
 
   const [formInstance, dispatchFormInstance] = useReducer(
     (_form: GlobalFormInstanceContext, formInstance: any) => {
-      return formInstance ? {...formInstance} : null
+      console.log('--->', _form, formInstance)
+      return formInstance ? formInstance : null
     },
     initialState
   );

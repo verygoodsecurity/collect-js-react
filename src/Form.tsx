@@ -88,7 +88,7 @@ function CollectForm(props: ICollectFormProps) {
 
       // console.log('qweqweqw',dispatchFormСontext,  dispatchFormInstanceContextUpdate)
       // if (typeof dispatchFormInstanceContextUpdate === 'function') {
-        dispatchFormInstanceContextUpdate({qwe: 1});
+        dispatchFormInstanceContextUpdate(getFormInstance());
       // } else {
         // console.log('ELSE', dispatchFormInstanceContextUpdate, dispatchResponseUpdate, dispatchFormStateUpdate, getFormInstance())
       // }
