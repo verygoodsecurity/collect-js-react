@@ -15,7 +15,7 @@ declare global {
   }
 }
 
-type VGSCollectVaultEnvironment = 'sandbox' | 'live' | 'live-eu-1';
+type VGSCollectVaultEnvironment = 'sandbox' | 'live' | 'live-eu-1' | 'live-ap-1';
 /**
  * Available options for .field() method configuration
  */
