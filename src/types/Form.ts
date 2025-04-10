@@ -1,8 +1,4 @@
-import {
-  ClassMap,
-  IVGSCollectFieldInstance,
-  VGSCollectFieldType
-} from './Field';
+import { ClassMap, IVGSCollectFieldInstance, VGSCollectFieldType } from './Field';
 
 import { HttpStatusCode as VGSCollectHttpStatusCode } from './HttpStatusCode';
 
@@ -30,15 +26,7 @@ type SubmitSerializer = 'deep' | 'flat';
 type SubmitSerialization = 'json' | 'formData';
 type SubmitMapDotToObject = BooleanValue | 'merge' | 'mergeArray';
 
-type InputMode =
-  | 'none'
-  | 'text'
-  | 'decimal'
-  | 'numeric'
-  | 'tel'
-  | 'search'
-  | 'email'
-  | 'url';
+type InputMode = 'none' | 'text' | 'decimal' | 'numeric' | 'tel' | 'search' | 'email' | 'url';
 
 // Available types for Tokenization flow
 type StorageTypes = 'PERSISTENT' | 'VOLATILE';
@@ -238,10 +226,7 @@ interface IVGSCollectForm {
   submit(
     path: string,
     options: Partial<VGSCollectSubmitOptions>,
-    successCallback?: (
-      status: VGSCollectHttpStatusCode | null,
-      data: any
-    ) => any,
+    successCallback?: (status: VGSCollectHttpStatusCode | null, data: any) => any,
     errorCallback?: (error: VGSCollectFormState) => any
   ): any;
 
@@ -249,10 +234,7 @@ interface IVGSCollectForm {
    * Docs: https://www.verygoodsecurity.com/docs/api/collect/#api-formtokenize
    */
   tokenize(
-    successCallback: (
-      status: VGSCollectHttpStatusCode | null,
-      data: any
-    ) => any,
+    successCallback: (status: VGSCollectHttpStatusCode | null, data: any) => any,
     errorCallback: (error: VGSCollectFormState) => any
   ): any;
 
@@ -283,11 +265,7 @@ interface IVGSCollectForm {
 }
 
 interface IVGSCollect {
-  create(
-    vaultId: string,
-    environment: string,
-    stateCallback?: (state: VGSCollectFormState) => void
-  ): any;
+  create(vaultId: string, environment: string, stateCallback?: (state: VGSCollectFormState) => void): any;
 }
 
 type ICollectFieldAlias = {
