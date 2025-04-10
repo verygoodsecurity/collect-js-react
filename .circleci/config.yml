@@ -42,7 +42,7 @@ jobs:
       - run:
           name: Authenticate with NPM
           command: |
-            echo "//registry.npmjs.org/:_authToken=$NPM_VGS_PUBLISH_TOKEN" >> ~/project/.npmrc
+            echo "//registry.npmjs.org/:_authToken=$NPM_PUBLISH_TOKEN_NEW" >> ~/project/.npmrc
       - run:
           name: Publish package
           command: |
