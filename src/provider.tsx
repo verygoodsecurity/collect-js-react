@@ -12,9 +12,8 @@ export const GlobalSubmitContext = createContext<GlobalSubmitContext>(initialSta
 export const DispatchSubmitContext = createContext({} as Dispatch<any>);
 export const GlobalStateContext = createContext<GlobalStateContext>(initialState);
 export const DispatchStateContext = createContext({} as Dispatch<any>);
-export const GlobalFormInstanceContext = createContext<GlobalFormInstanceContext>(false);
+export const GlobalFormInstanceContext = createContext<GlobalFormInstanceContext>(null);
 export const DispatchFormInstanceContext = createContext({} as Dispatch<any>);
-
 
 export const GlobalStateProvider = ({ children }: any) => {
   const [state, dispatch] = useReducer(
@@ -31,10 +30,11 @@ export const GlobalStateProvider = ({ children }: any) => {
   );
 
   const [formInstance, dispatchFormInstance] = useReducer(
-    (_form: any, formInstance: any) => {
+    (_form: GlobalFormInstanceContext, formInstance: any) => {
+      console.log('--->', _form, formInstance)
       return formInstance ? formInstance : null
     },
-    null
+    initialState
   );
 
   const memoState = useMemo(
@@ -79,9 +79,11 @@ export const useVGSCollectResponse = () => [
   useContext(GlobalSubmitContext)
 ];
 
-export const useVGSCollectFormInstance = () => [
-  useContext(GlobalFormInstanceContext)
-];
+export const useVGSCollectFormInstance = () => {
+  return [
+    useContext(GlobalFormInstanceContext)
+  ];
+}
 
 export const VGSCollectProvider = ({ children }: any) => {
   return <GlobalStateProvider>{children}</GlobalStateProvider>;
