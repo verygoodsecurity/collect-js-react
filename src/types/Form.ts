@@ -58,6 +58,7 @@ interface ICollectFormProps {
   onUpdateCallback?: (state: VGSCollectFormState | null) => void;
   onSubmitCallback?: (status: any, resp: any) => void;
   onErrorCallback?: (errors: any) => void;
+  onCardCreateCallback?: (status: any, resp: any) => void;
 }
 
 interface VGSCollectStateParams {
@@ -234,6 +235,15 @@ interface IVGSCollectForm {
    * Docs: https://www.verygoodsecurity.com/docs/api/collect/#api-formtokenize
    */
   tokenize(
+    successCallback: (status: VGSCollectHttpStatusCode | null, data: any) => any,
+    errorCallback: (error: VGSCollectFormState) => any
+  ): any;
+
+  /**
+   * Docs: https://www.verygoodsecurity.com/docs/api/collect/#api-formcreatecard
+   */
+  createCard(
+    options: Partial<VGSCollectSubmitOptions>,
     successCallback: (status: VGSCollectHttpStatusCode | null, data: any) => any,
     errorCallback: (error: VGSCollectFormState) => any
   ): any;

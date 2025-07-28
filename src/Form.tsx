@@ -38,6 +38,7 @@ function CollectForm(props: ICollectFormProps) {
     onCustomSubmit,
     onUpdateCallback,
     onSubmitCallback,
+    onCardCreateCallback,
     onErrorCallback,
     children,
   } = props;
@@ -106,6 +107,21 @@ function CollectForm(props: ICollectFormProps) {
 
     if (!form) {
       throw new Error('@vgs/collect-js-react: VGS Collect form not found.');
+    }
+    if (onCardCreateCallback) {
+      form.createCard(
+        submitParameters,
+        (status: HttpStatusCode | null, resp: any) => {
+          if (onSubmitCallback) {
+            onSubmitCallback(status, resp);
+          }
+        },
+        (errors: any) => {
+          if (onErrorCallback) {
+            onErrorCallback(errors);
+          }
+        }
+      ) 
     }
     if (tokenizationAPI) {
       form.tokenize(

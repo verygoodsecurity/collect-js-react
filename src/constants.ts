@@ -15,15 +15,18 @@ const DEFAULT_CONFIG = {
   },
   CARD_NUMBER: {
     type: 'card-number',
-    placeholder: 'Credit Card Number'
+    placeholder: 'Credit Card Number',
+    name: 'pan'
   },
   CARD_EXPIRATION_DATE: {
     type: 'card-expiration-date',
-    placeholder: 'Card Expiration Date'
+    placeholder: 'Card Expiration Date',
+    name: 'exp-date'
   },
   CARD_SECURITY_CODE: {
     type: 'card-security-code',
-    placeholder: 'CVC/CVV'
+    placeholder: 'CVC/CVV',
+    name: 'cvc'
   },
   PASSWORD: {
     type: 'password',
