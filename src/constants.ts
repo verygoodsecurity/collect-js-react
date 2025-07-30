@@ -17,26 +17,22 @@ const DEFAULT_CONFIG = {
   CARDHOLDER: {
     type: 'text',
     placeholder: 'Cardholder',
-    name: 'cardholder',
-    // defaultValue: 'Cardholder'
+    name: 'cardholder'
   },
   CARD_NUMBER: {
     type: 'card-number',
     placeholder: 'Credit Card Number',
-    name: 'pan',
-    // defaultValue: '4111 1111 1111 1111'
+    name: 'pan'
   },
   CARD_EXPIRATION_DATE: {
     type: 'card-expiration-date',
     placeholder: 'Card Expiration Date',
-    name: 'exp-date',
-    // defaultValue: '12 / 2028'
+    name: 'exp-date'
   },
   CARD_SECURITY_CODE: {
     type: 'card-security-code',
     placeholder: 'CVC/CVV',
-    name: 'cvc',
-    // defaultValue: '123'
+    name: 'cvc'
   },
   PASSWORD: {
     type: 'password',
