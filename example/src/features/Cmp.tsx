@@ -9,11 +9,9 @@ import {
   IVGSCollectForm
 } from 'collect-js-react';
 import React, { useEffect, useState } from 'react';
-
 import { loadVGSCollect } from '@vgs/collect-js';
 
-const { TextField, CardNumberField, CardExpirationDateField, CardSecurityCodeField } = VGSCollectForm;
-
+const { CardholderField, CardNumberField, CardExpirationDateField, CardSecurityCodeField } = VGSCollectForm;
 const { REACT_APP_VAULT_ID, REACT_APP_ENVIRONMENT, REACT_APP_COLLECT_VERSION } = process.env;
 
 const Cmp = (e: any) => {
@@ -73,10 +71,32 @@ const Cmp = (e: any) => {
      */
   };
 
-  const onCardCreateCallback = (status: VGSCollectHttpStatusCode, resp: any) => {
-    console.log('Submit callback')
-  }
- 
+  const onSubmitCallback = (status: VGSCollectHttpStatusCode, resp: any) => {
+    console.log('Submit callback', status, resp);
+  };
+
+  const getTokenizationApiKey = async (param1: string, param2: object) => {
+    console.log(param1, param2);
+    try {
+      const response = await fetch('http://localhost:9090/get/cmp-api-key', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log(data);
+      return data;
+    } catch (error) {
+      return null;
+    }
+  };
+
   return (
     <>
       {isVGSCollectScriptLoaded && (
@@ -91,22 +111,27 @@ const Cmp = (e: any) => {
             environment={REACT_APP_ENVIRONMENT as VGSCollectVaultEnvironment}
             onUpdateCallback={onUpdateCallback}
             onErrorCallback={onErrorCallback}
-            onCardCreateCallback={onCardCreateCallback}
+            onSubmitCallback={onSubmitCallback}
             submitParameters={{
-              auth: 'token.access_token', 
-              data: {
-                cardholder: {
-                  name: 'test',
-                  address: {
-                      address1: '123 Main St',
-                      address2: 'Suite 456',
-                      address3: 'Line 3',
-                      address4: 'Line 4',
-                      city: 'LA',
-                      region: 'CA',
-                      postal_code: '12345',
-                      country: 'USA'
-                  }
+              createCard: {
+                auth: async () => {
+                  const data = await getTokenizationApiKey('cmp', { param: 1 });
+                  return data.access_token;
+                },
+                data: {
+                  // cardholder: {
+                  //   name: 'test',
+                  //   address: {
+                  //     address1: '123 Main St',
+                  //     address2: 'Suite 456',
+                  //     address3: 'Line 3',
+                  //     address4: 'Line 4',
+                  //     city: 'LA',
+                  //     region: 'CA',
+                  //     postal_code: '12345',
+                  //     country: 'USA'
+                  //   }
+                  // }
                 }
               }
             }}
@@ -115,13 +140,11 @@ const Cmp = (e: any) => {
              * VGS Collect text field component:
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
-            <TextField name='textField' validations={['required']} css={VGSCollectFieldStyles} />
+            {/* <CardholderField css={VGSCollectFieldStyles} /> */}
             <CardNumberField css={VGSCollectFieldStyles} />
             <CardExpirationDateField css={VGSCollectFieldStyles} />
             <CardSecurityCodeField css={VGSCollectFieldStyles} />
-            
             <button type='submit'>Submit</button>
-
           </VGSCollectForm>
         </div>
       )}

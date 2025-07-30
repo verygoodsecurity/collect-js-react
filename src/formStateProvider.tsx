@@ -23,22 +23,15 @@ const formReducer = (state: GlobalFormContext, action: Action) => {
 export const FormStateProvider = ({ children }: any) => {
   const [formState, dispatchFormState] = useReducer(formReducer, initialFormState);
 
-  const memoFormState = useMemo(
-    () => (formState),
-    [formState]
-  );
+  const memoFormState = useMemo(() => formState, [formState]);
 
   return (
     <div>
-        <GlobalFormContext.Provider value={memoFormState}>
-            <DispatchFormContext.Provider value={dispatchFormState}>
-                {children}
-            </DispatchFormContext.Provider>
-        </GlobalFormContext.Provider>
+      <GlobalFormContext.Provider value={memoFormState}>
+        <DispatchFormContext.Provider value={dispatchFormState}>{children}</DispatchFormContext.Provider>
+      </GlobalFormContext.Provider>
     </div>
   );
 };
 
-export const useVGSCollectFormState = () => [
-  useContext(GlobalFormContext)
-];
+export const useVGSCollectFormState = () => [useContext(GlobalFormContext)];

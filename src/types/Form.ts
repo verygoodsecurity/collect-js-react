@@ -104,6 +104,7 @@ interface IDefaultFieldOptions {
 
 type FieldConfig =
   | IVGSCollectTextField
+  | IVGSCollectCardholderField
   | IVGSCollectCardNumberField
   | IVGSCollectCardExpirationField
   | IVGSCollectCardCVCField
@@ -119,6 +120,11 @@ interface IVGSCollectTextField extends IDefaultFieldOptions {
   max?: number;
   maxLength?: number;
   step?: number;
+  hideValue?: BooleanValue;
+}
+
+interface IVGSCollectCardholderField extends IDefaultFieldOptions {
+  type: 'text';
   hideValue?: BooleanValue;
 }
 
@@ -292,6 +298,7 @@ export type {
   IVGSCollect,
   IVGSCollectForm,
   IVGSCollectTextField,
+  IVGSCollectCardholderField,
   IVGSCollectCardNumberField,
   IVGSCollectCardExpirationField,
   IVGSCollectCardCVCField,

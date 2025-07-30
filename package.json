@@ -21,7 +21,8 @@
     "lint:fix": "eslint --ext .ts src --fix",
     "test:unit": "jest --coverage --coverageReporters json-summary",
     "test:watch": "jest --watch",
-    "predeploy": "cd example && yarn install && yarn run build"
+    "predeploy": "cd example && yarn install && yarn run build",
+    "format": "prettier --write ."
   },
   "peerDependencies": {
     "react": "^16.0 || ^17.0 || ^18.0",

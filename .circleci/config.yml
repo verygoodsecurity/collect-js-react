@@ -38,7 +38,7 @@ jobs:
       - run:
           name: Build
           command: |
-            yarn build    
+            yarn build
       - run:
           name: Authenticate with NPM
           command: |
@@ -47,7 +47,7 @@ jobs:
           name: Publish package
           command: |
             npm publish --access public
-  
+
   scan-sast-pr:
     parameters:
       default_branch:
@@ -62,7 +62,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Semgrep diff scan"
+          name: 'Semgrep diff scan'
           command: semgrep ci
 
   scan-sast-full:
@@ -78,7 +78,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Semgrep full scan"
+          name: 'Semgrep full scan'
           command: semgrep ci
 
 workflows:
@@ -101,7 +101,7 @@ workflows:
       - test:
           context:
             - frontend-deploy
-            - circleci    
+            - circleci
       - test-react-17
       - publish:
           context: frontend-deploy
@@ -110,7 +110,7 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v.*/
-  
+
   scheduled-security-scan:
     when: << pipeline.parameters.nightly-security-scan >>
     jobs:
@@ -119,4 +119,3 @@ workflows:
             - security-tools
             - frontend-deploy
             - circleci
-
