@@ -5,8 +5,7 @@ import {
   VGSCollectVaultEnvironment,
   useVGSCollectResponse,
   useVGSCollectState,
-  useVGSCollectFormInstance,
-  IVGSCollectForm
+  useVGSCollectFormInstance
 } from 'collect-js-react';
 import React, { useEffect, useState } from 'react';
 import { loadVGSCollect } from '@vgs/collect-js';
@@ -16,8 +15,6 @@ const { REACT_APP_VAULT_ID, REACT_APP_ENVIRONMENT, REACT_APP_COLLECT_VERSION } =
 
 const Cmp = (e: any) => {
   const [isVGSCollectScriptLoaded, setCollectScriptLoaded] = useState(false);
-  const [formInstance, setFormInstance] = useState<IVGSCollectForm | null>(null);
-  const [isFormSubmitting, setFormSubmitting] = useState(false);
   const VGSCollectFieldStyles = {
     '&::placeholder': {
       color: '#686868'
@@ -30,6 +27,7 @@ const Cmp = (e: any) => {
   const [response] = useVGSCollectResponse();
   const [form] = useVGSCollectFormInstance();
 
+  console.log('form', form);
   useEffect(() => {
     /**
      * Track form state
@@ -41,10 +39,6 @@ const Cmp = (e: any) => {
      * Track response from the VGS Collect form
      */
   }, [response]);
-
-  useEffect(() => {
-    setFormInstance(form);
-  }, [form]);
 
   useEffect(() => {
     /**
@@ -63,6 +57,7 @@ const Cmp = (e: any) => {
     /**
      * Receive information about Erorrs (client-side validation, or rejection in async headers function)
      */
+    console.log(errors);
   };
 
   const onUpdateCallback = (state: VGSCollectFormState) => {
@@ -75,6 +70,25 @@ const Cmp = (e: any) => {
     console.log('Submit callback', status, resp);
   };
 
+  const getTokenizationApiKey = async () => {
+    try {
+      const response = await fetch('http://localhost:9090/get/cmp-api-key', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.access_token;
+    } catch (error) {
+      return null;
+    }
+  };
   return (
     <>
       {isVGSCollectScriptLoaded && (
@@ -92,7 +106,7 @@ const Cmp = (e: any) => {
             onSubmitCallback={onSubmitCallback}
             submitParameters={{
               createCard: {
-                auth: '<VGS_AUTH_TOKEN>',
+                auth: getTokenizationApiKey,
                 data: {
                   cardholder: {
                     address: {

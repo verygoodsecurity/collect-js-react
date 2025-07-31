@@ -75,6 +75,7 @@ const SubmitHandling = (e: any) => {
 
   const customHandling = (event: any) => {
     event.preventDefault();
+    console.log('-->', formInstance);
     if (!isFormSubmitting && formInstance) {
       setFormSubmitting(true);
       formInstance.submit(

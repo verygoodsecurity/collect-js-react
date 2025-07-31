@@ -21,18 +21,22 @@ const DEFAULT_CONFIG = {
   },
   CARD_NUMBER: {
     type: 'card-number',
-    placeholder: 'Credit Card Number',
-    name: 'pan'
+    name: 'pan',
+    validations: ['required', 'validCardNumber'],
+    placeholder: 'Credit Card Number'
   },
   CARD_EXPIRATION_DATE: {
     type: 'card-expiration-date',
+    name: 'exp-date',
     placeholder: 'Card Expiration Date',
-    name: 'exp-date'
+    yearLength: 2,
+    validations: ['required', 'validCardExpirationDate']
   },
   CARD_SECURITY_CODE: {
+    name: 'cvc',
     type: 'card-security-code',
     placeholder: 'CVC/CVV',
-    name: 'cvc'
+    validations: ['required', 'validCardSecurityCode']
   },
   PASSWORD: {
     type: 'password',

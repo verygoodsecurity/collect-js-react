@@ -89,15 +89,23 @@ function CollectForm(props: ICollectFormProps) {
 
   const submitHandler = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    
+
     const form: IVGSCollectForm = getFormInstance();
-    
+
     if (!form) {
       throw new Error('@vgs/collect-js-react: VGS Collect form not found.');
     }
     if (submitParameters.createCard) {
-      const authToken = typeof submitParameters?.createCard?.auth === 'function' ? await submitParameters.createCard.auth() : submitParameters.createCard.auth
-      submitParameters.createCard.auth = authToken;
+      const authToken =
+        typeof submitParameters?.createCard?.auth === 'function'
+          ? await submitParameters.createCard.auth()
+          : submitParameters.createCard.auth;
+      if (typeof authToken === 'string') {
+        submitParameters.createCard.auth = authToken;
+      } else {
+        throw new Error('Access token should be a string');
+      }
+
       form.createCard(
         submitParameters.createCard,
         (status: HttpStatusCode | null, resp: any) => {
@@ -169,4 +177,3 @@ VGSCollectForm.TextareaField = TextareaField;
 VGSCollectForm.NumberField = NumberField;
 VGSCollectForm.FileField = FileField;
 VGSCollectForm.DateField = DateField;
-
