@@ -221,6 +221,41 @@ const VGSCollectSecureForm = () => {
 };
 ```
 
+## Integration with Card Management Platform 
+
+You can create a predefined Collect.js form to integrate with the [VGS Card Management Platform](https://docs.verygoodsecurity.com/card-management/api)
+ 
+```javascript
+import { VGSCollectForm } from '@vgs/collect-js-react';
+
+const {CardholderField, CardNumberField, CardExpirationDateField, CardSecurityCodeField } = VGSCollectForm;
+
+const myApp = () => {
+  const onSubmitCallback = (status, data) => {};
+  const onUpdateCallback = (state) => {};
+
+  return (
+    <VGSCollectForm
+      vaultId='<vault_id>'
+      environment='<environment>'
+      submitParamethers={{
+        createCard: {
+          auth: <vgs_auth_token>
+        }
+      }}
+      onUpdateCallback={onUpdateCallback}
+      onSubmitCallback={onSubmitCallback}
+    >
+      <CardholderField css={{}} />
+      <CardNumberField css={{}} />
+      <CardExpirationDateField css={{}} />
+      <CardSecurityCodeField css={{}} />
+    </VGSCollectForm>
+  );
+};
+```
+
+
 ## Documentation
 
 - [Collect.js Documentation](https://www.verygoodsecurity.com/docs/vgs-collect/js/integration)
