@@ -98,21 +98,22 @@ export default App;
 
 <br/>
 
-### 3. Define secure input fields:
+### 3. Define secure input fields
 
-| Collect.js input type  | Collect.js React Component                  | Default Prop Values                                        |
-| ---------------------- | ------------------------------------------- | ---------------------------------------------------------- |
-| `text`                 | `<VGSCollectForm.TextField/>`               | ` {type: 'text', placeholder: 'Cardholder Name'}`          |
-| `card-number`          | `<VGSCollectForm.CardNumberField/>`         | `{type: 'card-number', placeholder: 'Credit Card Number'}` |
-| `card-expiration-date` | `<VGSCollectForm.CardExpirationDateField/>` | `{type: 'card-expiration-date', placeholder: 'MM/YY'}`     |
-| `card-security-code`   | `<VGSCollectForm.CardSecurityCodeField/>`   | `{type: 'card-security-code', placeholder: 'CVC/CVV'}`     |
-| `password`             | `<VGSCollectForm.PasswordField/>`           | `{type: 'password', placeholder: 'Enter Password'}`        |
-| `ssn`                  | `<VGSCollectForm.SSNField/>`                | `{type: 'ssn', placeholder: 'SSN'}`                        |
-| `zip-code`             | `<VGSCollectForm.ZipCodeField/>`            | `{type: 'zip-code', placeholder: 'Zip Code'}`              |
-| `number`               | `<VGSCollectForm.NumberField/>`             | `{type: 'number', placeholder: 'Number'}`                  |
-| `textarea`             | `<VGSCollectForm/TextareaField/>`           | `{type: 'textarea',  placeholder: 'Comment'}`              |
-| `file`                 | `<VGSCollectForm/FileField/>`               | `{type: 'file',  placeholder: ''}`                         |
-| `date`                 | `<VGSCollectForm/DateField/>`               | `{type: 'date',  placeholder: ''}`                         |
+| **Collect.js input type** | **Collect.js React Component**              | **Default Prop Values**                                                                 |
+|---------------------------|---------------------------------------------|------------------------------------------------------------------------------------------|
+| `text`                    | `<VGSCollectForm.TextField />`              | `{ type: 'text', placeholder: 'Cardholder Name' }`                                      |
+| `text`                    | `<VGSCollectForm.CardholderField />`        | `{ type: 'text', name: 'cardholder', placeholder: 'Cardholder' }`                       |
+| `card-number`             | `<VGSCollectForm.CardNumberField />`        | `{ type: 'card-number', name: 'pan', validations: ['required', 'validCardNumber'], placeholder: 'Credit Card Number' }` |
+| `card-expiration-date`    | `<VGSCollectForm.CardExpirationDateField />`| `{ type: 'card-expiration-date', name: 'exp-date', validations: ['required', 'validCardExpirationDate'], yearLength: 2, placeholder: 'MM/YY' }` |
+| `card-security-code`      | `<VGSCollectForm.CardSecurityCodeField />`  | `{ type: 'card-security-code', name: 'cvc', validations: ['required', 'validCardSecurityCode'], placeholder: 'CVC/CVV' }` |
+| `password`                | `<VGSCollectForm.PasswordField />`          | `{ type: 'password', placeholder: 'Enter Password' }`                                   |
+| `ssn`                     | `<VGSCollectForm.SSNField />`               | `{ type: 'ssn', placeholder: 'SSN' }`                                                   |
+| `zip-code`                | `<VGSCollectForm.ZipCodeField />`           | `{ type: 'zip-code', placeholder: 'Zip Code' }`                                         |
+| `number`                  | `<VGSCollectForm.NumberField />`            | `{ type: 'number', placeholder: 'Number' }`                                             |
+| `textarea`                | `<VGSCollectForm.TextareaField />`          | `{ type: 'textarea', placeholder: 'Comment' }`                                          |
+| `file`                    | `<VGSCollectForm.FileField />`              | `{ type: 'file', placeholder: '' }`                                                     |
+| `date`                    | `<VGSCollectForm.DateField />`              | `{ type: 'date', placeholder: '' }`                                                     |
 
 The complete list of supported properties you can find here: https://www.verygoodsecurity.com/docs/api/collect/#api-formfield.
 All configuration properties available in the Reference Documentation can be passed in the component props using the same name.
