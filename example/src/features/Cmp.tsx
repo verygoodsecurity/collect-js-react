@@ -67,25 +67,14 @@ const Cmp = (e: any) => {
     console.log('Submit callback', status, resp);
   };
 
-  const getTokenizationApiKey = async () => {
-    try {
-      const response = await fetch('http://localhost:9090/get/cmp-api-key', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      return data.access_token;
-    } catch (error) {
-      return null;
-    }
+  const getAccessApiKey = async (timeoutMs = 1000): Promise<string> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve('access_token');
+      }, timeoutMs);
+    });
   };
+
   return (
     <>
       {isVGSCollectScriptLoaded && (
@@ -103,7 +92,7 @@ const Cmp = (e: any) => {
             onSubmitCallback={onSubmitCallback}
             submitParameters={{
               createCard: {
-                auth: getTokenizationApiKey,
+                auth: () => getAccessApiKey(1000),
                 data: {
                   cardholder: {
                     address: {
