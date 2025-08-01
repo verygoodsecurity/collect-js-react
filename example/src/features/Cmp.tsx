@@ -27,7 +27,6 @@ const Cmp = (e: any) => {
   const [response] = useVGSCollectResponse();
   const [form] = useVGSCollectFormInstance();
 
-  console.log('form', form);
   useEffect(() => {
     /**
      * Track form state

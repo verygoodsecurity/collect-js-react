@@ -95,7 +95,8 @@ function CollectForm(props: ICollectFormProps) {
     if (!form) {
       throw new Error('@vgs/collect-js-react: VGS Collect form not found.');
     }
-    if (submitParameters.createCard) {
+    if (submitParameters?.createCard) {
+      console.log('create card');
       const authToken =
         typeof submitParameters?.createCard?.auth === 'function'
           ? await submitParameters.createCard.auth()
@@ -120,6 +121,7 @@ function CollectForm(props: ICollectFormProps) {
         }
       );
     } else if (tokenizationAPI) {
+      console.log('tokenize');
       form.tokenize(
         (status: HttpStatusCode | null, resp: any) => {
           if (onSubmitCallback) {
@@ -133,9 +135,10 @@ function CollectForm(props: ICollectFormProps) {
         }
       );
     } else {
+      console.log('default Submit')
       form.submit(
         action,
-        submitParameters,
+        submitParameters ? submitParameters : '',
         (status: HttpStatusCode | null, data: any) => {
           if (onSubmitCallback) {
             onSubmitCallback(status, data);
