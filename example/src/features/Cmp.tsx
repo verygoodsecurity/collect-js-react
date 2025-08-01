@@ -4,8 +4,7 @@ import {
   VGSCollectHttpStatusCode,
   VGSCollectVaultEnvironment,
   useVGSCollectResponse,
-  useVGSCollectState,
-  useVGSCollectFormInstance
+  useVGSCollectState
 } from 'collect-js-react';
 import React, { useEffect, useState } from 'react';
 import { loadVGSCollect } from '@vgs/collect-js';
@@ -25,7 +24,6 @@ const Cmp = (e: any) => {
 
   const [state] = useVGSCollectState();
   const [response] = useVGSCollectResponse();
-  const [form] = useVGSCollectFormInstance();
 
   useEffect(() => {
     /**
