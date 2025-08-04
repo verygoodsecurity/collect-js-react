@@ -202,6 +202,7 @@ interface CardInfo {
   length?: number[];
   cvvLength?: number[];
   luhn?: Boolean;
+  useExtendedBin?: Boolean;
 }
 
 interface VGSCollectSubmitOptions {
