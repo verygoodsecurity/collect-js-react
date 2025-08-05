@@ -134,7 +134,7 @@ const myApp = () => {
       vaultId='<vault_id>'
       environment='<environment>'
       action='/post'
-      submitParamethers={{
+      submitParameters={{
         headers: {
           myHeader: 'MyHeader'
         }

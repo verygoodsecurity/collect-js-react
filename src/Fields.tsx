@@ -40,7 +40,7 @@ function RenderField(props: any) {
 
   const fieldProps = {
     ...fieldPropsRaw,
-    ...(style && { css: style }) //Add css, if style exist
+    ...(style && { css: style }) //Add css, if style exists
   };
 
   if (!props.name) {
