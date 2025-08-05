@@ -122,8 +122,7 @@ _Example:_
 ```javascript
 import { VGSCollectForm } from '@vgs/collect-js-react';
 
-const { CardNumberField, CardExpirationDateField, CardSecurityCodeField } =
-  VGSCollectForm;
+const { CardNumberField, CardExpirationDateField, CardSecurityCodeField } = VGSCollectForm;
 
 const myApp = () => {
   const onSubmitCallback = (status, data) => {};
@@ -192,12 +191,7 @@ The library exposes the following handlers: `onFocus`, `onBlur`, `onUpdate`, `on
 In order to access the form state and response from the hook, wrap consumer component with the form in `VGSCollectProvider` context provider.
 
 ```javascript
-import {
-  VGSCollectProvider,
-  useVGSCollectState,
-  useVGSCollectResponse,
-  VGSCollectForm
-} from '@vgs/collect-js-react';
+import { VGSCollectProvider, useVGSCollectState, useVGSCollectResponse, VGSCollectForm } from '@vgs/collect-js-react';
 
 const { TextField } = VGSCollectForm;
 
@@ -220,16 +214,8 @@ const VGSCollectSecureForm = () => {
   }, [state]);
 
   return (
-    <VGSCollectForm
-      vaultId='<vault_id>'
-      environment='<environment>'
-      action='/post'
-    >
-      <TextField
-        name='cardholder-name'
-        validations={['required']}
-        placeholder='Cardholder name'
-      />
+    <VGSCollectForm vaultId='<vault_id>' environment='<environment>' action='/post'>
+      <TextField name='cardholder-name' validations={['required']} placeholder='Cardholder name' />
     </VGSCollectForm>
   );
 };

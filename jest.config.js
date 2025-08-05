@@ -1,9 +1,9 @@
 module.exports = {
   verbose: true,
-  preset: "ts-jest",
-  testMatch: ["**/tests/*.test.tsx"],
+  preset: 'ts-jest',
+  testMatch: ['**/tests/*.test.tsx'],
   setupFilesAfterEnv: ['./jest.setup.js'],
-  testEnvironment: "jsdom",
+  testEnvironment: 'jsdom'
 };
 
 if (process.env.REACT_VERSION === '17') {

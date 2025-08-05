@@ -13,18 +13,13 @@ import {
 } from './Fields';
 import { DispatchStateContext, DispatchSubmitContext, DispatchFormInstanceContext } from './provider';
 import { FormStateProvider, DispatchFormContext } from './formStateProvider';
-import {
-  ICollectFormProps,
-  IVGSCollectForm,
-  VGSCollectFormState
-} from './types/Form';
+import { ICollectFormProps, IVGSCollectForm, VGSCollectFormState } from './types/Form';
 import React, { useContext, useEffect } from 'react';
 import { getFormInstance, setFormInstance } from './state';
 
 import { HttpStatusCode } from './types/HttpStatusCode';
 
 const isBrowser = typeof window !== 'undefined';
-
 
 function CollectForm(props: ICollectFormProps) {
   const {
@@ -39,7 +34,7 @@ function CollectForm(props: ICollectFormProps) {
     onUpdateCallback,
     onSubmitCallback,
     onErrorCallback,
-    children,
+    children
   } = props;
 
   if (!vaultId) {
@@ -52,28 +47,19 @@ function CollectForm(props: ICollectFormProps) {
   const dispatchFormInstanceContextUpdate = useContext(DispatchFormInstanceContext);
 
   const isProviderExists =
-    typeof dispatchFormStateUpdate === 'function' &&
-    typeof dispatchResponseUpdate === 'function';
+    typeof dispatchFormStateUpdate === 'function' && typeof dispatchResponseUpdate === 'function';
 
   useEffect(() => {
-    if (
-      isBrowser &&
-      window.VGSCollect &&
-      Object.keys(getFormInstance()).length === 0
-    ) {
-      const form: IVGSCollectForm = window.VGSCollect.create(
-        vaultId,
-        environment,
-        (state: VGSCollectFormState) => {
-          if (onUpdateCallback) {
-            onUpdateCallback(state);
-          } 
-          isProviderExists && dispatchFormStateUpdate(state);
+    if (isBrowser && window.VGSCollect && Object.keys(getFormInstance()).length === 0) {
+      const form: IVGSCollectForm = window.VGSCollect.create(vaultId, environment, (state: VGSCollectFormState) => {
+        if (onUpdateCallback) {
+          onUpdateCallback(state);
         }
-      );
-      
+        isProviderExists && dispatchFormStateUpdate(state);
+      });
+
       dispatchFormСontext({ type: 'FORM_MOUNTED' });
-      
+
       if (cname) {
         form.useCname(cname);
       }
@@ -101,7 +87,7 @@ function CollectForm(props: ICollectFormProps) {
   }, []);
 
   const submitHandler = (e: React.SyntheticEvent) => {
-    e.preventDefault();    
+    e.preventDefault();
     const form: IVGSCollectForm = getFormInstance();
 
     if (!form) {
@@ -142,13 +128,7 @@ function CollectForm(props: ICollectFormProps) {
     }
   };
 
-  return (
-    <form 
-      onSubmit={(event) => (onCustomSubmit || submitHandler)(event)}
-    >
-      {children}
-    </form>
-  );
+  return <form onSubmit={(event) => (onCustomSubmit || submitHandler)(event)}>{children}</form>;
 }
 
 export function VGSCollectForm(props: ICollectFormProps) {
@@ -156,7 +136,7 @@ export function VGSCollectForm(props: ICollectFormProps) {
     <FormStateProvider>
       <CollectForm {...props} />
     </FormStateProvider>
-  )
+  );
 }
 
 VGSCollectForm.TextField = TextField;
