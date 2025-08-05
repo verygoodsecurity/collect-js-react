@@ -13,8 +13,7 @@ import { loadVGSCollect } from '@vgs/collect-js';
 
 const { TextField, CardNumberField } = VGSCollectForm;
 
-const { REACT_APP_VAULT_ID, REACT_APP_ENVIRONMENT, REACT_APP_COLLECT_VERSION } =
-  process.env;
+const { REACT_APP_VAULT_ID, REACT_APP_ENVIRONMENT, REACT_APP_COLLECT_VERSION } = process.env;
 
 const CustomPayload = () => {
   const [isVGSCollectScriptLoaded, setCollectScriptLoaded] = useState(false);
@@ -134,20 +133,12 @@ const CustomPayload = () => {
              * VGS Collect text field component:
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
-            <TextField
-              name='textField'
-              validations={['required']}
-              css={VGSCollectFieldStyles}
-            />
+            <TextField name='textField' validations={['required']} css={VGSCollectFieldStyles} />
             {/**
              * VGS Collect text field component:
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
-            <CardNumberField
-              name='card-number'
-              validations={['required']}
-              style={VGSCollectFieldStyles}
-            />
+            <CardNumberField name='card-number' validations={['required']} style={VGSCollectFieldStyles} />
             <input
               className='vgs-collect-native-input'
               type='text'

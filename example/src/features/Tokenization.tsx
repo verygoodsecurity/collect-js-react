@@ -8,12 +8,7 @@ import {
 
 import { loadVGSCollect } from '@vgs/collect-js';
 
-const {
-  TextField,
-  CardNumberField,
-  CardExpirationDateField,
-  CardSecurityCodeField
-} = VGSCollectForm;
+const { TextField, CardNumberField, CardExpirationDateField, CardSecurityCodeField } = VGSCollectForm;
 
 const { REACT_APP_ENVIRONMENT, REACT_APP_COLLECT_VERSION } = process.env;
 const vaultId = 'tntux31nzpn';
