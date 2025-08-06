@@ -58,6 +58,7 @@ interface ICollectFormProps {
   onUpdateCallback?: (state: VGSCollectFormState | null) => void;
   onSubmitCallback?: (status: any, resp: any) => void;
   onErrorCallback?: (errors: any) => void;
+  onCardCreateCallback?: (status: any, resp: any) => void;
 }
 
 interface VGSCollectStateParams {
@@ -103,6 +104,7 @@ interface IDefaultFieldOptions {
 
 type FieldConfig =
   | IVGSCollectTextField
+  | IVGSCollectCardholderField
   | IVGSCollectCardNumberField
   | IVGSCollectCardExpirationField
   | IVGSCollectCardCVCField
@@ -118,6 +120,11 @@ interface IVGSCollectTextField extends IDefaultFieldOptions {
   max?: number;
   maxLength?: number;
   step?: number;
+  hideValue?: BooleanValue;
+}
+
+interface IVGSCollectCardholderField extends IDefaultFieldOptions {
+  type: 'text';
   hideValue?: BooleanValue;
 }
 
@@ -195,6 +202,7 @@ interface CardInfo {
   length?: number[];
   cvvLength?: number[];
   luhn?: Boolean;
+  useExtendedBin?: Boolean;
 }
 
 interface VGSCollectSubmitOptions {
@@ -234,6 +242,15 @@ interface IVGSCollectForm {
    * Docs: https://www.verygoodsecurity.com/docs/api/collect/#api-formtokenize
    */
   tokenize(
+    successCallback: (status: VGSCollectHttpStatusCode | null, data: any) => any,
+    errorCallback: (error: VGSCollectFormState) => any
+  ): any;
+
+  /**
+   * Docs: https://www.verygoodsecurity.com/docs/api/collect/#api-formcreatecard
+   */
+  createCard(
+    options: Partial<VGSCollectSubmitOptions>,
     successCallback: (status: VGSCollectHttpStatusCode | null, data: any) => any,
     errorCallback: (error: VGSCollectFormState) => any
   ): any;
@@ -282,6 +299,7 @@ export type {
   IVGSCollect,
   IVGSCollectForm,
   IVGSCollectTextField,
+  IVGSCollectCardholderField,
   IVGSCollectCardNumberField,
   IVGSCollectCardExpirationField,
   IVGSCollectCardCVCField,

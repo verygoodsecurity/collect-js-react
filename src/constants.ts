@@ -11,19 +11,32 @@ const FIELD_EVENTS = {
 const DEFAULT_CONFIG = {
   TEXT: {
     type: 'text',
-    placeholder: 'Cardholder Name'
+    placeholder: 'Cardholder Name',
+    defaultValue: 'Test Name'
+  },
+  CARDHOLDER: {
+    type: 'text',
+    placeholder: 'Cardholder',
+    name: 'cardholder'
   },
   CARD_NUMBER: {
     type: 'card-number',
+    name: 'pan',
+    validations: ['required', 'validCardNumber'],
     placeholder: 'Credit Card Number'
   },
   CARD_EXPIRATION_DATE: {
     type: 'card-expiration-date',
-    placeholder: 'Card Expiration Date'
+    name: 'exp-date',
+    placeholder: 'Card Expiration Date',
+    yearLength: 2,
+    validations: ['required', 'validCardExpirationDate']
   },
   CARD_SECURITY_CODE: {
+    name: 'cvc',
     type: 'card-security-code',
-    placeholder: 'CVC/CVV'
+    placeholder: 'CVC/CVV',
+    validations: ['required', 'validCardSecurityCode']
   },
   PASSWORD: {
     type: 'password',

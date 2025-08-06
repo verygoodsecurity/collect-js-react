@@ -27,8 +27,7 @@ const {
   DateField
 } = VGSCollectForm;
 
-const { REACT_APP_VAULT_ID, REACT_APP_ENVIRONMENT, REACT_APP_COLLECT_VERSION } =
-  process.env;
+const { REACT_APP_VAULT_ID, REACT_APP_ENVIRONMENT, REACT_APP_COLLECT_VERSION } = process.env;
 
 const Basic = React.memo(() => {
   const [isVGSCollectScriptLoaded, setCollectScriptLoaded] = useState(false);
@@ -184,38 +183,22 @@ const Basic = React.memo(() => {
              * VGS Collect ssn field component:
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
-            <SSNField
-              name='ssn'
-              validations={['required', 'validSSN']}
-              css={VGSCollectFieldStyles}
-            />
+            <SSNField name='ssn' validations={['required', 'validSSN']} css={VGSCollectFieldStyles} />
             {/**
              * VGS Collect zip code field component:
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
-            <ZipCodeField
-              name='zip-code'
-              validations={['required']}
-              css={VGSCollectFieldStyles}
-            />
+            <ZipCodeField name='zip-code' validations={['required']} css={VGSCollectFieldStyles} />
             {/**
              * VGS Collect password field component:
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
-            <PasswordField
-              name='password'
-              validations={['required']}
-              css={VGSCollectFieldStyles}
-            />
+            <PasswordField name='password' validations={['required']} css={VGSCollectFieldStyles} />
             {/**
              * VGS Collect number field component:
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
-            <NumberField
-              name='number'
-              validations={['required']}
-              css={VGSCollectFieldStyles}
-            />
+            <NumberField name='number' validations={['required']} css={VGSCollectFieldStyles} />
             {/**
              * VGS Collect textarea field component:
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
@@ -230,11 +213,7 @@ const Basic = React.memo(() => {
              * VGS Collect textarea field component:
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
-            <DateField
-              name='date'
-              validations={['required']}
-              css={VGSCollectFieldStyles}
-            />
+            <DateField name='date' validations={['required']} css={VGSCollectFieldStyles} />
             {/**
              * VGS Collect textarea field component:
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield

@@ -1,6 +1,6 @@
 {
   "name": "@vgs/collect-js-react",
-  "version": "1.5.2",
+  "version": "2.0.0",
   "description": "VGS Collect.js React wrapper",
   "author": "vgs",
   "license": "MIT",
@@ -21,7 +21,8 @@
     "lint:fix": "eslint --ext .ts src --fix",
     "test:unit": "jest --coverage --coverageReporters json-summary",
     "test:watch": "jest --watch",
-    "predeploy": "cd example && yarn install && yarn run build"
+    "predeploy": "cd example && yarn install && yarn run build",
+    "format": "prettier --write ."
   },
   "peerDependencies": {
     "react": "^16.0 || ^17.0 || ^18.0",
@@ -78,5 +79,6 @@
     "postcss": "8.4.21",
     "webpack": "5.76.0"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
