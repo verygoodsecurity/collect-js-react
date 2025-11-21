@@ -12,7 +12,6 @@ const DEFAULT_CONFIG = {
   TEXT: {
     type: 'text',
     placeholder: 'Cardholder Name',
-    defaultValue: 'Test Name'
   },
   CARDHOLDER: {
     type: 'text',
