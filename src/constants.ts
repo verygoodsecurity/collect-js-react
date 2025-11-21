@@ -11,8 +11,7 @@ const FIELD_EVENTS = {
 const DEFAULT_CONFIG = {
   TEXT: {
     type: 'text',
-    placeholder: 'Cardholder Name',
-    defaultValue: 'Test Name'
+    placeholder: 'Cardholder Name'
   },
   CARDHOLDER: {
     type: 'text',
