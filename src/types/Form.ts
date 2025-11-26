@@ -209,7 +209,7 @@ interface VGSCollectSubmitOptions {
   data: object | ((values: any) => any);
   headers: object;
   method: SubmitMethod;
-  serailizer: SubmitSerializer;
+  serializer: SubmitSerializer;
   serialization: SubmitSerialization;
   mapDotToObject: SubmitMapDotToObject;
   withCredentials: BooleanValue;
