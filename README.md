@@ -246,6 +246,8 @@ const myApp = () => {
           auth: <vgs_auth_token>,
           data: { // optional parameters
             cardholder: {
+              name: "Cardholder Name",
+              company: "A Corp, LLC",
               address: {
                 address1: '123 Main St',
                 address2: 'Suite 456',
