@@ -90,7 +90,7 @@ export default App;
 | vaultId            | A string value beginning with the prefix `tnt`.            | [Parameters.vaultId](https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate)       |
 | environment        | Vault environment: `sanbdox` \| `live` or region specific. | [Parameters.environment](https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate)   |
 | action             | Endpoint for the HTTP request.                             | [Parameters.path](https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit)                |
-| submitParamethers? | HTTP request configuration.                                | [Parameters.options](https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit)             |
+| submitParameters? | HTTP request configuration.                                | [Parameters.options](https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit)             |
 | onUpdateCallback?  | Returns the form state in the callback.                    | [Parameters.stateCallback](https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate) |
 | onSubmitCallback?  | Returns status and response data in the callback.          | [Parameters.responseCallback](https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit)    |
 | cname?             | String represents CNAME the request will be submitted to.  | [.useCNAME()](https://www.verygoodsecurity.com/docs/api/collect/#api-formusecname)                  |
@@ -226,6 +226,8 @@ const VGSCollectSecureForm = () => {
 
 You can create a predefined Collect.js form to integrate with the [VGS Card Management Platform](https://docs.verygoodsecurity.com/card-management/api)
 
+Minimum CollectJS version: 3.2.2
+
 ```javascript
 import { VGSCollectForm } from '@vgs/collect-js-react';
 
@@ -239,9 +241,23 @@ const myApp = () => {
     <VGSCollectForm
       vaultId='<vault_id>'
       environment='<environment>'
-      submitParamethers={{
+      submitParameters={{
         createCard: {
-          auth: <vgs_auth_token>
+          auth: <vgs_auth_token>,
+          data: { // optional parameters
+            cardholder: {
+              address: {
+                address1: '123 Main St',
+                address2: 'Suite 456',
+                address3: 'Line 3',
+                address4: 'Line 4',
+                city: 'LA',
+                region: 'CA',
+                postal_code: '12345',
+                country: 'USA'
+              }
+            }
+          }
         }
       }}
       onUpdateCallback={onUpdateCallback}
