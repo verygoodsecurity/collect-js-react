@@ -133,7 +133,7 @@ interface IVGSCollectCardNumberField extends IDefaultFieldOptions {
   icons?: Record<string, string>;
   showCardIcon?: boolean | Record<string, any>;
   addCardBrands?: Array<CardInfo>;
-  validCardBrands: Array<Partial<CardInfo>>;
+  validCardBrands?: Array<Partial<CardInfo>>;
   hideValue?: BooleanValue;
 }
 
