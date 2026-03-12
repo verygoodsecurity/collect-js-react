@@ -11,7 +11,7 @@ import {
 import React, { useEffect, useState } from 'react';
 
 import { loadVGSCollect } from '@vgs/collect-js';
-import { EXAMPLE_COLLECT_VERSION, EXAMPLE_ENVIRONMENT, EXAMPLE_VAULT_ID } from '../env';
+import { COLLECT_VERSION, ENVIRONMENT, VAULT_ID } from '../env';
 
 const { TextField } = VGSCollectForm;
 
@@ -52,9 +52,9 @@ const SubmitHandling = (e: any) => {
      * Loading VGS Collect script from and attaching it to the <head>
      */
     loadVGSCollect({
-      vaultId: EXAMPLE_VAULT_ID,
-      environment: EXAMPLE_ENVIRONMENT as VGSCollectVaultEnvironment,
-      version: EXAMPLE_COLLECT_VERSION
+      vaultId: VAULT_ID,
+      environment: ENVIRONMENT as VGSCollectVaultEnvironment,
+      version: COLLECT_VERSION
     }).then(() => {
       setCollectScriptLoaded(true);
     });
@@ -102,8 +102,8 @@ const SubmitHandling = (e: any) => {
            * https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate
            */}
           <VGSCollectForm
-            vaultId={EXAMPLE_VAULT_ID}
-            environment={EXAMPLE_ENVIRONMENT as VGSCollectVaultEnvironment}
+            vaultId={VAULT_ID}
+            environment={ENVIRONMENT as VGSCollectVaultEnvironment}
             onCustomSubmit={customHandling}
             onUpdateCallback={onUpdateCallback}
             onErrorCallback={onErrorCallback}
