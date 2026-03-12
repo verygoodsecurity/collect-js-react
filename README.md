@@ -54,7 +54,7 @@ To stay PCI Compliant it's a mandatory to load js from our `js.verygoodvault.com
 There are couple of options here:
 
 - [Download file directly from the CDN](https://www.verygoodsecurity.com/docs/vgs-collect/js#quick-start).
-- Use our loading [npm module](https://www.npmjs.com/package/@vgs/collect-js). _[Example](https://github.com/verygoodsecurity/collect-js-react/blob/main/example/src/features/Basic.tsx#L45)_.
+- Use our loading [npm module](https://www.npmjs.com/package/@vgs/collect-js). _[Example](https://github.com/verygoodsecurity/collect-js-react/blob/main/examples/demo/src/features/Basic.tsx#L45)_.
 
 <br/>
 
@@ -279,13 +279,29 @@ const myApp = () => {
 
 ## Examples
 
-To run the examples locally from the repository root:
+The runnable apps now live under `examples/`:
+
+```txt
+examples/
+  demo/
+  compat/
+```
+
+`examples/demo` is the full demo app. `examples/compat` contains minimal React compatibility fixtures for 16, 17, 18, and 19.
+
+To run them from the repository root:
 
 ```sh
 yarn install
 ```
 
-Configure `example/.env`, simply rename `example/.env.example` and replace values:
+Configure the demo env file:
+
+```sh
+cp examples/demo/.env.example examples/demo/.env
+```
+
+Then edit `examples/demo/.env`:
 
 ```sh
 VITE_VAULT_ID=<vault_id>
@@ -293,22 +309,60 @@ VITE_ENVIRONMENT=<env>
 VITE_COLLECT_VERSION=<collect_version>
 ```
 
-Start the Vite example app:
+Start the full demo app:
 
 ```sh
-yarn start
+yarn demo:dev
 ```
 
 Open [http://localhost:3000/](http://localhost:3000/)
 
-If you want to rebuild the published library in watch mode while working on the example:
+Build the demo app:
+
+```sh
+yarn demo:build
+```
+
+`yarn start` and `yarn example:dev` are kept as aliases for `yarn demo:dev`.
+
+If you want to rebuild the published library in watch mode while working on the demo:
 
 ```sh
 yarn dev:lib
 ```
 
-- [Simple Configuration](https://github.com/verygoodsecurity/collect-js-react/blob/main/example/src/features/Basic.tsx)
-- [Custom Payload Configuration](https://github.com/verygoodsecurity/collect-js-react/blob/main/example/src/features/CustomPayload.tsx)
+Build the React compatibility fixtures:
+
+```sh
+yarn compat:build
+```
+
+Run the React 19 compatibility fixture locally:
+
+```sh
+yarn compat:dev:react19
+```
+
+Other fixture dev servers:
+
+```sh
+yarn compat:dev:react16
+yarn compat:dev:react17
+yarn compat:dev:react18
+```
+
+Ports:
+
+```txt
+demo: 3000
+react16 fixture: 3016
+react17 fixture: 3017
+react18 fixture: 3018
+react19 fixture: 3019
+```
+
+- [Simple Configuration](https://github.com/verygoodsecurity/collect-js-react/blob/main/examples/demo/src/features/Basic.tsx)
+- [Custom Payload Configuration](https://github.com/verygoodsecurity/collect-js-react/blob/main/examples/demo/src/features/CustomPayload.tsx)
 - [Stackblitz](https://stackblitz.com/edit/react-ts-kuxtvv?file=App.tsx)
 
 ## Contact

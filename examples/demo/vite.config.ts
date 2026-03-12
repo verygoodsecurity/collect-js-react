@@ -2,7 +2,7 @@ import react from '@vitejs/plugin-react';
 import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 
-const workspaceRoot = resolve(__dirname, '..');
+const workspaceRoot = resolve(__dirname, '../..');
 
 export default defineConfig({
   root: __dirname,
