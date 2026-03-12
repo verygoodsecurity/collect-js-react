@@ -1,13 +1,11 @@
-This example was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This example is served with Vite from the root workspace.
 
-It is linked to the collect-js-react package in the parent directory for development purposes.
+Run `yarn install` in the repository root, copy `.env.example` to `.env`, then start the example with `yarn example:dev`.
 
-You can run `yarn install` and then `yarn start` to test the package.
-
-NOTE: Before start, make sure that you have configured `.env` file
+Environment variables:
 
 ```
-REACT_APP_VAULT_ID=<vault_id>
-REACT_APP_ENVIRONMENT=<env>
-REACT_APP_COLLECT_VERSION=<collect_version>
+VITE_VAULT_ID=<vault_id>
+VITE_ENVIRONMENT=<env>
+VITE_COLLECT_VERSION=<collect_version>
 ```

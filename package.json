@@ -5,23 +5,36 @@
   "author": "vgs",
   "license": "MIT",
   "main": "dist/index.js",
-  "module": "dist/index.modern.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    }
+  },
   "source": "src/index.tsx",
   "engines": {
     "node": ">=10"
   },
   "scripts": {
-    "build": "microbundle-crl --no-compress --format modern,cjs",
-    "start": "microbundle-crl watch --no-compress --format modern,cjs",
+    "build": "tsdown",
+    "dev": "vite --config example/vite.config.ts",
+    "dev:lib": "tsdown --watch",
+    "example:build": "vite build --config example/vite.config.ts",
+    "example:dev": "vite --config example/vite.config.ts",
+    "start": "vite --config example/vite.config.ts",
     "prepare": "run-s build",
-    "test": "run-s test:unit test:lint test:build",
+    "test": "run-s test:unit test:lint test:build test:examplebuild",
     "test:react-17": "REACT_VERSION=17 npm test",
     "test:build": "run-s build",
+    "test:examplebuild": "run-s example:build",
     "test:lint": "eslint --ext .ts src",
     "lint:fix": "eslint --ext .ts src --fix",
     "test:unit": "jest --coverage --coverageReporters json-summary",
     "test:watch": "jest --watch",
-    "predeploy": "cd example && yarn install && yarn run build",
+    "predeploy": "yarn example:build",
     "format": "prettier --write ."
   },
   "peerDependencies": {
@@ -51,15 +64,19 @@
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.17.0",
-    "microbundle-crl": "^0.13.11",
+    "@vgs/collect-js": "^0.6.1",
+    "@vitejs/plugin-react": "^6.0.0",
+    "jest": "^27.5.1",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.0.4",
     "react": "^16.13.1",
     "react-17": "npm:react@^17",
     "react-dom": "^16.13.1",
-    "react-scripts": "5.0.1",
+    "react-router-dom": "^6.4.4",
+    "tsdown": "^0.21.2",
     "ts-jest": "27.0.1",
-    "typescript": "^4.9.3"
+    "typescript": "^4.9.3",
+    "vite": "^8.0.0"
   },
   "babel": {
     "presets": [

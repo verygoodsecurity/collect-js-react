@@ -6,14 +6,13 @@ import {
   VGSCollectVaultEnvironment,
   useVGSCollectResponse,
   useVGSCollectState
-} from 'collect-js-react';
+} from '@vgs/collect-js-react';
 import React, { useEffect, useState } from 'react';
 
 import { loadVGSCollect } from '@vgs/collect-js';
+import { EXAMPLE_COLLECT_VERSION, EXAMPLE_ENVIRONMENT, EXAMPLE_VAULT_ID } from '../env';
 
 const { TextField, CardNumberField } = VGSCollectForm;
-
-const { REACT_APP_VAULT_ID, REACT_APP_ENVIRONMENT, REACT_APP_COLLECT_VERSION } = process.env;
 
 const CustomPayload = () => {
   const [isVGSCollectScriptLoaded, setCollectScriptLoaded] = useState(false);
@@ -56,9 +55,9 @@ const CustomPayload = () => {
      * Loading VGS Collect script from and attaching it to the <head>
      */
     loadVGSCollect({
-      vaultId: REACT_APP_VAULT_ID as string,
-      environment: REACT_APP_ENVIRONMENT as VGSCollectVaultEnvironment,
-      version: REACT_APP_COLLECT_VERSION as string
+      vaultId: EXAMPLE_VAULT_ID,
+      environment: EXAMPLE_ENVIRONMENT as VGSCollectVaultEnvironment,
+      version: EXAMPLE_COLLECT_VERSION
     }).then(() => {
       setCollectScriptLoaded(true);
     });
@@ -110,8 +109,8 @@ const CustomPayload = () => {
            * https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate
            */}
           <VGSCollectForm
-            vaultId={REACT_APP_VAULT_ID as string}
-            environment={REACT_APP_ENVIRONMENT as VGSCollectVaultEnvironment}
+            vaultId={EXAMPLE_VAULT_ID}
+            environment={EXAMPLE_ENVIRONMENT as VGSCollectVaultEnvironment}
             action='/post'
             submitParameters={{
               // JSON request body generated on the form submission including custom parameters

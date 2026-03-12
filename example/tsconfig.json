@@ -5,6 +5,7 @@
     "lib": ["dom", "esnext"],
     "moduleResolution": "node",
     "jsx": "react",
+    "types": ["vite/client"],
     "sourceMap": true,
     "declaration": true,
     "esModuleInterop": true,

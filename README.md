@@ -279,29 +279,33 @@ const myApp = () => {
 
 ## Examples
 
-To run exmaples locally, in the core folder run:
+To run the examples locally from the repository root:
 
 ```sh
 yarn install
-yarn start
 ```
 
-Switch the folder to `example` and configure `.env` file, simply rename `.env.example` and replace values
+Configure `example/.env`, simply rename `example/.env.example` and replace values:
 
 ```sh
-REACT_APP_VAULT_ID=<vault_id>
-REACT_APP_ENVIRONMENT=<env>
-REACT_APP_COLLECT_VERSION=<collect_version>
+VITE_VAULT_ID=<vault_id>
+VITE_ENVIRONMENT=<env>
+VITE_COLLECT_VERSION=<collect_version>
 ```
 
-From `example` folder run:
+Start the Vite example app:
 
 ```sh
-yarn install
 yarn start
 ```
 
 Open [http://localhost:3000/](http://localhost:3000/)
+
+If you want to rebuild the published library in watch mode while working on the example:
+
+```sh
+yarn dev:lib
+```
 
 - [Simple Configuration](https://github.com/verygoodsecurity/collect-js-react/blob/main/example/src/features/Basic.tsx)
 - [Custom Payload Configuration](https://github.com/verygoodsecurity/collect-js-react/blob/main/example/src/features/CustomPayload.tsx)
