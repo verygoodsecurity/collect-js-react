@@ -7,7 +7,7 @@ on:
   pull_request:
 
 jobs:
-  build-test-publish:
+  build-test:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -32,6 +32,65 @@ jobs:
       - name: Run Tests
         run: yarn test
 
+  compat-ui:
+    needs: build-test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        react_fixture:
+          - react16
+          - react17
+          - react18
+          - react19
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'yarn'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Setup Chrome
+        id: setup-chrome
+        uses: browser-actions/setup-chrome@v2
+        with:
+          chrome-version: stable
+
+      - name: Run compat UI test
+        env:
+          CHROME_BIN: ${{ steps.setup-chrome.outputs.chrome-path }}
+        run: yarn compat:test:ui:${{ matrix.react_fixture }}
+
+  publish:
+    needs: compat-ui
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'yarn'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
       - name: Publish package
-        if: startsWith(github.ref, 'refs/tags/v')
         run: npm publish --access public
