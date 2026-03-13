@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Routes, Route, Outlet, Link } from 'react-router-dom';
+import { Link, Outlet, Route, Routes } from 'react-router-dom';
 import Base from './features/Basic';
 import CustomPayload from './features/CustomPayload';
 import Tokenization from './features/Tokenization';

@@ -9,9 +9,10 @@ import {
   VGSCollectVaultEnvironment,
   useVGSCollectResponse,
   useVGSCollectState
-} from 'collect-js-react';
+} from '@vgs/collect-js-react';
 
 import { loadVGSCollect } from '@vgs/collect-js';
+import { COLLECT_VERSION, ENVIRONMENT, VAULT_ID } from '../env';
 
 const {
   TextField,
@@ -26,8 +27,6 @@ const {
   FileField,
   DateField
 } = VGSCollectForm;
-
-const { REACT_APP_VAULT_ID, REACT_APP_ENVIRONMENT, REACT_APP_COLLECT_VERSION } = process.env;
 
 const Basic = React.memo(() => {
   const [isVGSCollectScriptLoaded, setCollectScriptLoaded] = useState(false);
@@ -56,9 +55,9 @@ const Basic = React.memo(() => {
      * Loading VGS Collect script from and attaching it to the <head>
      */
     loadVGSCollect({
-      vaultId: REACT_APP_VAULT_ID as string,
-      environment: REACT_APP_ENVIRONMENT as VGSCollectVaultEnvironment,
-      version: REACT_APP_COLLECT_VERSION as string
+      vaultId: VAULT_ID,
+      environment: ENVIRONMENT as VGSCollectVaultEnvironment,
+      version: COLLECT_VERSION
     }).then(() => {
       setCollectScriptLoaded(true);
     });
@@ -104,8 +103,8 @@ const Basic = React.memo(() => {
            * https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate
            */}
           <VGSCollectForm
-            vaultId={REACT_APP_VAULT_ID as string}
-            environment={REACT_APP_ENVIRONMENT as VGSCollectVaultEnvironment}
+            vaultId={VAULT_ID}
+            environment={ENVIRONMENT as VGSCollectVaultEnvironment}
             action='/post'
             submitParameters={{}}
             onUpdateCallback={onUpdateCallback}

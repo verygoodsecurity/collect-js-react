@@ -1,4 +1,5 @@
 import { ClassMap, IVGSCollectFieldInstance, VGSCollectFieldType } from './Field';
+import type { ReactNode, SyntheticEvent } from 'react';
 
 import { HttpStatusCode as VGSCollectHttpStatusCode } from './HttpStatusCode';
 
@@ -53,8 +54,8 @@ interface ICollectFormProps {
   cname?: string;
   routeId?: string;
   tokenizationAPI?: boolean;
-  children?: JSX.Element[] | JSX.Element;
-  onCustomSubmit?: (event: React.SyntheticEvent) => void;
+  children?: ReactNode;
+  onCustomSubmit?: (event: SyntheticEvent) => void;
   onUpdateCallback?: (state: VGSCollectFormState | null) => void;
   onSubmitCallback?: (status: any, resp: any) => void;
   onErrorCallback?: (errors: any) => void;

@@ -4,16 +4,21 @@ import {
   VGSCollectHttpStatusCode,
   VGSCollectVaultEnvironment,
   useVGSCollectResponse,
-  useVGSCollectState
-} from 'collect-js-react';
+  useVGSCollectState,
+  useVGSCollectFormInstance,
+  IVGSCollectForm
+} from '@vgs/collect-js-react';
 import React, { useEffect, useState } from 'react';
+
 import { loadVGSCollect } from '@vgs/collect-js';
+import { COLLECT_VERSION, ENVIRONMENT, VAULT_ID } from '../env';
 
-const { CardholderField, CardNumberField, CardExpirationDateField, CardSecurityCodeField } = VGSCollectForm;
-const { REACT_APP_VAULT_ID, REACT_APP_ENVIRONMENT, REACT_APP_COLLECT_VERSION } = process.env;
+const { TextField } = VGSCollectForm;
 
-const Cmp = (e: any) => {
+const SubmitHandling = (e: any) => {
   const [isVGSCollectScriptLoaded, setCollectScriptLoaded] = useState(false);
+  const [formInstance, setFormInstance] = useState<IVGSCollectForm | null>(null);
+  const [isFormSubmitting, setFormSubmitting] = useState(false);
   const VGSCollectFieldStyles = {
     '&::placeholder': {
       color: '#686868'
@@ -24,6 +29,7 @@ const Cmp = (e: any) => {
 
   const [state] = useVGSCollectState();
   const [response] = useVGSCollectResponse();
+  const [form] = useVGSCollectFormInstance();
 
   useEffect(() => {
     /**
@@ -38,13 +44,17 @@ const Cmp = (e: any) => {
   }, [response]);
 
   useEffect(() => {
+    setFormInstance(form);
+  }, [form]);
+
+  useEffect(() => {
     /**
      * Loading VGS Collect script from and attaching it to the <head>
      */
     loadVGSCollect({
-      vaultId: REACT_APP_VAULT_ID as string,
-      environment: REACT_APP_ENVIRONMENT as VGSCollectVaultEnvironment,
-      version: REACT_APP_COLLECT_VERSION as string
+      vaultId: VAULT_ID,
+      environment: ENVIRONMENT as VGSCollectVaultEnvironment,
+      version: COLLECT_VERSION
     }).then(() => {
       setCollectScriptLoaded(true);
     });
@@ -54,7 +64,6 @@ const Cmp = (e: any) => {
     /**
      * Receive information about Erorrs (client-side validation, or rejection in async headers function)
      */
-    console.log(errors);
   };
 
   const onUpdateCallback = (state: VGSCollectFormState) => {
@@ -63,61 +72,47 @@ const Cmp = (e: any) => {
      */
   };
 
-  const onSubmitCallback = (status: VGSCollectHttpStatusCode, resp: any) => {
-    console.log('Submit callback', status, resp);
-  };
-
-  const getAccessApiKey = async (timeoutMs = 1000): Promise<string> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve('access_token');
-      }, timeoutMs);
-    });
+  const customHandling = (event: any) => {
+    event.preventDefault();
+    console.log('-->', formInstance);
+    if (!isFormSubmitting && formInstance) {
+      setFormSubmitting(true);
+      formInstance.submit(
+        '/post',
+        {},
+        (status, data) => {
+          console.log('Response:', status, data);
+          setFormSubmitting(false);
+        },
+        (errors) => {
+          console.log(errors);
+          setFormSubmitting(false);
+        }
+      );
+    }
   };
 
   return (
     <>
       {isVGSCollectScriptLoaded && (
         <div className='left'>
-          <h2>CMP</h2>
+          <h2>Custom Submit Handling</h2>
           {/**
            * VGS Collect form wrapper element. Abstraction over the VGSCollect.create()
            * https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate
            */}
           <VGSCollectForm
-            vaultId={REACT_APP_VAULT_ID as string}
-            environment={REACT_APP_ENVIRONMENT as VGSCollectVaultEnvironment}
+            vaultId={VAULT_ID}
+            environment={ENVIRONMENT as VGSCollectVaultEnvironment}
+            onCustomSubmit={customHandling}
             onUpdateCallback={onUpdateCallback}
             onErrorCallback={onErrorCallback}
-            onSubmitCallback={onSubmitCallback}
-            submitParameters={{
-              createCard: {
-                auth: () => getAccessApiKey(1000),
-                data: {
-                  cardholder: {
-                    address: {
-                      address1: '123 Main St',
-                      address2: 'Suite 456',
-                      address3: 'Line 3',
-                      address4: 'Line 4',
-                      city: 'LA',
-                      region: 'CA',
-                      postal_code: '12345',
-                      country: 'USA'
-                    }
-                  }
-                }
-              }
-            }}
           >
             {/**
              * VGS Collect text field component:
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
-            <CardholderField css={VGSCollectFieldStyles} />
-            <CardNumberField css={VGSCollectFieldStyles} />
-            <CardExpirationDateField css={VGSCollectFieldStyles} />
-            <CardSecurityCodeField css={VGSCollectFieldStyles} />
+            <TextField name='textField' validations={['required']} css={VGSCollectFieldStyles} />
             <button type='submit'>Submit</button>
           </VGSCollectForm>
         </div>
@@ -126,4 +121,4 @@ const Cmp = (e: any) => {
   );
 };
 
-export default Cmp;
+export default SubmitHandling;

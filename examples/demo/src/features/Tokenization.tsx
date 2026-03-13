@@ -4,13 +4,12 @@ import {
   VGSCollectFormState,
   VGSCollectHttpStatusCode,
   VGSCollectVaultEnvironment
-} from 'collect-js-react';
+} from '@vgs/collect-js-react';
 
 import { loadVGSCollect } from '@vgs/collect-js';
+import { COLLECT_VERSION, ENVIRONMENT } from '../env';
 
 const { TextField, CardNumberField, CardExpirationDateField, CardSecurityCodeField } = VGSCollectForm;
-
-const { REACT_APP_ENVIRONMENT, REACT_APP_COLLECT_VERSION } = process.env;
 const vaultId = 'tntux31nzpn';
 
 const CustomPayload = () => {
@@ -29,8 +28,8 @@ const CustomPayload = () => {
      */
     loadVGSCollect({
       vaultId: vaultId as string,
-      environment: REACT_APP_ENVIRONMENT as VGSCollectVaultEnvironment,
-      version: REACT_APP_COLLECT_VERSION as string
+      environment: ENVIRONMENT as VGSCollectVaultEnvironment,
+      version: COLLECT_VERSION
     }).then(() => {
       setCollectScriptLoaded(true);
     });
@@ -65,7 +64,7 @@ const CustomPayload = () => {
            */}
           <VGSCollectForm
             vaultId={vaultId as string}
-            environment={REACT_APP_ENVIRONMENT as VGSCollectVaultEnvironment}
+            environment={ENVIRONMENT as VGSCollectVaultEnvironment}
             tokenizationAPI
             submitParameters={{}}
             onUpdateCallback={onUpdateCallback}
