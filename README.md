@@ -337,6 +337,18 @@ Build the React compatibility fixtures:
 yarn compat:build
 ```
 
+Run the browser compatibility checks for all supported React fixtures:
+
+```sh
+yarn compat:test:ui
+```
+
+Run a single browser compatibility check:
+
+```sh
+yarn compat:test:ui:react19
+```
+
 Run the React 19 compatibility fixture locally:
 
 ```sh

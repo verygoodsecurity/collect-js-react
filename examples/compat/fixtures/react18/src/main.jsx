@@ -1,6 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { CompatApp } from '../../../shared/App';
+import '../../../shared/installVGSCollectStub';
 
 const container = document.getElementById('root');
 
