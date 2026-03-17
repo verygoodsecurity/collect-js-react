@@ -12,7 +12,7 @@ import { COLLECT_VERSION, ENVIRONMENT, VAULT_ID } from '../env';
 
 const { CardholderField, CardNumberField, CardExpirationDateField, CardSecurityCodeField } = VGSCollectForm;
 
-const Cmp = (e: any) => {
+const Cmp = () => {
   const [isVGSCollectScriptLoaded, setCollectScriptLoaded] = useState(false);
   const VGSCollectFieldStyles = {
     '&::placeholder': {
@@ -67,12 +67,15 @@ const Cmp = (e: any) => {
     console.log('Submit callback', status, resp);
   };
 
-  const getAccessApiKey = async (timeoutMs = 1000): Promise<string> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve('access_token');
-      }, timeoutMs);
-    });
+  const getAccessApiKey = async (): Promise<string> => {
+    const response = await fetch('/api/access-token');
+    const data = await response.json();
+
+    if (!response.ok || typeof data.access_token !== 'string') {
+      throw new Error(data.error_description || data.error || 'Failed to fetch access token');
+    }
+
+    return data.access_token;
   };
 
   return (
@@ -92,7 +95,7 @@ const Cmp = (e: any) => {
             onSubmitCallback={onSubmitCallback}
             submitParameters={{
               createCard: {
-                auth: () => getAccessApiKey(1000),
+                auth: () => getAccessApiKey(),
                 data: {
                   cardholder: {
                     address: {
