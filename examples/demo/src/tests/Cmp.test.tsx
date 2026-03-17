@@ -25,21 +25,27 @@ jest.mock('@vgs/collect-js', () => ({
   loadVGSCollect: mockLoadVGSCollect
 }));
 
-jest.mock('@vgs/collect-js-react', () => ({
-  VGSCollectSession: Object.assign(
-    ({ children, ...props }: any) => {
-      latestSessionProps = props;
-      return <form data-testid='session-form'>{children}</form>;
-    },
-    {
-      CardholderField: ({ defaultValue }: any) => <div data-testid='cardholder-field'>{defaultValue || ''}</div>,
-      CardNumberField: () => <div data-testid='card-number-field' />,
-      CardExpirationDateField: ({ defaultValue }: any) => <div data-testid='card-exp-field'>{defaultValue || ''}</div>,
-      CardSecurityCodeField: ({ defaultValue }: any) => <div data-testid='card-cvc-field'>{defaultValue || ''}</div>
-    }
-  ),
-  useVGSCollectState: mockUseVGSCollectState
-}), { virtual: true });
+jest.mock(
+  '@vgs/collect-js-react',
+  () => ({
+    VGSCollectSession: Object.assign(
+      ({ children, ...props }: any) => {
+        latestSessionProps = props;
+        return <form data-testid='session-form'>{children}</form>;
+      },
+      {
+        CardholderField: ({ defaultValue }: any) => <div data-testid='cardholder-field'>{defaultValue || ''}</div>,
+        CardNumberField: () => <div data-testid='card-number-field' />,
+        CardExpirationDateField: ({ defaultValue }: any) => (
+          <div data-testid='card-exp-field'>{defaultValue || ''}</div>
+        ),
+        CardSecurityCodeField: ({ defaultValue }: any) => <div data-testid='card-cvc-field'>{defaultValue || ''}</div>
+      }
+    ),
+    useVGSCollectState: mockUseVGSCollectState
+  }),
+  { virtual: true }
+);
 
 const Cmp = require('../features/Cmp').default;
 

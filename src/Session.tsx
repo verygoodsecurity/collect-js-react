@@ -62,25 +62,24 @@ function CollectSession(props: ICollectSessionProps) {
     let sessionForm: IVGSCollectForm | null = null;
 
     if (isBrowser && window.VGSCollect && Object.keys(getFormInstance()).length === 0) {
-      void window.VGSCollect
-        .session({
-          vaultId,
-          env: env || environment,
-          formId,
-          configuration,
-          authHandler,
-          routeId,
-          onErrorCallback,
-          stateCallback: (state: VGSCollectFormState) => {
-            if (stateCallback) {
-              stateCallback(state);
-            }
-            if (onUpdateCallback) {
-              onUpdateCallback(state);
-            }
-            isProviderExists && dispatchFormStateUpdate(state);
+      void window.VGSCollect.session({
+        vaultId,
+        env: env || environment,
+        formId,
+        configuration,
+        authHandler,
+        routeId,
+        onErrorCallback,
+        stateCallback: (state: VGSCollectFormState) => {
+          if (stateCallback) {
+            stateCallback(state);
           }
-        })
+          if (onUpdateCallback) {
+            onUpdateCallback(state);
+          }
+          isProviderExists && dispatchFormStateUpdate(state);
+        }
+      })
         .then((form: IVGSCollectForm) => {
           if (!isMounted) {
             form.unmount();

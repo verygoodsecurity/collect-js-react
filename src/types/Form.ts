@@ -47,9 +47,7 @@ type TokenFormats =
 type FormEventTypes = 'enterPress' | 'getCardAttributesSuccess' | 'getCardAttributesError';
 
 type VGSCollectSessionAuthResult = string | { token: string };
-type VGSCollectSessionAuthHandler =
-  | string
-  | (() => VGSCollectSessionAuthResult | Promise<VGSCollectSessionAuthResult>);
+type VGSCollectSessionAuthHandler = string | (() => VGSCollectSessionAuthResult | Promise<VGSCollectSessionAuthResult>);
 
 interface IBaseCollectProps {
   vaultId: string;

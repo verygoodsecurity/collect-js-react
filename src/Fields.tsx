@@ -97,7 +97,7 @@ function RenderField(props: any) {
       className={`vgs-collect-iframe-wr ${className ? className : ''}`}
       id={fieldId}
       data-testid='vgs-collect-field-wrapper'
-    ></div>
+    />
   );
 }
 

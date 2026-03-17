@@ -82,9 +82,9 @@ test('Generate <div> wrapper element for each iframe', () => {
   render(
     <VGSCollectProvider>
       <VGSCollectForm vaultId={COLLECT_CONFIG.VAULT_ID} environment={COLLECT_CONFIG.ENVIRONMENT}>
-        <VGSCollectForm.CardNumberField name='card-number'></VGSCollectForm.CardNumberField>
-        <VGSCollectForm.CardExpirationDateField name='card-exp'></VGSCollectForm.CardExpirationDateField>
-        <VGSCollectForm.CardSecurityCodeField name='card-cvv'></VGSCollectForm.CardSecurityCodeField>
+        <VGSCollectForm.CardNumberField name='card-number' />
+        <VGSCollectForm.CardExpirationDateField name='card-exp' />
+        <VGSCollectForm.CardSecurityCodeField name='card-cvv' />
       </VGSCollectForm>
     </VGSCollectProvider>
   );
@@ -124,10 +124,7 @@ test('VGSCollectSession calls .session() method and subscribes to card attribute
   );
 
   await waitFor(() => {
-    expect(VGSCollectInstanceMock.on).toHaveBeenCalledWith(
-      'getCardAttributesSuccess',
-      onGetCardAttributesSuccess
-    );
+    expect(VGSCollectInstanceMock.on).toHaveBeenCalledWith('getCardAttributesSuccess', onGetCardAttributesSuccess);
     expect(VGSCollectInstanceMock.on).toHaveBeenCalledWith('getCardAttributesError', onGetCardAttributesError);
   });
 });

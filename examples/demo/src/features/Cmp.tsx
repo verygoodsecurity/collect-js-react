@@ -132,7 +132,7 @@ const Cmp = () => {
                * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
                */}
               <CardholderField css={VGSCollectFieldStyles} defaultValue='John Doe' />
-              
+
               <CardNumberField css={VGSCollectFieldStyles} />
               <CardExpirationDateField css={VGSCollectFieldStyles} defaultValue='12 / 38' />
               <CardSecurityCodeField css={VGSCollectFieldStyles} defaultValue='123' />
