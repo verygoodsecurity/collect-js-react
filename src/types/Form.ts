@@ -108,6 +108,7 @@ interface IDefaultFieldOptions {
   validations?: string[];
   css?: Record<string, any>;
   style?: Record<string, any>;
+  defaultValue?: string;
   successColor?: string;
   errorColor?: string;
   classes?: ClassMap;
