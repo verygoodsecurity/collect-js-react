@@ -79,6 +79,13 @@ const Cmp = () => {
   const formattedSubmitPayload = submitResponse?.data || submitResponse;
   const cvcAlias = submitResponse?.data?.attributes?.cvc_alias || submitResponse?.attributes?.cvc_alias;
 
+  const fallbackConfiguration = {
+    cardAttributes: {
+      enable: true,
+      parameters: ['card_brand', 'card_type', 'product_name']
+    }
+  };
+
   return (
     <>
       {isVGSCollectScriptLoaded && (
@@ -94,6 +101,7 @@ const Cmp = () => {
               vaultId={VAULT_ID}
               environment={ENVIRONMENT as VGSCollectVaultEnvironment}
               formId={sessionFormId}
+              configuration={fallbackConfiguration}
               authHandler={getAccessApiKey}
               stateCallback={onStateCallback}
               onErrorCallback={onErrorCallback}

@@ -174,6 +174,37 @@ test('VGSCollectSession submits createCard payload without inline auth when sess
   );
 });
 
+test('VGSCollectSession passes configuration fallback to .session()', async () => {
+  const configuration = {
+    cardAttributes: {
+      enable: true,
+      parameters: ['card_brand', 'card_type', 'product_name']
+    }
+  };
+
+  render(
+    <VGSCollectProvider>
+      <VGSCollectSession
+        vaultId={COLLECT_CONFIG.VAULT_ID}
+        environment={COLLECT_CONFIG.ENVIRONMENT}
+        formId='missing-form-for-configuration-fallback'
+        configuration={configuration}
+      />
+    </VGSCollectProvider>
+  );
+
+  await waitFor(() =>
+    expect(window.VGSCollect.session).toHaveBeenCalledWith(
+      expect.objectContaining({
+        vaultId: COLLECT_CONFIG.VAULT_ID,
+        env: COLLECT_CONFIG.ENVIRONMENT,
+        formId: 'missing-form-for-configuration-fallback',
+        configuration
+      })
+    )
+  );
+});
+
 describe('generateUUID', () => {
   it('should generate a valid UUID', () => {
     const uuid = generateUUID();

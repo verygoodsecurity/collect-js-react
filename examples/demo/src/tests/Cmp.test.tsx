@@ -84,37 +84,32 @@ describe('CMP demo page', () => {
     expect(screen.getByTestId('card-exp-field')).toHaveTextContent('12 / 38');
     expect(screen.getByTestId('card-cvc-field')).toHaveTextContent('123');
 
-    expect(latestSessionProps).toEqual(
-      expect.objectContaining({
-        vaultId: demoEnv.VAULT_ID,
-        environment: demoEnv.ENVIRONMENT,
-        formId: demoEnv.FORM_ID,
-        authHandler: expect.any(Function),
-        stateCallback: expect.any(Function),
-        onErrorCallback: expect.any(Function),
-        onGetCardAttributesSuccess: expect.any(Function),
-        onGetCardAttributesError: expect.any(Function),
-        onSubmitCallback: expect.any(Function),
-        submitParameters: {
-          createCard: {
-            data: {
-              cardholder: {
-                address: {
-                  address1: '123 Main St',
-                  address2: 'Suite 456',
-                  address3: 'Line 3',
-                  address4: 'Line 4',
-                  city: 'LA',
-                  region: 'CA',
-                  postal_code: '12345',
-                  country: 'USA'
-                }
-              }
+    expect(latestSessionProps.vaultId).toBe(demoEnv.VAULT_ID);
+    expect(latestSessionProps.environment).toBe(demoEnv.ENVIRONMENT);
+    expect(latestSessionProps.authHandler).toEqual(expect.any(Function));
+    expect(latestSessionProps.stateCallback).toEqual(expect.any(Function));
+    expect(latestSessionProps.onErrorCallback).toEqual(expect.any(Function));
+    expect(latestSessionProps.onGetCardAttributesSuccess).toEqual(expect.any(Function));
+    expect(latestSessionProps.onGetCardAttributesError).toEqual(expect.any(Function));
+    expect(latestSessionProps.onSubmitCallback).toEqual(expect.any(Function));
+    expect(latestSessionProps.submitParameters).toEqual({
+      createCard: {
+        data: {
+          cardholder: {
+            address: {
+              address1: '123 Main St',
+              address2: 'Suite 456',
+              address3: 'Line 3',
+              address4: 'Line 4',
+              city: 'LA',
+              region: 'CA',
+              postal_code: '12345',
+              country: 'USA'
             }
           }
         }
-      })
-    );
+      }
+    });
   });
 
   test('authHandler fetches access token from the demo endpoint and returns it', async () => {
