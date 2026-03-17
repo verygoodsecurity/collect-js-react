@@ -1133,10 +1133,10 @@
     semver "^7.3.2"
     tsutils "^3.17.1"
 
-"@vgs/collect-js@^0.6.1":
-  version "0.6.3"
-  resolved "https://registry.yarnpkg.com/@vgs/collect-js/-/collect-js-0.6.3.tgz#e12cb23ed6d845e1b89eeafa6a8aa20f5ce0de5a"
-  integrity sha512-B3IH14EgXn1k8ZpU0tCOHMlHW+Jhje4PR8tDDxaX7T2TdF7WBa3e8loegHcO4YiM8GSoFejWifRgEAJCT3KYSQ==
+"@vgs/collect-js@^0.7.3":
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/@vgs/collect-js/-/collect-js-0.7.3.tgz#189e7b841de0f089b5865c657242e1d18d3ccce5"
+  integrity sha512-DJAeQVgD8GVZy5ROGqkLLpi39EDycoyw5Oy+PWHBaUo3JHR5CDOr3aU9aNjYuY5oCveZLt0BY8x3LLEfQEeAAg==
   dependencies:
     core-js "^3.30.0"
     uuid "^8.3.2"
