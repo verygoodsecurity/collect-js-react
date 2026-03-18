@@ -44,11 +44,13 @@ type TokenFormats =
 /**
  * Available options for the form .on() method
  */
-type FormEventTypes = 'enterPress';
+type FormEventTypes = 'enterPress' | 'getCardAttributesSuccess' | 'getCardAttributesError';
 
-interface ICollectFormProps {
+type VGSCollectSessionAuthResult = string | { token: string };
+type VGSCollectSessionAuthHandler = string | (() => VGSCollectSessionAuthResult | Promise<VGSCollectSessionAuthResult>);
+
+interface IBaseCollectProps {
   vaultId: string;
-  environment: VGSCollectVaultEnvironment;
   submitParameters?: any;
   action?: string;
   cname?: string;
@@ -60,6 +62,21 @@ interface ICollectFormProps {
   onSubmitCallback?: (status: any, resp: any) => void;
   onErrorCallback?: (errors: any) => void;
   onCardCreateCallback?: (status: any, resp: any) => void;
+}
+
+interface ICollectFormProps extends IBaseCollectProps {
+  environment: VGSCollectVaultEnvironment;
+}
+
+interface ICollectSessionProps extends IBaseCollectProps {
+  environment?: VGSCollectVaultEnvironment;
+  env?: VGSCollectVaultEnvironment;
+  formId?: string;
+  configuration?: any;
+  authHandler?: VGSCollectSessionAuthHandler;
+  stateCallback?: (state: VGSCollectFormState | null) => void;
+  onGetCardAttributesSuccess?: (resp: any) => void;
+  onGetCardAttributesError?: (errors: any) => void;
 }
 
 interface VGSCollectStateParams {
@@ -89,6 +106,7 @@ interface IDefaultFieldOptions {
   validations?: string[];
   css?: Record<string, any>;
   style?: Record<string, any>;
+  defaultValue?: string;
   successColor?: string;
   errorColor?: string;
   classes?: ClassMap;
@@ -226,8 +244,8 @@ interface IVGSCollectForm {
    * Docs: https://www.verygoodsecurity.com/docs/api/collect/#api-fieldon
    *       https://www.verygoodsecurity.com/docs/api/collect/#api-fieldoff
    */
-  on(event: FormEventTypes, callback: (info: { name: string }) => void): void;
-  off(event: FormEventTypes, callback: () => void): void;
+  on(event: FormEventTypes, callback: (info: any) => void): void;
+  off(event: FormEventTypes, callback: (info: any) => void): void;
 
   /**
    * Docs: https://www.verygoodsecurity.com/docs/api/collect/#api-formsubmit
@@ -282,8 +300,20 @@ interface IVGSCollectForm {
   setRouteId(routeId: string): void;
 }
 
+interface IVGSCollectSessionOptions {
+  vaultId: string;
+  env?: VGSCollectVaultEnvironment;
+  stateCallback?: (state: VGSCollectFormState) => void;
+  formId?: string;
+  configuration?: any;
+  authHandler?: VGSCollectSessionAuthHandler;
+  onErrorCallback?: (error: any) => void;
+  routeId?: string;
+}
+
 interface IVGSCollect {
-  create(vaultId: string, environment: string, stateCallback?: (state: VGSCollectFormState) => void): any;
+  create(vaultId: string, environment: string, stateCallback?: (state: VGSCollectFormState) => void): IVGSCollectForm;
+  session(options: IVGSCollectSessionOptions): Promise<IVGSCollectForm>;
 }
 
 type ICollectFieldAlias = {
@@ -312,9 +342,13 @@ export type {
   IVGSCollectDateField,
   IVGSCollectFileField,
   ICollectFormProps,
+  ICollectSessionProps,
   ICollectFormPayloadStructure,
   VGSCollectFormState,
   VGSCollectStateParams,
   VGSCollectVaultEnvironment,
-  VGSCollectHttpStatusCode
+  VGSCollectHttpStatusCode,
+  VGSCollectSessionAuthHandler,
+  VGSCollectSessionAuthResult,
+  IVGSCollectSessionOptions
 };

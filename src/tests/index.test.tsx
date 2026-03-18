@@ -1,8 +1,8 @@
 import React from 'react';
 import '@testing-library/jest-dom';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
-import { VGSCollectProvider, VGSCollectForm } from '../index';
+import { VGSCollectProvider, VGSCollectForm, VGSCollectSession } from '../index';
 import { VGSCollectVaultEnvironment } from '../types/Form';
 import { getFormInstance } from '../state';
 
@@ -82,13 +82,124 @@ test('Generate <div> wrapper element for each iframe', () => {
   render(
     <VGSCollectProvider>
       <VGSCollectForm vaultId={COLLECT_CONFIG.VAULT_ID} environment={COLLECT_CONFIG.ENVIRONMENT}>
-        <VGSCollectForm.CardNumberField name='card-number'></VGSCollectForm.CardNumberField>
-        <VGSCollectForm.CardExpirationDateField name='card-exp'></VGSCollectForm.CardExpirationDateField>
-        <VGSCollectForm.CardSecurityCodeField name='card-cvv'></VGSCollectForm.CardSecurityCodeField>
+        <VGSCollectForm.CardNumberField name='card-number' />
+        <VGSCollectForm.CardExpirationDateField name='card-exp' />
+        <VGSCollectForm.CardSecurityCodeField name='card-cvv' />
       </VGSCollectForm>
     </VGSCollectProvider>
   );
   expect(screen.getAllByTestId('vgs-collect-field-wrapper')).toHaveLength(3);
+});
+
+test('VGSCollectSession calls .session() method and subscribes to card attributes events', async () => {
+  const authHandler = jest.fn();
+  const onGetCardAttributesSuccess = jest.fn();
+  const onGetCardAttributesError = jest.fn();
+
+  render(
+    <VGSCollectProvider>
+      <VGSCollectSession
+        vaultId={COLLECT_CONFIG.VAULT_ID}
+        environment={COLLECT_CONFIG.ENVIRONMENT}
+        formId='test-simple-form'
+        routeId={COLLECT_CONFIG.ROUTE_ID}
+        authHandler={authHandler}
+        onGetCardAttributesSuccess={onGetCardAttributesSuccess}
+        onGetCardAttributesError={onGetCardAttributesError}
+      />
+    </VGSCollectProvider>
+  );
+
+  await waitFor(() =>
+    expect(window.VGSCollect.session).toHaveBeenCalledWith(
+      expect.objectContaining({
+        vaultId: COLLECT_CONFIG.VAULT_ID,
+        env: COLLECT_CONFIG.ENVIRONMENT,
+        formId: 'test-simple-form',
+        routeId: COLLECT_CONFIG.ROUTE_ID,
+        authHandler,
+        stateCallback: expect.any(Function)
+      })
+    )
+  );
+
+  await waitFor(() => {
+    expect(VGSCollectInstanceMock.on).toHaveBeenCalledWith('getCardAttributesSuccess', onGetCardAttributesSuccess);
+    expect(VGSCollectInstanceMock.on).toHaveBeenCalledWith('getCardAttributesError', onGetCardAttributesError);
+  });
+});
+
+test('VGSCollectSession submits createCard payload without inline auth when session authHandler is provided', async () => {
+  render(
+    <VGSCollectProvider>
+      <VGSCollectSession
+        vaultId={COLLECT_CONFIG.VAULT_ID}
+        environment={COLLECT_CONFIG.ENVIRONMENT}
+        formId='test-simple-form'
+        authHandler={jest.fn()}
+        submitParameters={{
+          createCard: {
+            data: {
+              cardholder: {
+                name: 'test'
+              }
+            }
+          }
+        }}
+      >
+        <button type='submit'>Submit</button>
+      </VGSCollectSession>
+    </VGSCollectProvider>
+  );
+
+  await waitFor(() => expect(window.VGSCollect.session).toHaveBeenCalled());
+
+  fireEvent.click(screen.getByText('Submit'));
+
+  await waitFor(() =>
+    expect(VGSCollectInstanceMock.createCard).toHaveBeenCalledWith(
+      {
+        data: {
+          cardholder: {
+            name: 'test'
+          }
+        }
+      },
+      expect.any(Function),
+      expect.any(Function)
+    )
+  );
+});
+
+test('VGSCollectSession passes configuration fallback to .session()', async () => {
+  const configuration = {
+    cardAttributes: {
+      enable: true,
+      parameters: ['card_brand', 'card_type', 'product_name']
+    }
+  };
+
+  render(
+    <VGSCollectProvider>
+      <VGSCollectSession
+        vaultId={COLLECT_CONFIG.VAULT_ID}
+        environment={COLLECT_CONFIG.ENVIRONMENT}
+        formId='missing-form-for-configuration-fallback'
+        configuration={configuration}
+      />
+    </VGSCollectProvider>
+  );
+
+  await waitFor(() =>
+    expect(window.VGSCollect.session).toHaveBeenCalledWith(
+      expect.objectContaining({
+        vaultId: COLLECT_CONFIG.VAULT_ID,
+        env: COLLECT_CONFIG.ENVIRONMENT,
+        formId: 'missing-form-for-configuration-fallback',
+        configuration
+      })
+    )
+  );
 });
 
 describe('generateUUID', () => {

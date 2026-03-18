@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
     "baseUrl": "src",
+    "paths": {
+      "@vgs/collect-js-react": ["index.tsx"],
+      "collect-js-react": ["index.tsx"]
+    },
     "outDir": "dist",
     "module": "esnext",
     "lib": ["dom", "esnext"],
