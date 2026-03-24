@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   VGSCollectFocusEventData,
-  VGSCollectForm,
+  VGSCollectSession,
   VGSCollectFormState,
   VGSCollectHttpStatusCode,
   VGSCollectKeyboardEventData,
@@ -12,7 +12,7 @@ import {
 } from '@vgs/collect-js-react';
 
 import { loadVGSCollect } from '@vgs/collect-js';
-import { COLLECT_VERSION, ENVIRONMENT, VAULT_ID } from '../env';
+import { COLLECT_VERSION, ENVIRONMENT, FORM_ID, VAULT_ID } from '../env';
 
 const {
   TextField,
@@ -26,7 +26,7 @@ const {
   ZipCodeField,
   FileField,
   DateField
-} = VGSCollectForm;
+} = VGSCollectSession;
 
 const Basic = React.memo(() => {
   const [isVGSCollectScriptLoaded, setCollectScriptLoaded] = useState(false);
@@ -35,6 +35,7 @@ const Basic = React.memo(() => {
    * VGS Collect state hook to retrieve the form state
    */
   const [state] = useVGSCollectState();
+  const sessionFormId = FORM_ID || 'test-simple-form';
 
   /**
    * VGS Collect submit hook to retrieve the form response
@@ -102,12 +103,19 @@ const Basic = React.memo(() => {
            * VGS Collect form wrapper element. Abstraction over the VGSCollect.create()
            * https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate
            */}
-          <VGSCollectForm
+          <VGSCollectSession
             vaultId={VAULT_ID}
             environment={ENVIRONMENT as VGSCollectVaultEnvironment}
-            action='/post'
-            submitParameters={{}}
-            onUpdateCallback={onUpdateCallback}
+            // formId={sessionFormId}
+            submit={{
+              api: 'proxy',
+              action: '/post',
+              // submitParameters: {
+              //   city: 'LA',
+              //   country: 'USA'
+              // }
+            }}
+            stateCallback={onUpdateCallback}
             onSubmitCallback={onSubmitCallback}
             onErrorCallback={onErrorCallback}
           >
@@ -224,7 +232,7 @@ const Basic = React.memo(() => {
               css={VGSCollectFieldStyles}
             />
             <button type='submit'>Submit</button>
-          </VGSCollectForm>
+          </VGSCollectSession>
         </div>
       )}
     </>

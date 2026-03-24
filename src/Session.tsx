@@ -235,23 +235,41 @@ function CollectSession(props: ICollectSessionProps) {
         form.setRouteId(submitConfiguration.routeId);
       }
 
+      let isProxySubmitHandled = false;
+
+      const handleProxySuccess = (status: HttpStatusCode | null, data: any) => {
+        if (isProxySubmitHandled) {
+          return;
+        }
+
+        isProxySubmitHandled = true;
+
+        if (onSubmitCallback) {
+          onSubmitCallback(status, data);
+        }
+        dispatchResponseUpdate({
+          status,
+          data
+        });
+      };
+
+      const handleProxyError = (errors: any) => {
+        if (isProxySubmitHandled) {
+          return;
+        }
+
+        isProxySubmitHandled = true;
+
+        if (onErrorCallback) {
+          onErrorCallback(errors);
+        }
+      };
+
       form.submit(
         submitConfiguration.action,
         submitConfiguration.submitParameters || {},
-        (status: HttpStatusCode | null, data: any) => {
-          if (onSubmitCallback) {
-            onSubmitCallback(status, data);
-          }
-          dispatchResponseUpdate({
-            status,
-            data
-          });
-        },
-        (errors: any) => {
-          if (onErrorCallback) {
-            onErrorCallback(errors);
-          }
-        }
+        handleProxySuccess,
+        handleProxyError
       );
     }
   };

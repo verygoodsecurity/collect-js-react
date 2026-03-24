@@ -1,5 +1,5 @@
 import {
-  VGSCollectForm,
+  VGSCollectSession,
   VGSCollectFormState,
   VGSCollectHttpStatusCode,
   VGSCollectVaultEnvironment,
@@ -11,9 +11,9 @@ import {
 import React, { useEffect, useState } from 'react';
 
 import { loadVGSCollect } from '@vgs/collect-js';
-import { COLLECT_VERSION, ENVIRONMENT, VAULT_ID } from '../env';
+import { COLLECT_VERSION, ENVIRONMENT, FORM_ID, VAULT_ID } from '../env';
 
-const { TextField } = VGSCollectForm;
+const { TextField } = VGSCollectSession;
 
 const SubmitHandling = (e: any) => {
   const [isVGSCollectScriptLoaded, setCollectScriptLoaded] = useState(false);
@@ -30,6 +30,7 @@ const SubmitHandling = (e: any) => {
   const [state] = useVGSCollectState();
   const [response] = useVGSCollectResponse();
   const [form] = useVGSCollectFormInstance();
+  const sessionFormId = FORM_ID || 'test-simple-form';
 
   useEffect(() => {
     /**
@@ -101,11 +102,12 @@ const SubmitHandling = (e: any) => {
            * VGS Collect form wrapper element. Abstraction over the VGSCollect.create()
            * https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate
            */}
-          <VGSCollectForm
+          <VGSCollectSession
             vaultId={VAULT_ID}
             environment={ENVIRONMENT as VGSCollectVaultEnvironment}
+            formId={sessionFormId}
             onCustomSubmit={customHandling}
-            onUpdateCallback={onUpdateCallback}
+            stateCallback={onUpdateCallback}
             onErrorCallback={onErrorCallback}
           >
             {/**
@@ -114,7 +116,7 @@ const SubmitHandling = (e: any) => {
              */}
             <TextField name='textField' validations={['required']} css={VGSCollectFieldStyles} />
             <button type='submit'>Submit</button>
-          </VGSCollectForm>
+          </VGSCollectSession>
         </div>
       )}
     </>
