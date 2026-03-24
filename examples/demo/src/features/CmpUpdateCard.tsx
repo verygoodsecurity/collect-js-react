@@ -90,8 +90,8 @@ const CmpUpdateCard = () => {
                 }
               }}
             >
-              <CardExpirationDateField css={VGSCollectFieldStyles} defaultValue='12 / 38' />
-              <CardSecurityCodeField css={VGSCollectFieldStyles} defaultValue='123' />
+              <CardExpirationDateField css={VGSCollectFieldStyles} />
+              <CardSecurityCodeField css={VGSCollectFieldStyles} />
               <button type='submit'>Submit</button>
             </VGSCollectSession>
           </div>
