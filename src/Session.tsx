@@ -14,7 +14,7 @@ import {
 } from './Fields';
 import { DispatchStateContext, DispatchSubmitContext, DispatchFormInstanceContext } from './provider';
 import { FormStateProvider, DispatchFormContext } from './formStateProvider';
-import { ICollectSessionProps, IVGSCollectForm, VGSCollectFormState } from './types/Form';
+import { ICollectSessionProps, ICollectSessionSubmit, IVGSCollectForm, VGSCollectFormState } from './types/Form';
 import React, { useContext, useEffect } from 'react';
 import { getFormInstance, setFormInstance } from './state';
 
@@ -22,19 +22,38 @@ import { HttpStatusCode } from './types/HttpStatusCode';
 
 const isBrowser = typeof window !== 'undefined';
 
+const DEFAULT_PROXY_ACTION = '/';
+
+const resolveCMPSubmitParameters = async (submitParameters?: Record<string, any>) => {
+  const cmpSubmitParameters = {
+    ...(submitParameters || {})
+  };
+
+  if (typeof cmpSubmitParameters.auth !== 'undefined') {
+    const authToken =
+      typeof cmpSubmitParameters.auth === 'function' ? await cmpSubmitParameters.auth() : cmpSubmitParameters.auth;
+
+    if (typeof authToken === 'string') {
+      cmpSubmitParameters.auth = authToken;
+    } else {
+      throw new Error('Access token should be a string');
+    }
+  }
+
+  return cmpSubmitParameters;
+};
+
 function CollectSession(props: ICollectSessionProps) {
   const {
     vaultId,
     env,
     environment = 'sandbox',
-    action = '/',
     cname,
     routeId,
     formId,
     configuration,
     authHandler,
-    submitParameters,
-    tokenizationAPI = false,
+    submit,
     onCustomSubmit,
     stateCallback,
     onUpdateCallback,
@@ -142,31 +161,47 @@ function CollectSession(props: ICollectSessionProps) {
     e.preventDefault();
 
     const form: IVGSCollectForm = getFormInstance();
+    const submitConfiguration: ICollectSessionSubmit = submit || { api: 'proxy', action: DEFAULT_PROXY_ACTION };
 
     if (!form) {
       throw new Error('@vgs/collect-js-react: VGS Collect form not found.');
     }
 
-    if (submitParameters?.createCard) {
-      const createCardParameters = {
-        ...submitParameters.createCard
-      };
+    if (submitConfiguration.api === 'cmp') {
+      if (submitConfiguration.operation === 'createCard') {
+        const cmpSubmitParameters = await resolveCMPSubmitParameters(submitConfiguration.submitParameters);
 
-      if (typeof createCardParameters.auth !== 'undefined') {
-        const authToken =
-          typeof createCardParameters.auth === 'function'
-            ? await createCardParameters.auth()
-            : createCardParameters.auth;
-
-        if (typeof authToken === 'string') {
-          createCardParameters.auth = authToken;
-        } else {
-          throw new Error('Access token should be a string');
-        }
+        form.createCard(
+          cmpSubmitParameters,
+          (status: HttpStatusCode | null, resp: any) => {
+            if (onSubmitCallback) {
+              onSubmitCallback(status, resp);
+            }
+          },
+          (errors: any) => {
+            if (onErrorCallback) {
+              onErrorCallback(errors);
+            }
+          }
+        );
+      } else {
+        form.updateCard(
+          submitConfiguration.params,
+          (status: HttpStatusCode | null, resp: any) => {
+            if (onSubmitCallback) {
+              onSubmitCallback(status, resp);
+            }
+          },
+          (errors: any) => {
+            if (onErrorCallback) {
+              onErrorCallback(errors);
+            }
+          }
+        );
       }
-
-      form.createCard(
-        createCardParameters,
+    } else if (submitConfiguration.api === 'vault') {
+      form.createAliases(
+        submitConfiguration.submitParameters || {},
         (status: HttpStatusCode | null, resp: any) => {
           if (onSubmitCallback) {
             onSubmitCallback(status, resp);
@@ -178,7 +213,11 @@ function CollectSession(props: ICollectSessionProps) {
           }
         }
       );
-    } else if (tokenizationAPI) {
+    } else if (submitConfiguration.api === 'tokenization') {
+      if (submitConfiguration.routeId) {
+        form.setRouteId(submitConfiguration.routeId);
+      }
+
       form.tokenize(
         (status: HttpStatusCode | null, resp: any) => {
           if (onSubmitCallback) {
@@ -191,10 +230,14 @@ function CollectSession(props: ICollectSessionProps) {
           }
         }
       );
-    } else {
+    } else if (submitConfiguration.api === 'proxy') {
+      if (submitConfiguration.routeId) {
+        form.setRouteId(submitConfiguration.routeId);
+      }
+
       form.submit(
-        action,
-        submitParameters ? submitParameters : '',
+        submitConfiguration.action,
+        submitConfiguration.submitParameters || {},
         (status: HttpStatusCode | null, data: any) => {
           if (onSubmitCallback) {
             onSubmitCallback(status, data);

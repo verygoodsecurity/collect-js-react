@@ -98,8 +98,10 @@ describe('CMP demo page', () => {
     expect(latestSessionProps.onGetCardAttributesSuccess).toEqual(expect.any(Function));
     expect(latestSessionProps.onGetCardAttributesError).toEqual(expect.any(Function));
     expect(latestSessionProps.onSubmitCallback).toEqual(expect.any(Function));
-    expect(latestSessionProps.submitParameters).toEqual({
-      createCard: {
+    expect(latestSessionProps.submit).toEqual({
+      api: 'cmp',
+      operation: 'createCard',
+      submitParameters: {
         data: {
           cardholder: {
             address: {

@@ -59,7 +59,9 @@ export function installVGSCollectStub() {
         setRouteId() {},
         submit() {},
         tokenize() {},
+        createAliases() {},
         createCard() {},
+        updateCard() {},
         unmount() {
           mountedFields.forEach((secureField) => {
             secureField.delete();

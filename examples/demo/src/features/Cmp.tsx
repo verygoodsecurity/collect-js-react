@@ -41,6 +41,7 @@ const Cmp = () => {
   }, []);
 
   const onErrorCallback = (errors: VGSCollectFormState) => {
+    console.log('qweqweqweqweqwe', errors)
     setCmpError(errors);
     console.log(errors);
   };
@@ -48,6 +49,7 @@ const Cmp = () => {
   const onStateCallback = (_state: VGSCollectFormState) => {};
 
   const onSubmitCallback = (status: VGSCollectHttpStatusCode, resp: any) => {
+    console.log('qweqew', resp)
     setCmpError(null);
     setSubmitResponse(resp);
     console.log('Submit callback', status, resp);
@@ -76,7 +78,8 @@ const Cmp = () => {
     return value ? JSON.stringify(value, null, 2) : emptyMessage;
   };
 
-  const formattedSubmitPayload = submitResponse?.data || submitResponse;
+  // const formattedSubmitPayload = submitResponse?.data || submitResponse;
+  const formattedSubmitPayload = submitResponse;
   const cvcAlias = submitResponse?.data?.attributes?.cvc_alias || submitResponse?.attributes?.cvc_alias;
 
   const fallbackConfiguration = {
@@ -108,8 +111,10 @@ const Cmp = () => {
               onGetCardAttributesSuccess={onGetCardAttributesSuccess}
               onGetCardAttributesError={onGetCardAttributesError}
               onSubmitCallback={onSubmitCallback}
-              submitParameters={{
-                createCard: {
+              submit={{
+                api: 'cmp',
+                operation: 'createCard',
+                submitParameters: {
                   data: {
                     cardholder: {
                       address: {
@@ -126,6 +131,26 @@ const Cmp = () => {
                   }
                 }
               }}
+              // submit={{
+              //   api: 'proxy',
+              //   action: '/post',
+              //   routeId: '95c9e353-e0f6-4665-9acd-fec787ef5337',
+              //   submitParameters: {
+              //     data: (fields: any) => {
+              //       return {
+              //         customData: 'test',
+              //         textField: 'text 2',
+              //         cardNumber: fields['pan']
+              //       };
+              //     },
+              //     headers: {
+              //       test1: 'test'
+              //     }
+              //   }
+              // }}
+              // submit={{
+              //   api: 'vault'
+              // }}
             >
               {/**
                * VGS Collect text field component:
