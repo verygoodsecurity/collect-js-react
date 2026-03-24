@@ -5,6 +5,7 @@ import CustomPayload from './features/CustomPayload';
 import Tokenization from './features/Tokenization';
 import SubmitHandling from './features/SubmitHandling';
 import Cmp from './features/Cmp';
+import CmpUpdateCard from './features/CmpUpdateCard';
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
           <Route path='/tokenization-api' element={<Tokenization />} />
           <Route path='/submit-handling' element={<SubmitHandling />} />
           <Route path='/cmp' element={<Cmp />} />
+          <Route path='/cmp-update-card' element={<CmpUpdateCard />} />
           <Route path='*' element={<NoMatch />} />
         </Route>
       </Routes>
@@ -31,7 +33,8 @@ function Layout() {
         <Link to='/custom-payload'>Custom Payload</Link>
         <Link to='/tokenization-api'>Tokenization API</Link>
         <Link to='/submit-handling'>Submit Handling</Link>
-        <Link to='/cmp'>Card Management Integration</Link>
+        <Link to='/cmp'>Card Management (Create Card)</Link>
+        <Link to='/cmp-update-card'>Card Management (Update Card)</Link>
       </nav>
       <hr />
       <main className='container'>
