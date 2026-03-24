@@ -110,10 +110,6 @@ const Basic = React.memo(() => {
             submit={{
               api: 'proxy',
               action: '/post',
-              // submitParameters: {
-              //   city: 'LA',
-              //   country: 'USA'
-              // }
             }}
             stateCallback={onUpdateCallback}
             onSubmitCallback={onSubmitCallback}
