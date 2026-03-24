@@ -131,26 +131,6 @@ const Cmp = () => {
                   }
                 }
               }}
-              // submit={{
-              //   api: 'proxy',
-              //   action: '/post',
-              //   routeId: '95c9e353-e0f6-4665-9acd-fec787ef5337',
-              //   submitParameters: {
-              //     data: (fields: any) => {
-              //       return {
-              //         customData: 'test',
-              //         textField: 'text 2',
-              //         cardNumber: fields['pan']
-              //       };
-              //     },
-              //     headers: {
-              //       test1: 'test'
-              //     }
-              //   }
-              // }}
-              // submit={{
-              //   api: 'vault'
-              // }}
             >
               {/**
                * VGS Collect text field component:
