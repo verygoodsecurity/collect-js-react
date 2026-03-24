@@ -66,7 +66,6 @@ const CustomPayload = () => {
           <VGSCollectSession
             vaultId={vaultId as string}
             environment={ENVIRONMENT as VGSCollectVaultEnvironment}
-            formId={sessionFormId}
             submit={{
               api: 'tokenization'
             }}

@@ -112,7 +112,6 @@ const CustomPayload = () => {
           <VGSCollectSession
             vaultId={VAULT_ID}
             environment={ENVIRONMENT as VGSCollectVaultEnvironment}
-            formId={sessionFormId}
             submit={{
               api: 'proxy',
               action: '/post',

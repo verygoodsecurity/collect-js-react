@@ -77,7 +77,6 @@ const CmpUpdateCard = () => {
             <VGSCollectSession
               vaultId={VAULT_ID}
               environment={ENVIRONMENT as VGSCollectVaultEnvironment}
-              formId={sessionFormId}
               authHandler={getAccessApiKey}
               stateCallback={onStateCallback}
               onErrorCallback={onErrorCallback}
