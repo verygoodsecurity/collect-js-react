@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import {
-  VGSCollectForm,
+  VGSCollectSession,
   VGSCollectFormState,
   VGSCollectHttpStatusCode,
   VGSCollectVaultEnvironment
 } from '@vgs/collect-js-react';
 
 import { loadVGSCollect } from '@vgs/collect-js';
-import { COLLECT_VERSION, ENVIRONMENT } from '../env';
+import { COLLECT_VERSION, ENVIRONMENT, FORM_ID } from '../env';
 
-const { TextField, CardNumberField, CardExpirationDateField, CardSecurityCodeField } = VGSCollectForm;
+const { TextField, CardNumberField, CardExpirationDateField, CardSecurityCodeField } = VGSCollectSession;
 const vaultId = 'tntux31nzpn';
 
 const CustomPayload = () => {
   const [isVGSCollectScriptLoaded, setCollectScriptLoaded] = useState(false);
+  const sessionFormId = FORM_ID || 'test-simple-form';
   const VGSCollectFieldStyles = {
     padding: '.5rem 1rem',
     boxSizing: 'border-box',
@@ -62,12 +63,13 @@ const CustomPayload = () => {
            * VGS Collect form wrapper element. Abstraction over the VGSCollect.create()
            * https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate
            */}
-          <VGSCollectForm
+          <VGSCollectSession
             vaultId={vaultId as string}
             environment={ENVIRONMENT as VGSCollectVaultEnvironment}
-            tokenizationAPI
-            submitParameters={{}}
-            onUpdateCallback={onUpdateCallback}
+            submit={{
+              api: 'tokenization'
+            }}
+            stateCallback={onUpdateCallback}
             onSubmitCallback={onSubmitCallback}
             onErrorCallback={onErrorCallback}
           >
@@ -102,7 +104,7 @@ const CustomPayload = () => {
               }}
             />
             <button type='submit'>Submit</button>
-          </VGSCollectForm>
+          </VGSCollectSession>
         </div>
       )}
     </>

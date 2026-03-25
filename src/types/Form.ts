@@ -51,11 +51,8 @@ type VGSCollectSessionAuthHandler = string | (() => VGSCollectSessionAuthResult 
 
 interface IBaseCollectProps {
   vaultId: string;
-  submitParameters?: any;
-  action?: string;
   cname?: string;
   routeId?: string;
-  tokenizationAPI?: boolean;
   children?: ReactNode;
   onCustomSubmit?: (event: SyntheticEvent) => void;
   onUpdateCallback?: (state: VGSCollectFormState | null) => void;
@@ -66,7 +63,49 @@ interface IBaseCollectProps {
 
 interface ICollectFormProps extends IBaseCollectProps {
   environment: VGSCollectVaultEnvironment;
+  submitParameters?: any;
+  action?: string;
+  tokenizationAPI?: boolean;
 }
+
+interface ICollectSessionProxySubmit {
+  api: 'proxy';
+  action: string;
+  routeId?: string;
+  submitParameters?: Partial<VGSCollectSubmitOptions>;
+}
+
+interface ICollectSessionVaultSubmit {
+  api: 'vault';
+  submitParameters?: Record<string, any>;
+}
+
+interface ICollectSessionTokenizationSubmit {
+  api: 'tokenization';
+  routeId?: string;
+}
+
+interface ICollectSessionCMPCreateCardSubmit {
+  api: 'cmp';
+  operation: 'createCard';
+  submitParameters?: Partial<VGSCollectSubmitOptions>;
+}
+
+interface ICollectSessionCMPUpdateCardSubmit {
+  api: 'cmp';
+  operation: 'updateCard';
+  params: {
+    cardId: string;
+    [key: string]: any;
+  };
+}
+
+type ICollectSessionSubmit =
+  | ICollectSessionProxySubmit
+  | ICollectSessionVaultSubmit
+  | ICollectSessionTokenizationSubmit
+  | ICollectSessionCMPCreateCardSubmit
+  | ICollectSessionCMPUpdateCardSubmit;
 
 interface ICollectSessionProps extends IBaseCollectProps {
   environment?: VGSCollectVaultEnvironment;
@@ -74,6 +113,7 @@ interface ICollectSessionProps extends IBaseCollectProps {
   formId?: string;
   configuration?: any;
   authHandler?: VGSCollectSessionAuthHandler;
+  submit?: ICollectSessionSubmit;
   stateCallback?: (state: VGSCollectFormState | null) => void;
   onGetCardAttributesSuccess?: (resp: any) => void;
   onGetCardAttributesError?: (errors: any) => void;
@@ -266,10 +306,28 @@ interface IVGSCollectForm {
   ): any;
 
   /**
+   * Docs: https://docs.verygoodsecurity.com/vault/developer-tools/vgs-collect/js/reference-documentation
+   */
+  createAliases(
+    options: Record<string, any>,
+    successCallback: (status: VGSCollectHttpStatusCode | null, data: any) => any,
+    errorCallback: (error: VGSCollectFormState) => any
+  ): any;
+
+  /**
    * Docs: https://www.verygoodsecurity.com/docs/api/collect/#api-formcreatecard
    */
   createCard(
     options: Partial<VGSCollectSubmitOptions>,
+    successCallback: (status: VGSCollectHttpStatusCode | null, data: any) => any,
+    errorCallback: (error: VGSCollectFormState) => any
+  ): any;
+
+  /**
+   * Docs: https://www.verygoodsecurity.com/docs/api/collect/#api-formupdatecard
+   */
+  updateCard(
+    params: Record<string, any>,
     successCallback: (status: VGSCollectHttpStatusCode | null, data: any) => any,
     errorCallback: (error: VGSCollectFormState) => any
   ): any;
@@ -343,6 +401,12 @@ export type {
   IVGSCollectFileField,
   ICollectFormProps,
   ICollectSessionProps,
+  ICollectSessionSubmit,
+  ICollectSessionProxySubmit,
+  ICollectSessionVaultSubmit,
+  ICollectSessionTokenizationSubmit,
+  ICollectSessionCMPCreateCardSubmit,
+  ICollectSessionCMPUpdateCardSubmit,
   ICollectFormPayloadStructure,
   VGSCollectFormState,
   VGSCollectStateParams,

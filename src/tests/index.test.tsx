@@ -17,6 +17,10 @@ const COLLECT_CONFIG = {
   ROUTE_ID: '4dfja6ec-b5e2-002e-828d-388dfd169997f'
 };
 
+beforeEach(() => {
+  jest.clearAllMocks();
+});
+
 test('Throw error when vaultId is not in received props', () => {
   const originalError = console.error;
   console.error = jest.fn();
@@ -129,7 +133,7 @@ test('VGSCollectSession calls .session() method and subscribes to card attribute
   });
 });
 
-test('VGSCollectSession submits createCard payload without inline auth when session authHandler is provided', async () => {
+test('VGSCollectSession submits CMP createCard payload from submit.api config', async () => {
   render(
     <VGSCollectProvider>
       <VGSCollectSession
@@ -137,8 +141,10 @@ test('VGSCollectSession submits createCard payload without inline auth when sess
         environment={COLLECT_CONFIG.ENVIRONMENT}
         formId='test-simple-form'
         authHandler={jest.fn()}
-        submitParameters={{
-          createCard: {
+        submit={{
+          api: 'cmp',
+          operation: 'createCard',
+          submitParameters: {
             data: {
               cardholder: {
                 name: 'test'
@@ -168,6 +174,296 @@ test('VGSCollectSession submits createCard payload without inline auth when sess
       expect.any(Function),
       expect.any(Function)
     )
+  );
+});
+
+test('VGSCollectSession submits proxy payload from submit.api config', async () => {
+  render(
+    <VGSCollectProvider>
+      <VGSCollectSession
+        vaultId={COLLECT_CONFIG.VAULT_ID}
+        environment={COLLECT_CONFIG.ENVIRONMENT}
+        formId='test-simple-form'
+        submit={{
+          api: 'proxy',
+          action: '/post',
+          routeId: COLLECT_CONFIG.ROUTE_ID,
+          submitParameters: {
+            headers: {
+              Authorization: 'Bearer token'
+            }
+          }
+        }}
+      >
+        <button type='submit'>Submit</button>
+      </VGSCollectSession>
+    </VGSCollectProvider>
+  );
+
+  await waitFor(() => expect(window.VGSCollect.session).toHaveBeenCalled());
+
+  fireEvent.click(screen.getByText('Submit'));
+
+  await waitFor(() => {
+    expect(VGSCollectInstanceMock.setRouteId).toHaveBeenCalledWith(COLLECT_CONFIG.ROUTE_ID);
+    expect(VGSCollectInstanceMock.submit).toHaveBeenCalledWith(
+      '/post',
+      {
+        headers: {
+          Authorization: 'Bearer token'
+        }
+      },
+      expect.any(Function),
+      expect.any(Function)
+    );
+  });
+});
+
+test('VGSCollectSession forwards proxy validation result returned by submit to onErrorCallback', async () => {
+  const onErrorCallback = jest.fn();
+  const validationError = {
+    'card-number': {
+      name: 'card-number',
+      errorMessages: ['Card number is invalid'],
+      isDirty: true,
+      isTouched: true,
+      isFocused: false,
+      isValid: false,
+      isEmpty: false
+    }
+  };
+
+  VGSCollectInstanceMock.submit.mockImplementationOnce(
+    (
+      _action: string,
+      _options: Record<string, unknown>,
+      _successCallback?: (status: number | null, data: any) => void,
+      errorCallback?: (errors: any) => void
+    ) => {
+      if (errorCallback) {
+        errorCallback(validationError);
+      }
+    }
+  );
+
+  render(
+    <VGSCollectProvider>
+      <VGSCollectSession
+        vaultId={COLLECT_CONFIG.VAULT_ID}
+        environment={COLLECT_CONFIG.ENVIRONMENT}
+        formId='test-simple-form'
+        onErrorCallback={onErrorCallback}
+        submit={{
+          api: 'proxy',
+          action: '/post',
+          submitParameters: {}
+        }}
+      >
+        <button type='submit'>Submit</button>
+      </VGSCollectSession>
+    </VGSCollectProvider>
+  );
+
+  await waitFor(() => expect(window.VGSCollect.session).toHaveBeenCalled());
+
+  fireEvent.click(screen.getByText('Submit'));
+
+  await waitFor(() =>
+    expect(VGSCollectInstanceMock.submit).toHaveBeenCalledWith('/post', {}, expect.any(Function), expect.any(Function))
+  );
+
+  await waitFor(() => expect(onErrorCallback).toHaveBeenCalledWith(validationError));
+});
+
+test('VGSCollectSession forwards proxy success result returned by submit to onSubmitCallback', async () => {
+  const onSubmitCallback = jest.fn();
+
+  VGSCollectInstanceMock.submit.mockImplementationOnce(
+    (
+      _action: string,
+      _options: Record<string, unknown>,
+      successCallback?: (status: number | null, data: any) => void
+    ) => {
+      if (successCallback) {
+        successCallback(200, {
+          id: 'submission_123'
+        });
+      }
+    }
+  );
+
+  render(
+    <VGSCollectProvider>
+      <VGSCollectSession
+        vaultId={COLLECT_CONFIG.VAULT_ID}
+        environment={COLLECT_CONFIG.ENVIRONMENT}
+        formId='test-simple-form'
+        onSubmitCallback={onSubmitCallback}
+        submit={{
+          api: 'proxy',
+          action: '/post',
+          submitParameters: {
+            headers: {
+              Authorization: 'Bearer token'
+            }
+          }
+        }}
+      >
+        <button type='submit'>Submit</button>
+      </VGSCollectSession>
+    </VGSCollectProvider>
+  );
+
+  await waitFor(() => expect(window.VGSCollect.session).toHaveBeenCalled());
+
+  fireEvent.click(screen.getByText('Submit'));
+
+  await waitFor(() =>
+    expect(onSubmitCallback).toHaveBeenCalledWith(200, {
+      id: 'submission_123'
+    })
+  );
+});
+
+test('VGSCollectSession submits vault payload from submit.api config', async () => {
+  render(
+    <VGSCollectProvider>
+      <VGSCollectSession
+        vaultId={COLLECT_CONFIG.VAULT_ID}
+        environment={COLLECT_CONFIG.ENVIRONMENT}
+        formId='test-simple-form'
+        submit={{
+          api: 'vault',
+          submitParameters: {
+            access_token: 'vault-token'
+          }
+        }}
+      >
+        <button type='submit'>Submit</button>
+      </VGSCollectSession>
+    </VGSCollectProvider>
+  );
+
+  await waitFor(() => expect(window.VGSCollect.session).toHaveBeenCalled());
+
+  fireEvent.click(screen.getByText('Submit'));
+
+  await waitFor(() =>
+    expect(VGSCollectInstanceMock.createAliases).toHaveBeenCalledWith(
+      {
+        access_token: 'vault-token'
+      },
+      expect.any(Function),
+      expect.any(Function)
+    )
+  );
+});
+
+test('VGSCollectSession submits tokenization payload from submit.api config', async () => {
+  render(
+    <VGSCollectProvider>
+      <VGSCollectSession
+        vaultId={COLLECT_CONFIG.VAULT_ID}
+        environment={COLLECT_CONFIG.ENVIRONMENT}
+        formId='test-simple-form'
+        submit={{
+          api: 'tokenization',
+          routeId: COLLECT_CONFIG.ROUTE_ID
+        }}
+      >
+        <button type='submit'>Submit</button>
+      </VGSCollectSession>
+    </VGSCollectProvider>
+  );
+
+  await waitFor(() => expect(window.VGSCollect.session).toHaveBeenCalled());
+
+  fireEvent.click(screen.getByText('Submit'));
+
+  await waitFor(() => {
+    expect(VGSCollectInstanceMock.setRouteId).toHaveBeenCalledWith(COLLECT_CONFIG.ROUTE_ID);
+    expect(VGSCollectInstanceMock.tokenize).toHaveBeenCalledWith(expect.any(Function), expect.any(Function));
+  });
+});
+
+test('VGSCollectSession submits CMP updateCard payload from submit.api config', async () => {
+  render(
+    <VGSCollectProvider>
+      <VGSCollectSession
+        vaultId={COLLECT_CONFIG.VAULT_ID}
+        environment={COLLECT_CONFIG.ENVIRONMENT}
+        formId='test-simple-form'
+        submit={{
+          api: 'cmp',
+          operation: 'updateCard',
+          params: {
+            cardId: 'card_123'
+          }
+        }}
+      >
+        <button type='submit'>Submit</button>
+      </VGSCollectSession>
+    </VGSCollectProvider>
+  );
+
+  await waitFor(() => expect(window.VGSCollect.session).toHaveBeenCalled());
+
+  fireEvent.click(screen.getByText('Submit'));
+
+  await waitFor(() =>
+    expect(VGSCollectInstanceMock.updateCard).toHaveBeenCalledWith(
+      {
+        cardId: 'card_123'
+      },
+      expect.any(Function),
+      expect.any(Function)
+    )
+  );
+});
+
+test('VGSCollectSession calls onSubmitCallback for CMP updateCard success', async () => {
+  const onSubmitCallback = jest.fn();
+
+  VGSCollectInstanceMock.updateCard.mockImplementationOnce(
+    (_params: any, successCallback: (status: number, resp: any) => void) => {
+      successCallback(200, {
+        data: {
+          id: 'card_123'
+        }
+      });
+    }
+  );
+
+  render(
+    <VGSCollectProvider>
+      <VGSCollectSession
+        vaultId={COLLECT_CONFIG.VAULT_ID}
+        environment={COLLECT_CONFIG.ENVIRONMENT}
+        formId='test-simple-form'
+        onSubmitCallback={onSubmitCallback}
+        submit={{
+          api: 'cmp',
+          operation: 'updateCard',
+          params: {
+            cardId: 'card_123'
+          }
+        }}
+      >
+        <button type='submit'>Submit</button>
+      </VGSCollectSession>
+    </VGSCollectProvider>
+  );
+
+  await waitFor(() => expect(window.VGSCollect.session).toHaveBeenCalled());
+
+  fireEvent.click(screen.getByText('Submit'));
+
+  await waitFor(() =>
+    expect(onSubmitCallback).toHaveBeenCalledWith(200, {
+      data: {
+        id: 'card_123'
+      }
+    })
   );
 });
 

@@ -34,8 +34,6 @@ jest.mock(
         return <form data-testid='session-form'>{children}</form>;
       },
       {
-        CardholderField: ({ defaultValue }: any) => <div data-testid='cardholder-field'>{defaultValue || ''}</div>,
-        CardNumberField: () => <div data-testid='card-number-field' />,
         CardExpirationDateField: ({ defaultValue }: any) => (
           <div data-testid='card-exp-field'>{defaultValue || ''}</div>
         ),
@@ -47,9 +45,9 @@ jest.mock(
   { virtual: true }
 );
 
-const Cmp = require('../features/Cmp').default;
+const CmpUpdateCard = require('../features/CmpUpdateCard').default;
 
-describe('CMP demo page', () => {
+describe('CMP update card demo page', () => {
   let consoleLogSpy: jest.SpyInstance;
 
   beforeEach(() => {
@@ -59,7 +57,7 @@ describe('CMP demo page', () => {
     mockUseVGSCollectState.mockReset();
     mockUseVGSCollectState.mockReturnValue([
       {
-        pan: {
+        cvc: {
           isDirty: true,
           isValid: true,
           errorMessages: []
@@ -73,8 +71,8 @@ describe('CMP demo page', () => {
     consoleLogSpy.mockRestore();
   });
 
-  test('loads Collect.js and renders VGSCollectSession with expected props', async () => {
-    render(<Cmp />);
+  test('loads Collect.js and renders update card session with expected props', async () => {
+    render(<CmpUpdateCard />);
 
     await waitFor(() => expect(screen.getByTestId('session-form')).toBeInTheDocument());
 
@@ -84,38 +82,23 @@ describe('CMP demo page', () => {
       version: demoEnv.COLLECT_VERSION
     });
 
-    expect(screen.getByText('CMP Session')).toBeInTheDocument();
+    expect(screen.getByText('Card Management (Update Card)')).toBeInTheDocument();
     expect(screen.getByText(`Using formId: ${demoEnv.FORM_ID}`)).toBeInTheDocument();
-    expect(screen.getByTestId('cardholder-field')).toHaveTextContent('John Doe');
-    expect(screen.getByTestId('card-exp-field')).toHaveTextContent('12 / 38');
-    expect(screen.getByTestId('card-cvc-field')).toHaveTextContent('123');
+    expect(screen.getByText('Card ID: CRDe4CxWRkZZYZ8cGumTbESMP')).toBeInTheDocument();
+    expect(screen.getByTestId('card-exp-field')).toBeInTheDocument();
+    expect(screen.getByTestId('card-cvc-field')).toBeInTheDocument();
 
     expect(latestSessionProps.vaultId).toBe(demoEnv.VAULT_ID);
     expect(latestSessionProps.environment).toBe(demoEnv.ENVIRONMENT);
     expect(latestSessionProps.authHandler).toEqual(expect.any(Function));
     expect(latestSessionProps.stateCallback).toEqual(expect.any(Function));
     expect(latestSessionProps.onErrorCallback).toEqual(expect.any(Function));
-    expect(latestSessionProps.onGetCardAttributesSuccess).toEqual(expect.any(Function));
-    expect(latestSessionProps.onGetCardAttributesError).toEqual(expect.any(Function));
     expect(latestSessionProps.onSubmitCallback).toEqual(expect.any(Function));
     expect(latestSessionProps.submit).toEqual({
       api: 'cmp',
-      operation: 'createCard',
-      submitParameters: {
-        data: {
-          cardholder: {
-            address: {
-              address1: '123 Main St',
-              address2: 'Suite 456',
-              address3: 'Line 3',
-              address4: 'Line 4',
-              city: 'LA',
-              region: 'CA',
-              postal_code: '12345',
-              country: 'USA'
-            }
-          }
-        }
+      operation: 'updateCard',
+      params: {
+        cardId: 'CRDe4CxWRkZZYZ8cGumTbESMP'
       }
     });
   });
@@ -128,7 +111,7 @@ describe('CMP demo page', () => {
       })
     });
 
-    render(<Cmp />);
+    render(<CmpUpdateCard />);
 
     await waitFor(() => expect(latestSessionProps?.authHandler).toEqual(expect.any(Function)));
 
@@ -136,74 +119,37 @@ describe('CMP demo page', () => {
     expect(global.fetch).toHaveBeenCalledWith('/api/access-token');
   });
 
-  test('authHandler rejects when the token endpoint responds with an error', async () => {
-    (global.fetch as jest.Mock).mockResolvedValue({
-      ok: false,
-      json: async () => ({
-        error: 'token request failed'
-      })
-    });
+  test('renders update card response, errors and state from callbacks', async () => {
+    render(<CmpUpdateCard />);
 
-    render(<Cmp />);
-
-    await waitFor(() => expect(latestSessionProps?.authHandler).toEqual(expect.any(Function)));
-
-    await expect(latestSessionProps.authHandler()).rejects.toThrow('token request failed');
-  });
-
-  test('renders card attributes, CMP response, cvc alias, errors and state from callbacks', async () => {
-    render(<Cmp />);
-
-    await waitFor(() => expect(latestSessionProps?.onGetCardAttributesSuccess).toEqual(expect.any(Function)));
-
-    await act(async () => {
-      latestSessionProps.onGetCardAttributesSuccess({
-        attributes: {
-          brand: 'visa'
-        }
-      });
-    });
-
-    expect(screen.getByText(/"brand": "visa"/)).toBeInTheDocument();
+    await waitFor(() => expect(latestSessionProps?.onSubmitCallback).toEqual(expect.any(Function)));
 
     await act(async () => {
       latestSessionProps.onSubmitCallback(200, {
         data: {
+          id: 'CRDe4CxWRkZZYZ8cGumTbESMP',
           attributes: {
-            cvc_alias: 'tok_cvc_123',
-            pan_alias: 'tok_pan_123'
+            cvc_alias: 'tok_cvc_456'
           }
         }
       });
     });
 
-    expect(screen.getAllByText(/"cvc_alias": "tok_cvc_123"/)).toHaveLength(2);
-    expect(screen.getByText(/"pan_alias": "tok_pan_123"/)).toBeInTheDocument();
+    expect(screen.getByText('Card ID: CRDe4CxWRkZZYZ8cGumTbESMP')).toBeInTheDocument();
+    expect(screen.getByText(/"cardId": "CRDe4CxWRkZZYZ8cGumTbESMP"/)).toBeInTheDocument();
+    expect(screen.getByText(/"id": "CRDe4CxWRkZZYZ8cGumTbESMP"/)).toBeInTheDocument();
+    expect(screen.getByText(/"cvc_alias": "tok_cvc_456"/)).toBeInTheDocument();
     expect(screen.getByText(/"isDirty": true/)).toBeInTheDocument();
     expect(screen.getByText(/"isValid": true/)).toBeInTheDocument();
 
     await act(async () => {
       latestSessionProps.onErrorCallback({
-        pan: {
-          errorMessages: ['Card number is invalid']
+        cvc: {
+          errorMessages: ['CVC is invalid']
         }
       });
     });
 
-    expect(screen.getByText(/Card number is invalid/)).toBeInTheDocument();
-  });
-
-  test('renders card attributes errors from the session error event', async () => {
-    render(<Cmp />);
-
-    await waitFor(() => expect(latestSessionProps?.onGetCardAttributesError).toEqual(expect.any(Function)));
-
-    await act(async () => {
-      latestSessionProps.onGetCardAttributesError({
-        errors: ['Card attributes failed']
-      });
-    });
-
-    expect(screen.getByText(/Card attributes failed/)).toBeInTheDocument();
+    expect(screen.getByText(/CVC is invalid/)).toBeInTheDocument();
   });
 });

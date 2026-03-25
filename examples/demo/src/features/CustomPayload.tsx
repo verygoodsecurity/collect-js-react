@@ -1,6 +1,6 @@
 import {
   ICollectFormPayloadStructure,
-  VGSCollectForm,
+  VGSCollectSession,
   VGSCollectFormState,
   VGSCollectHttpStatusCode,
   VGSCollectVaultEnvironment,
@@ -10,9 +10,9 @@ import {
 import React, { useEffect, useState } from 'react';
 
 import { loadVGSCollect } from '@vgs/collect-js';
-import { COLLECT_VERSION, ENVIRONMENT, VAULT_ID } from '../env';
+import { COLLECT_VERSION, ENVIRONMENT, FORM_ID, VAULT_ID } from '../env';
 
-const { TextField, CardNumberField } = VGSCollectForm;
+const { TextField, CardNumberField } = VGSCollectSession;
 
 const CustomPayload = () => {
   const [isVGSCollectScriptLoaded, setCollectScriptLoaded] = useState(false);
@@ -37,6 +37,7 @@ const CustomPayload = () => {
 
   const [state] = useVGSCollectState();
   const [response] = useVGSCollectResponse();
+  const sessionFormId = FORM_ID || 'test-simple-form';
 
   useEffect(() => {
     /**
@@ -108,23 +109,26 @@ const CustomPayload = () => {
            * VGS Collect form wrapper element. Abstraction over the VGSCollect.create()
            * https://www.verygoodsecurity.com/docs/api/collect/#api-vgscollectcreate
            */}
-          <VGSCollectForm
+          <VGSCollectSession
             vaultId={VAULT_ID}
             environment={ENVIRONMENT as VGSCollectVaultEnvironment}
-            action='/post'
-            submitParameters={{
-              // JSON request body generated on the form submission including custom parameters
-              // https://www.verygoodsecurity.com/docs/vgs-collect/js/integration#form-submit
-              data: (fields: ICollectFormPayloadStructure) => {
-                return {
-                  cusomData: inputValue,
-                  textField: fields.textField,
-                  cardNumber: fields['card-number']
-                };
-              },
-              headers: fetchHeaders
+            submit={{
+              api: 'proxy',
+              action: '/post',
+              submitParameters: {
+                // JSON request body generated on the form submission including custom parameters
+                // https://www.verygoodsecurity.com/docs/vgs-collect/js/integration#form-submit
+                data: (fields: ICollectFormPayloadStructure) => {
+                  return {
+                    cusomData: inputValue,
+                    textField: fields.textField,
+                    cardNumber: fields['card-number']
+                  };
+                },
+                headers: fetchHeaders
+              }
             }}
-            onUpdateCallback={onUpdateCallback}
+            stateCallback={onUpdateCallback}
             onSubmitCallback={onSubmitCallback}
             onErrorCallback={onErrorCallback}
           >
@@ -147,7 +151,7 @@ const CustomPayload = () => {
               }}
             />
             <button type='submit'>Submit</button>
-          </VGSCollectForm>
+          </VGSCollectSession>
         </div>
       )}
     </>
