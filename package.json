@@ -95,7 +95,7 @@
     "react-18": "npm:react@18.3.1",
     "react-19": "npm:react@19.2.4",
     "react-dom": "^19.2.4",
-    "react-dom-16": "npm:react-dom@16.14.0",
+    "react-dom-v16": "npm:react-dom@16.14.0",
     "react-dom-17": "npm:react-dom@17.0.2",
     "react-dom-18": "npm:react-dom@18.3.1",
     "react-dom-19": "npm:react-dom@19.2.4",
@@ -118,8 +118,16 @@
     "dist"
   ],
   "resolutions": {
+    "**/@typescript-eslint/typescript-estree/semver": "7.5.2",
+    "**/anymatch/picomatch": "2.3.2",
+    "**/flat-cache/flatted": "3.4.2",
+    "**/jest-snapshot/semver": "7.5.2",
+    "**/jest-util/picomatch": "2.3.2",
+    "**/micromatch/picomatch": "2.3.2",
+    "**/ts-jest/semver": "7.5.2",
+    "eslint/cross-spawn": "6.0.6",
     "nth-check": "2.1.1",
-    "postcss": "8.4.21",
+    "postcss": "8.5.10",
     "webpack": "5.76.0"
   },
   "dependencies": {},
