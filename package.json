@@ -9,7 +9,7 @@
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/verygoodsecurity/vgs-collect-js"
+    "url": "git+https://github.com/verygoodsecurity/collect-js-react.git"   
   },
   "exports": {
     ".": {
