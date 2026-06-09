@@ -1,6 +1,6 @@
 {
   "name": "@vgs/collect-js-react",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "VGS Collect.js React wrapper",
   "author": "vgs",
   "license": "MIT",
@@ -9,7 +9,7 @@
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/verygoodsecurity/collect-js-react.git"   
+    "url": "git+https://github.com/verygoodsecurity/collect-js-react.git"
   },
   "exports": {
     ".": {
