@@ -90,7 +90,7 @@ const Basic = React.memo(() => {
 
   const onErrorCallback = (errors: VGSCollectFormState) => {
     /**
-     * Receive information about Erorrs (client-side validation)
+     * Receive information about Errors (client-side validation)
      */
   };
 
@@ -190,7 +190,22 @@ const Basic = React.memo(() => {
              * VGS Collect zip code field component:
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield
              */}
-            <ZipCodeField name='zip-code' validations={['required']} css={VGSCollectFieldStyles} />
+            <ZipCodeField
+              name='zip-code'
+              validations={['required']}
+              css={VGSCollectFieldStyles}
+            />
+            {/**
+             * VGS Collect phone number field component with custom masking:
+             * https://www.verygoodsecurity.com/docs/api/collect/#api-fieldmask
+             */}
+            <TextField
+              name='phone-number'
+              validations={['required']}
+              placeholder='Phone Number'
+              mask='+1 (999) 999-9999'
+              css={VGSCollectFieldStyles}
+            />
             {/**
              * VGS Collect password field component:
              * https://www.verygoodsecurity.com/docs/api/collect/#api-formfield

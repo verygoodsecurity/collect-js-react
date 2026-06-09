@@ -236,6 +236,17 @@ Field components are exposed on both `VGSCollectSession` and `VGSCollectForm`.
 
 The complete list of supported props is documented here: https://www.verygoodsecurity.com/docs/api/collect/#api-formfield. Any property in that reference can be passed to a field component using the same name (`validations`, `css`, `classes`, `style`, `placeholder`, `autoFocus`, `disabled`, `readonly`, `inputMode`, `defaultValue`, `serializers`, `tokenization`, etc.).
 
+Field masking mirrors the Collect.js `field.mask(mask, maskChar, formatChars)` API for `text`, `textarea`, `password`, and `ssn` fields. Pass `mask`, and optionally `maskChar` and `formatChars`, on the field component.
+
+```javascript
+<TextField
+  name='employee-id'
+  validations={['required']}
+  mask='AAA-999'
+  formatChars={{ A: '[A-Za-z]' }}
+/>
+```
+
 _Example (full set of field types):_
 
 ```javascript

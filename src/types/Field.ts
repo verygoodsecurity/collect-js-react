@@ -86,7 +86,7 @@ interface IVGSCollectFieldInstance {
   /**
    * Docs: https://www.verygoodsecurity.com/docs/api/collect/#api-fieldmask
    */
-  mask(mask: string, maskChar: string, formatChar: string): void;
+  mask(mask: string, maskChar?: string | null, formatChars?: Record<string, string>): void;
 
   /**
    * Docs: https://www.verygoodsecurity.com/docs/api/collect/#api-fieldreplacepattern

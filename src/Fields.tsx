@@ -34,9 +34,33 @@ type GeneralFieldProps = {
   onKeyPress: (info: VGSCollectKeyboardEventData) => void;
 };
 
+type FieldMaskProps = {
+  mask?: string;
+  maskChar?: string | null;
+  formatChars?: Record<string, string>;
+};
+
+type CollectFieldProps<T> = Partial<T & GeneralFieldProps>;
+type MaskedCollectFieldProps<T> = Partial<T & GeneralFieldProps & FieldMaskProps>;
+
+const MASK_SUPPORTED_FIELD_TYPES = ['text', 'textarea', 'password', 'ssn'];
+
 function RenderField(props: any) {
-  const { className, onFocus, onBlur, onUpdate, onDelete, onKeyPress, onKeyUp, onKeyDown, style, ...fieldPropsRaw } =
-    props;
+  const {
+    className,
+    onFocus,
+    onBlur,
+    onUpdate,
+    onDelete,
+    onKeyPress,
+    onKeyUp,
+    onKeyDown,
+    style,
+    mask,
+    maskChar,
+    formatChars,
+    ...fieldPropsRaw
+  } = props;
 
   const fieldProps = {
     ...fieldPropsRaw,
@@ -45,6 +69,17 @@ function RenderField(props: any) {
 
   if (!props.name) {
     throw new Error(`@vgs/collect-js-react: name attribute for ${props.type} is required.`);
+  }
+
+  const hasMask = typeof mask !== 'undefined';
+  const hasMaskOptions = typeof maskChar !== 'undefined' || typeof formatChars !== 'undefined';
+
+  if (!hasMask && hasMaskOptions) {
+    throw new Error('@vgs/collect-js-react: mask field prop is required when maskChar or formatChars is provided.');
+  }
+
+  if (hasMask && !MASK_SUPPORTED_FIELD_TYPES.includes(props.type)) {
+    throw new Error(`@vgs/collect-js-react: mask field prop is not supported for ${props.type} fields.`);
   }
 
   const [fieldId] = React.useState(() => `vgs-${generateUUID()}`);
@@ -65,6 +100,10 @@ function RenderField(props: any) {
 
     if (Object.keys(collectFormInstance).length !== 0 && formState?.formCreated === true) {
       const secureField = collectFormInstance.field(`#${fieldId}`, fieldProps);
+
+      if (hasMask) {
+        secureField.mask(mask, maskChar ?? null, formatChars);
+      }
 
       eventsToListen.forEach((event) => {
         secureField.on(FIELD_EVENTS[event], (info) => {
@@ -101,7 +140,7 @@ function RenderField(props: any) {
   );
 }
 
-const TextField = React.memo((props: Partial<IVGSCollectTextField & GeneralFieldProps>) => {
+const TextField = React.memo((props: MaskedCollectFieldProps<IVGSCollectTextField>) => {
   return (
     <RenderField
       {...Object.assign(
@@ -114,7 +153,7 @@ const TextField = React.memo((props: Partial<IVGSCollectTextField & GeneralField
   );
 });
 
-const CardholderField = React.memo((props: Partial<IVGSCollectCardholderField & GeneralFieldProps>) => {
+const CardholderField = React.memo((props: MaskedCollectFieldProps<IVGSCollectCardholderField>) => {
   return (
     <RenderField
       {...Object.assign(
@@ -127,7 +166,7 @@ const CardholderField = React.memo((props: Partial<IVGSCollectCardholderField & 
   );
 });
 
-const CardNumberField = React.memo((props: Partial<IVGSCollectCardNumberField & GeneralFieldProps>) => {
+const CardNumberField = React.memo((props: CollectFieldProps<IVGSCollectCardNumberField>) => {
   return (
     <RenderField
       {...Object.assign(
@@ -140,7 +179,7 @@ const CardNumberField = React.memo((props: Partial<IVGSCollectCardNumberField & 
   );
 });
 
-const CardExpirationDateField = React.memo((props: Partial<IVGSCollectCardExpirationField & GeneralFieldProps>) => {
+const CardExpirationDateField = React.memo((props: CollectFieldProps<IVGSCollectCardExpirationField>) => {
   return (
     <RenderField
       {...Object.assign(
@@ -153,7 +192,7 @@ const CardExpirationDateField = React.memo((props: Partial<IVGSCollectCardExpira
   );
 });
 
-const CardSecurityCodeField = React.memo((props: Partial<IVGSCollectCardCVCField & GeneralFieldProps>) => {
+const CardSecurityCodeField = React.memo((props: CollectFieldProps<IVGSCollectCardCVCField>) => {
   return (
     <RenderField
       {...Object.assign(
@@ -166,7 +205,7 @@ const CardSecurityCodeField = React.memo((props: Partial<IVGSCollectCardCVCField
   );
 });
 
-const PasswordField = React.memo((props: Partial<IVGSCollectPasswordField & GeneralFieldProps>) => {
+const PasswordField = React.memo((props: MaskedCollectFieldProps<IVGSCollectPasswordField>) => {
   return (
     <RenderField
       {...Object.assign(
@@ -179,7 +218,7 @@ const PasswordField = React.memo((props: Partial<IVGSCollectPasswordField & Gene
   );
 });
 
-const SSNField = React.memo((props: Partial<IVGSCollectSSNField & GeneralFieldProps>) => {
+const SSNField = React.memo((props: MaskedCollectFieldProps<IVGSCollectSSNField>) => {
   return (
     <RenderField
       {...Object.assign(
@@ -192,7 +231,7 @@ const SSNField = React.memo((props: Partial<IVGSCollectSSNField & GeneralFieldPr
   );
 });
 
-const ZipCodeField = React.memo((props: Partial<IVGSCollectZipCodeField & GeneralFieldProps>) => {
+const ZipCodeField = React.memo((props: CollectFieldProps<IVGSCollectZipCodeField>) => {
   return (
     <RenderField
       {...Object.assign(
@@ -205,7 +244,7 @@ const ZipCodeField = React.memo((props: Partial<IVGSCollectZipCodeField & Genera
   );
 });
 
-const TextareaField = React.memo((props: Partial<IVGSCollectTextareaField & GeneralFieldProps>) => {
+const TextareaField = React.memo((props: MaskedCollectFieldProps<IVGSCollectTextareaField>) => {
   return (
     <RenderField
       {...Object.assign(
@@ -218,7 +257,7 @@ const TextareaField = React.memo((props: Partial<IVGSCollectTextareaField & Gene
   );
 });
 
-const NumberField = React.memo((props: Partial<IVGSCollectNumberField & GeneralFieldProps>) => {
+const NumberField = React.memo((props: CollectFieldProps<IVGSCollectNumberField>) => {
   return (
     <RenderField
       {...Object.assign(
@@ -231,7 +270,7 @@ const NumberField = React.memo((props: Partial<IVGSCollectNumberField & GeneralF
   );
 });
 
-const DateField = React.memo((props: Partial<IVGSCollectDateField & GeneralFieldProps>) => {
+const DateField = React.memo((props: CollectFieldProps<IVGSCollectDateField>) => {
   return (
     <RenderField
       {...Object.assign(
@@ -244,7 +283,7 @@ const DateField = React.memo((props: Partial<IVGSCollectDateField & GeneralField
   );
 });
 
-const FileField = React.memo((props: Partial<IVGSCollectFileField & GeneralFieldProps>) => {
+const FileField = React.memo((props: CollectFieldProps<IVGSCollectFileField>) => {
   return (
     <RenderField
       {...Object.assign(

@@ -6,7 +6,7 @@ import { VGSCollectProvider, VGSCollectForm, VGSCollectSession } from '../index'
 import { VGSCollectVaultEnvironment } from '../types/Form';
 import { getFormInstance } from '../state';
 
-import { VGSCollectInstanceMock } from './mocks';
+import { VGSCollectFieldInstanceMock, VGSCollectInstanceMock } from './mocks';
 
 import { generateUUID } from '../utils';
 
@@ -93,6 +93,87 @@ test('Generate <div> wrapper element for each iframe', () => {
     </VGSCollectProvider>
   );
   expect(screen.getAllByTestId('vgs-collect-field-wrapper')).toHaveLength(3);
+});
+
+test('Field props call .mask() with mask, maskChar, and formatChars', async () => {
+  const formatChars = { X: '[0-9]' };
+
+  render(
+    <VGSCollectProvider>
+      <VGSCollectForm vaultId={COLLECT_CONFIG.VAULT_ID} environment={COLLECT_CONFIG.ENVIRONMENT}>
+        <VGSCollectForm.TextField name='text' mask='XXXXX' maskChar={null} formatChars={formatChars} />
+      </VGSCollectForm>
+    </VGSCollectProvider>
+  );
+
+  await waitFor(() => expect(VGSCollectFieldInstanceMock.mask).toHaveBeenCalledWith('XXXXX', null, formatChars));
+
+  expect(VGSCollectInstanceMock.field).toHaveBeenCalledWith(
+    expect.any(String),
+    expect.not.objectContaining({
+      mask: 'XXXXX',
+      maskChar: null,
+      formatChars
+    })
+  );
+});
+
+test('Field props default maskChar to null when only mask is provided', async () => {
+  render(
+    <VGSCollectProvider>
+      <VGSCollectForm vaultId={COLLECT_CONFIG.VAULT_ID} environment={COLLECT_CONFIG.ENVIRONMENT}>
+        <VGSCollectForm.SSNField name='ssn' mask='999-99-9999' />
+      </VGSCollectForm>
+    </VGSCollectProvider>
+  );
+
+  await waitFor(() => expect(VGSCollectFieldInstanceMock.mask).toHaveBeenCalledWith('999-99-9999', null, undefined));
+});
+
+test('Field props require mask when maskChar or formatChars is provided', () => {
+  const originalError = console.error;
+  console.error = jest.fn();
+
+  expect(() =>
+    render(
+      <VGSCollectProvider>
+        <VGSCollectForm vaultId={COLLECT_CONFIG.VAULT_ID} environment={COLLECT_CONFIG.ENVIRONMENT}>
+          <VGSCollectForm.TextField name='text' maskChar='*' />
+        </VGSCollectForm>
+      </VGSCollectProvider>
+    )
+  ).toThrowError('@vgs/collect-js-react: mask field prop is required when maskChar or formatChars is provided.');
+
+  console.error = originalError;
+});
+
+test('Field props reject mask for unsupported field types', () => {
+  const originalError = console.error;
+  console.error = jest.fn();
+
+  expect(() =>
+    render(
+      <VGSCollectProvider>
+        <VGSCollectForm vaultId={COLLECT_CONFIG.VAULT_ID} environment={COLLECT_CONFIG.ENVIRONMENT}>
+          {/** @ts-ignore */}
+          <VGSCollectForm.CardNumberField name='card-number' mask='9999 9999 9999 9999' />
+        </VGSCollectForm>
+      </VGSCollectProvider>
+    )
+  ).toThrowError('@vgs/collect-js-react: mask field prop is not supported for card-number fields.');
+
+  expect(() =>
+    render(
+      <VGSCollectProvider>
+        <VGSCollectForm vaultId={COLLECT_CONFIG.VAULT_ID} environment={COLLECT_CONFIG.ENVIRONMENT}>
+          {/** @ts-ignore */}
+          <VGSCollectForm.ZipCodeField name='zip-code' mask='XXXXX' />
+        </VGSCollectForm>
+      </VGSCollectProvider>
+    )
+  ).toThrowError('@vgs/collect-js-react: mask field prop is not supported for zip-code fields.');
+
+  console.error = originalError;
 });
 
 test('VGSCollectSession calls .session() method and subscribes to card attributes events', async () => {

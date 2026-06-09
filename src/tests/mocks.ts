@@ -3,7 +3,8 @@ import type { IVGSCollect, IVGSCollectForm } from '../types/Form';
 export const VGSCollectFieldInstanceMock = {
   on: jest.fn(),
   off: jest.fn(),
-  delete: jest.fn()
+  delete: jest.fn(),
+  mask: jest.fn()
 };
 
 export const VGSCollectInstanceMock = {
