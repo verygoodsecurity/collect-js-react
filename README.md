@@ -34,6 +34,7 @@
 - [Legacy `VGSCollectForm` API](#legacy-vgscollectform-api)
 - [Documentation](#documentation)
 - [Examples](#examples)
+- [AI Agent Integration](#ai-agent-integration)
 - [Contact](#contact)
 - [License](#license)
 
@@ -764,6 +765,28 @@ react19 fixture: 3019
 External:
 
 - [Stackblitz](https://stackblitz.com/edit/react-ts-kuxtvv?file=App.tsx)
+
+## AI Agent Integration
+
+This repository ships a public AI skill at [`skills/vgs-collect-react-guide/SKILL.md`](./skills/vgs-collect-react-guide/SKILL.md) for AI agents integrating VGS Collect into React apps.
+
+Recommended: install the skill with `skills.sh`. This is the easiest way to give a compatible AI agent the repository-specific guidance it needs for `@vgs/collect-js-react` integrations.
+
+The installed skill bundle includes React-specific references and examples. Vanilla JavaScript, direct CDN, and standalone `@vgs/collect-js` loader guidance is packaged separately from this repository skill.
+
+What the skill is useful for:
+
+- integrating VGS Collect with React components from `@vgs/collect-js-react`
+- configuring `VGSCollectSession` for proxy submission, Vault alias creation, tokenization, or Card Management Platform card creation and update flows
+- choosing secure React field components and validation rules for card data, SSN, passwords, files, dates, and generic sensitive fields
+- preserving the secure iframe collection model and avoiding examples that place PAN, CVC, SSN, passwords, OAuth tokens, client secrets, production route IDs, or production CNAME details in browser code
+- keeping generated guidance aligned with the installed package versions, pinned Collect.js CDN version, and supported React compatibility range when those versions can be detected
+
+Install the skill with `skills.sh`:
+
+```bash
+npx skills add https://github.com/verygoodsecurity/collect-js-react --skill vgs-collect-react-guide
+```
 
 ## Contact
 

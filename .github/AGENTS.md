@@ -148,6 +148,16 @@ a detailed OWASP checklist.
 - Keep `README.md` focused on customers integrating the package and using its
   public API. Do not add internal implementation details, agent workflow notes,
   private security triage details, or repo-maintenance process there.
+- Treat `skills/` as public customer integration guidance. Keep committed skill
+  routers, references, and examples accurate against the current source, package
+  metadata, README, and examples. When a requested change includes packaged
+  skill artifacts outside `skills/`, keep those artifacts accurate as well.
+- When public API, documented behavior, supported environments, compatibility
+  ranges, or package versions change, update the relevant public skill router,
+  references, and examples in the same change.
+- Back public skill API and version claims with current repo evidence. If a
+  claim cannot be verified, label it as `HYPOTHESIS` and add a TODO instead of
+  presenting it as fact.
 
 ## Validation Expectations
 
@@ -178,4 +188,6 @@ Before finalizing `.github` changes, confirm:
 - Contributor instructions and `README.md` were checked for required updates,
   with README changes limited to customer-facing public API and integration
   content.
+- Public `skills/` were checked for required updates when public API, versions,
+  compatibility, setup, examples, or documented behavior changed.
 - Required validation was run, or the blocker was reported.
