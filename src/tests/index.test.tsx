@@ -4,7 +4,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 import { VGSCollectProvider, VGSCollectForm, VGSCollectSession } from '../index';
 import { VGSCollectVaultEnvironment } from '../types/Form';
-import { getFormInstance } from '../state';
+import { getFormInstance, setFormInstance } from '../state';
 
 import { VGSCollectFieldInstanceMock, VGSCollectInstanceMock } from './mocks';
 
@@ -17,7 +17,15 @@ const COLLECT_CONFIG = {
   ROUTE_ID: '4dfja6ec-b5e2-002e-828d-388dfd169997f'
 };
 
+const VGS_COLLECT_CREATE_LOAD_ERROR =
+  '@vgs/collect-js-react: VGS Collect.js is not loaded or does not expose .create(). Load Collect.js before rendering VGS Collect React fields. If you use the npm loader, install @vgs/collect-js@^0.7.3 and wait for loadVGSCollect(...) to resolve.';
+const VGS_COLLECT_SESSION_LOAD_ERROR =
+  '@vgs/collect-js-react: VGS Collect.js is not loaded or does not expose .session(). Load Collect.js before rendering VGS Collect React fields. If you use the npm loader, install @vgs/collect-js@^0.7.3 and wait for loadVGSCollect(...) to resolve.';
+const VGSCollectMock = window.VGSCollect;
+
 beforeEach(() => {
+  window.VGSCollect = VGSCollectMock;
+  setFormInstance({} as any);
   jest.clearAllMocks();
 });
 
@@ -35,6 +43,24 @@ test('Throw error when vaultId is not in received props', () => {
   ).toThrowError('@vgs/collect-js-react: vaultId is required.');
 
   console.error = originalError;
+});
+
+test('VGSCollectForm throws when Collect.js is not loaded before rendering fields', () => {
+  const originalError = console.error;
+  console.error = jest.fn();
+  (window as any).VGSCollect = undefined;
+
+  try {
+    expect(() =>
+      render(
+        <VGSCollectProvider>
+          <VGSCollectForm vaultId={COLLECT_CONFIG.VAULT_ID} environment={COLLECT_CONFIG.ENVIRONMENT} />
+        </VGSCollectProvider>
+      )
+    ).toThrowError(VGS_COLLECT_CREATE_LOAD_ERROR);
+  } finally {
+    console.error = originalError;
+  }
 });
 
 test('VGSCollectForm calls .create() method', () => {
@@ -174,6 +200,26 @@ test('Field props reject mask for unsupported field types', () => {
   ).toThrowError('@vgs/collect-js-react: mask field prop is not supported for zip-code fields.');
 
   console.error = originalError;
+});
+
+test('VGSCollectSession throws when the loaded Collect.js version does not expose .session()', () => {
+  const originalError = console.error;
+  console.error = jest.fn();
+  (window as any).VGSCollect = {
+    create: jest.fn()
+  };
+
+  try {
+    expect(() =>
+      render(
+        <VGSCollectProvider>
+          <VGSCollectSession vaultId={COLLECT_CONFIG.VAULT_ID} environment={COLLECT_CONFIG.ENVIRONMENT} />
+        </VGSCollectProvider>
+      )
+    ).toThrowError(VGS_COLLECT_SESSION_LOAD_ERROR);
+  } finally {
+    console.error = originalError;
+  }
 });
 
 test('VGSCollectSession calls .session() method and subscribes to card attributes events', async () => {

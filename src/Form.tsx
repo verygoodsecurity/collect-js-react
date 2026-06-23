@@ -17,6 +17,7 @@ import { FormStateProvider, DispatchFormContext } from './formStateProvider';
 import { ICollectFormProps, IVGSCollectForm, VGSCollectFormState } from './types/Form';
 import React, { useContext, useEffect } from 'react';
 import { getFormInstance, setFormInstance } from './state';
+import { assertVGSCollectLoaded } from './utils';
 
 import { HttpStatusCode } from './types/HttpStatusCode';
 
@@ -51,8 +52,13 @@ function CollectForm(props: ICollectFormProps) {
     typeof dispatchFormStateUpdate === 'function' && typeof dispatchResponseUpdate === 'function';
 
   useEffect(() => {
-    if (isBrowser && window.VGSCollect && Object.keys(getFormInstance()).length === 0) {
-      const form: IVGSCollectForm = window.VGSCollect.create(vaultId, environment, (state: VGSCollectFormState) => {
+    if (!isBrowser) {
+      return;
+    }
+
+    if (Object.keys(getFormInstance()).length === 0) {
+      const VGSCollect = assertVGSCollectLoaded('create');
+      const form: IVGSCollectForm = VGSCollect.create(vaultId, environment, (state: VGSCollectFormState) => {
         if (onUpdateCallback) {
           onUpdateCallback(state);
         }
@@ -92,7 +98,7 @@ function CollectForm(props: ICollectFormProps) {
 
     const form: IVGSCollectForm = getFormInstance();
 
-    if (!form) {
+    if (!form || Object.keys(form).length === 0) {
       throw new Error('@vgs/collect-js-react: VGS Collect form not found.');
     }
     if (submitParameters?.createCard) {

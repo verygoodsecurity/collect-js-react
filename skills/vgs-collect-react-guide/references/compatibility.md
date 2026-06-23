@@ -14,8 +14,8 @@ Use this reference for package installation, version selection, React support, C
 
 | Layer | Customer-facing purpose | Versioning guidance |
 | --- | --- | --- |
-| `@vgs/collect-js-react` | React components and hooks for rendering VGS Collect fields. | Version separately from the loader and Collect core SDK. Verify React and React DOM peer support from the package metadata when compatibility matters. |
-| `@vgs/collect-js` | Browser script loader that loads the Collect core SDK from the CDN. | Version separately from the React wrapper and Collect core SDK. It accepts a configured core SDK version. |
+| `@vgs/collect-js-react` | React components and hooks for rendering VGS Collect fields. | Version separately from the loader and Collect core SDK. Verify React, React DOM, and optional `@vgs/collect-js` peer support from the package metadata when compatibility matters. |
+| `@vgs/collect-js` | Browser script loader that loads the Collect core SDK from the CDN. | Version separately from the React wrapper and Collect core SDK. For wrapper versions that declare the loader peer, use a loader version that satisfies the wrapper's peer range. |
 | Collect core SDK | Browser runtime used by the React wrapper after loading. | Pin a concrete CDN/core version for production. Use the customer's existing pinned version when diagnosing behavior. |
 
 ## Version Selection
@@ -23,12 +23,13 @@ Use this reference for package installation, version selection, React support, C
 - Use `<collect_version>` as a placeholder in examples unless the customer provided a verified target version.
 - If the customer asks which exact version to install or pin, verify the current package/CDN version first.
 - If verification is unavailable, explain the rule: pin a concrete production version and confirm the target version from VGS docs, package metadata, or the customer's existing project config.
-- For React apps, install both the React wrapper and a loader path unless the app already loads the Collect core SDK another way.
+- For React apps that use the npm loader, install both the React wrapper and a compatible `@vgs/collect-js` loader version. If the app already loads the Collect core SDK from the CDN, the loader package is not required.
 
 ## React Compatibility
 
 - Check the installed `@vgs/collect-js-react` package metadata when the customer asks which React versions are supported.
 - React and React DOM are peer dependencies of the React wrapper.
+- `@vgs/collect-js` is an optional peer when the React app uses the npm loader path; CDN/global loading remains supported.
 - The React wrapper expects the Collect core SDK to be loaded before fields mount.
 
 ## Upgrade Guidance

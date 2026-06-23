@@ -10,9 +10,10 @@ policy files, workflow automation, and dependency-management configuration.
   Collect.js secure iframe fields.
 - The package is a browser-facing library for payment, identity, password,
   tokenization, proxy-submit, and Card Management Platform flows.
-- The published package currently has no runtime `dependencies`; React and
-  React DOM are peer dependencies, while build, lint, test, demo, and
-  compatibility tooling are `devDependencies`.
+- The published package currently has no runtime `dependencies`; React, React
+  DOM, and the optional `@vgs/collect-js` npm loader are peer dependencies,
+  while build, lint, test, demo, and compatibility tooling are
+  `devDependencies`.
 - Treat `@vgs/collect-js`, `src/Session.tsx`, `src/Form.tsx`, field props,
   submit parameters, auth handlers, CNAME/route configuration, demo token
   endpoints, and dependency-resolution overrides as security-sensitive surfaces.

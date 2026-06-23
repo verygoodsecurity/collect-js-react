@@ -17,6 +17,7 @@
 </p>
 
 - [Overview](#overview)
+- [AI Agent Integration](#ai-agent-integration)
 - [Installation](#installation)
 - [How to use](#how-to-use)
   - [1. Load VGS Collect.js script](#1-load-vgs-collectjs-script)
@@ -34,7 +35,6 @@
 - [Legacy `VGSCollectForm` API](#legacy-vgscollectform-api)
 - [Documentation](#documentation)
 - [Examples](#examples)
-- [AI Agent Integration](#ai-agent-integration)
 - [Contact](#contact)
 - [License](#license)
 
@@ -46,7 +46,7 @@
 
 - [Documentation](https://www.verygoodsecurity.com/docs/vgs-collect/js/overview)
 - [Reference Documentation](https://www.verygoodsecurity.com/docs/api/collect/)
-- [Examples](https://verygoodsecurity.github.io/vgs-collect-examples)
+- [Examples](https://github.com/vgs-samples/vgs-collect-examples)
 
 ### Why do I need to use this package?
 
@@ -57,6 +57,28 @@ It exports two top-level wrappers:
 - `VGSCollectSession` — recommended for new integrations. Built on top of `VGSCollect.session()` and supports proxy, vault, tokenization, and Card Management Platform (CMP) flows through a single declarative `submit` prop.
 - `VGSCollectForm` — the original wrapper around `VGSCollect.create()`. Still supported for backward compatibility — see [Legacy `VGSCollectForm` API](#legacy-vgscollectform-api).
 
+## AI Agent Integration
+
+This repository ships a public AI skill at [`skills/vgs-collect-react-guide/SKILL.md`](./skills/vgs-collect-react-guide/SKILL.md) for AI agents integrating VGS Collect into React apps.
+
+Recommended: install the skill with `skills.sh`. This is the easiest way to give a compatible AI agent the repository-specific guidance it needs for `@vgs/collect-js-react` integrations.
+
+The installed skill bundle includes React-specific references and examples. Vanilla JavaScript, direct CDN, and standalone `@vgs/collect-js` loader guidance is packaged separately from this repository skill.
+
+What the skill is useful for:
+
+- integrating VGS Collect with React components from `@vgs/collect-js-react`
+- configuring `VGSCollectSession` for proxy submission, Vault alias creation, tokenization, or Card Management Platform card creation and update flows
+- choosing secure React field components and validation rules for card data, SSN, passwords, files, dates, and generic sensitive fields
+- preserving the secure iframe collection model and avoiding examples that place PAN, CVC, SSN, passwords, OAuth tokens, client secrets, production route IDs, or production CNAME details in browser code
+- keeping generated guidance aligned with the installed package versions, pinned Collect.js CDN version, and supported React compatibility range when those versions can be detected
+
+Install the skill with `skills.sh`:
+
+```bash
+npx skills add https://github.com/verygoodsecurity/collect-js-react --skill vgs-collect-react-guide
+```
+
 ## Installation
 
 Install the package using `npm`:
@@ -65,13 +87,21 @@ Install the package using `npm`:
 npm install @vgs/collect-js-react
 ```
 
+If your app uses the `@vgs/collect-js` npm loader, install it alongside the React wrapper:
+
+```bash
+npm install @vgs/collect-js-react @vgs/collect-js@^0.7.3
+```
+
+Apps that load Collect.js directly from the VGS CDN do not need the `@vgs/collect-js` package.
+
 ## How to use
 
 ### 1. Load VGS Collect.js script
 
 To stay PCI Compliant it is mandatory to load `collect.js` from the `js.verygoodvault.com` domain. There are two common options:
 
-- [Download the file directly from the CDN](https://www.verygoodsecurity.com/docs/vgs-collect/js#quick-start).
+- [Download the file directly from the CDN](https://docs.verygoodsecurity.com/vault/developer-tools/vgs-collect/js/index).
 - Use the [`@vgs/collect-js`](https://www.npmjs.com/package/@vgs/collect-js) loader. _Example:_ [`examples/demo/src/features/Basic.tsx`](https://github.com/verygoodsecurity/collect-js-react/blob/main/examples/demo/src/features/Basic.tsx).
 
 ```javascript
@@ -235,9 +265,9 @@ Field components are exposed on both `VGSCollectSession` and `VGSCollectForm`.
 | `file`                    | `<VGSCollectSession.FileField />`            | `{ type: 'file', placeholder: '' }`                                                                            |
 | `date`                    | `<VGSCollectSession.DateField />`            | `{ type: 'date', placeholder: '' }`                                                                            |
 
-The complete list of supported props is documented here: https://www.verygoodsecurity.com/docs/api/collect/#api-formfield. Any property in that reference can be passed to a field component using the same name (`validations`, `css`, `classes`, `style`, `placeholder`, `autoFocus`, `disabled`, `readonly`, `inputMode`, `defaultValue`, `serializers`, `tokenization`, etc.).
+The complete list of supported props is documented in the [VGS Collect.js reference documentation](https://docs.verygoodsecurity.com/vault/developer-tools/vgs-collect/js/reference-documentation). Any property from the `form.field()` reference can be passed to a field component using the same name (`validations`, `css`, `classes`, `style`, `placeholder`, `autoFocus`, `disabled`, `readonly`, `inputMode`, `defaultValue`, `serializers`, `tokenization`, etc.).
 
-Field masking mirrors the Collect.js `field.mask(mask, maskChar, formatChars)` API for `text`, `textarea`, `password`, and `ssn` fields. Pass `mask`, and optionally `maskChar` and `formatChars`, on the field component.
+Field masking mirrors the Collect.js [`field.mask(mask, maskChar, formatChars)`](https://docs.verygoodsecurity.com/vault/developer-tools/vgs-collect/js/reference-documentation) API for `text`, `textarea`, `password`, and `ssn` fields. Pass `mask`, and optionally `maskChar` and `formatChars`, on the field component.
 
 ```javascript
 <TextField
@@ -765,28 +795,6 @@ react19 fixture: 3019
 External:
 
 - [Stackblitz](https://stackblitz.com/edit/react-ts-kuxtvv?file=App.tsx)
-
-## AI Agent Integration
-
-This repository ships a public AI skill at [`skills/vgs-collect-react-guide/SKILL.md`](./skills/vgs-collect-react-guide/SKILL.md) for AI agents integrating VGS Collect into React apps.
-
-Recommended: install the skill with `skills.sh`. This is the easiest way to give a compatible AI agent the repository-specific guidance it needs for `@vgs/collect-js-react` integrations.
-
-The installed skill bundle includes React-specific references and examples. Vanilla JavaScript, direct CDN, and standalone `@vgs/collect-js` loader guidance is packaged separately from this repository skill.
-
-What the skill is useful for:
-
-- integrating VGS Collect with React components from `@vgs/collect-js-react`
-- configuring `VGSCollectSession` for proxy submission, Vault alias creation, tokenization, or Card Management Platform card creation and update flows
-- choosing secure React field components and validation rules for card data, SSN, passwords, files, dates, and generic sensitive fields
-- preserving the secure iframe collection model and avoiding examples that place PAN, CVC, SSN, passwords, OAuth tokens, client secrets, production route IDs, or production CNAME details in browser code
-- keeping generated guidance aligned with the installed package versions, pinned Collect.js CDN version, and supported React compatibility range when those versions can be detected
-
-Install the skill with `skills.sh`:
-
-```bash
-npx skills add https://github.com/verygoodsecurity/collect-js-react --skill vgs-collect-react-guide
-```
 
 ## Contact
 

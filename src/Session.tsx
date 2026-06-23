@@ -17,6 +17,7 @@ import { FormStateProvider, DispatchFormContext } from './formStateProvider';
 import { ICollectSessionProps, ICollectSessionSubmit, IVGSCollectForm, VGSCollectFormState } from './types/Form';
 import React, { useContext, useEffect } from 'react';
 import { getFormInstance, setFormInstance } from './state';
+import { assertVGSCollectLoaded } from './utils';
 
 import { HttpStatusCode } from './types/HttpStatusCode';
 
@@ -80,8 +81,13 @@ function CollectSession(props: ICollectSessionProps) {
     let isMounted = true;
     let sessionForm: IVGSCollectForm | null = null;
 
-    if (isBrowser && window.VGSCollect && Object.keys(getFormInstance()).length === 0) {
-      void window.VGSCollect.session({
+    if (!isBrowser) {
+      return;
+    }
+
+    if (Object.keys(getFormInstance()).length === 0) {
+      const VGSCollect = assertVGSCollectLoaded('session');
+      void VGSCollect.session({
         vaultId,
         env: env || environment,
         formId,
@@ -163,7 +169,7 @@ function CollectSession(props: ICollectSessionProps) {
     const form: IVGSCollectForm = getFormInstance();
     const submitConfiguration: ICollectSessionSubmit = submit || { api: 'proxy', action: DEFAULT_PROXY_ACTION };
 
-    if (!form) {
+    if (!form || Object.keys(form).length === 0) {
       throw new Error('@vgs/collect-js-react: VGS Collect form not found.');
     }
 

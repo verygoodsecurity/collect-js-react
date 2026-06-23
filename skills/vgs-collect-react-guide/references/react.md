@@ -18,11 +18,13 @@ Use this reference for customers integrating the public `@vgs/collect-js-react` 
 
 ## Installation Shape
 
-Install the React wrapper, React peer dependencies, and a loader for the Collect core SDK.
+Install the React wrapper and React peer dependencies. If the app uses the `@vgs/collect-js` npm loader, install a compatible loader version alongside the wrapper.
 
 ```bash
-npm install @vgs/collect-js-react @vgs/collect-js react react-dom
+npm install @vgs/collect-js-react @vgs/collect-js@^0.7.3 react react-dom
 ```
+
+If the app loads Collect.js directly from the VGS CDN before rendering React fields, `@vgs/collect-js` is not required.
 
 ## Load Order
 
