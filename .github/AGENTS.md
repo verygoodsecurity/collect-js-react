@@ -140,8 +140,10 @@ a detailed OWASP checklist.
 - The `react-wrapper-parity.yml` workflow receives merged Collect.js PR context,
   triages wrapper impact, creates or updates Jira, comments back upstream, and
   opens draft parity PRs only for `code-required` or `docs-only` results.
-- Keep generated parity PRs draft until Codex or a maintainer has implemented
-  code/docs, validation is complete, and human review is complete.
+- Generated parity PRs receive the `needs-claude-implementation` label so the
+  Claude parity implementation workflow can add code/docs to the draft branch.
+- Keep generated parity PRs draft until Claude, Codex, or a maintainer has
+  implemented code/docs, validation is complete, and human review is complete.
 - Treat `no-op` parity results as audit evidence only. Do not create empty
   implementation branches for no-op results.
 - Treat `blocked` parity results as Jira-tracked blockers. Do not create draft

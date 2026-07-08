@@ -368,7 +368,7 @@ ${markdownList(surfaces)}
 - \`yarn test\` for shared session, form, field, submit, tokenization, or public type changes
 - \`git diff --check\`
 
-## Codex Handoff
+## Agent Handoff
 
 Use the upstream PR, merge SHA, changed files, and impacted wrapper surfaces above as the source of truth. Inspect upstream source before changing wrapper code. Do not copy sensitive values into code, logs, examples, comments, or PR text.
 `;
@@ -389,9 +389,9 @@ Draft React wrapper parity PR created from upstream Collect.js merge.
 
 ${payload.release_notes ? payload.release_notes : 'None provided.'}
 
-## Codex Implementation Handoff
+## Agent Implementation Handoff
 
-Codex should inspect the upstream source evidence, then implement only the required React wrapper parity changes. Keep this PR draft until code, tests, public docs, and public skills are complete.
+Claude should inspect the upstream source evidence, then implement only the required React wrapper parity changes. Keep this PR draft until code, tests, public docs, public skills, and human review are complete.
 
 Wrapper surfaces to check:
 

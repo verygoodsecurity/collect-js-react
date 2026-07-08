@@ -1,0 +1,99 @@
+---
+## Automated Claude implementation pass for generated React wrapper parity PRs.
+## Runs only on draft PRs labeled by the parity workflow.
+
+name: claude parity implementation
+
+on:
+  pull_request:
+    types: [labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  implement:
+    if: >-
+      github.event.label.name == 'needs-claude-implementation' &&
+      github.event.pull_request.draft == true &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      contains(toJson(github.event.pull_request.labels), 'react-wrapper-parity')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.VGS_GITHUB_CI_BOT_APP_ID }}
+          private-key: ${{ secrets.VGS_GITHUB_CI_BOT_APP_PEM_FILE }}
+          owner: verygoodsecurity
+          repositories: |
+            collect-js-react-private
+            vgs-collect
+
+      - name: Checkout parity branch
+        uses: actions/checkout@v4
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Expose GitHub App token to gh
+        run: echo "GH_TOKEN=${{ steps.app-token.outputs.token }}" >> "$GITHUB_ENV"
+
+      - name: Run Claude parity implementation
+        uses: anthropics/claude-code-action@v1
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ steps.app-token.outputs.token }}
+          use_commit_signing: true
+          prompt: |
+            Implement the React wrapper parity work for draft PR #${{ github.event.pull_request.number }}.
+
+            This PR was created by the Collect.js React wrapper parity workflow and must remain draft.
+            Do not mark the PR ready for review, approve it, merge it, close it, or create another PR.
+
+            Use the PR body as the handoff source, including:
+            - upstream Collect.js PR
+            - upstream merge SHA
+            - source marker
+            - triage result
+            - release notes
+            - wrapper surfaces to check
+
+            Inspect the upstream Collect.js source evidence before changing wrapper code. Use `gh` with
+            the provided token when upstream PR or commit details are needed.
+
+            Make only the React wrapper parity changes required by the upstream feature. Update public
+            TypeScript types, tests, demo usage, README, and public skills only when wrapper behavior
+            or examples change. Keep README changes customer-facing only.
+
+            Do not add PAN, CVC, SSN, OAuth tokens, client secrets, bearer tokens, production route IDs,
+            production CNAMEs, vault credentials, or sensitive vulnerability details to code, tests,
+            examples, logs, comments, or PR text.
+
+            Run the narrowest relevant validation that is feasible:
+            - yarn test:unit
+            - yarn test:lint
+            - yarn test:build
+            - yarn test:demobuild
+            - yarn test:compatbuild
+            - git diff --check
+
+            Commit any implementation changes to this PR branch using signed commits. If no code or
+            documentation change is required, leave a PR comment explaining why and do not force a diff.
+          claude_args: |
+            --max-turns 20
+            --allowedTools Read,Edit,Write,Glob,Grep,Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh pr comment:*),Bash(gh api:*),Bash(git status:*),Bash(git diff:*),Bash(corepack:*),Bash(yarn:*),Bash(node:*)
+
+      - name: Queue Claude agent review
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: gh pr edit "$PR_NUMBER" --add-label "agent-review"
