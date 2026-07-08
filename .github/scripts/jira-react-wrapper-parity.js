@@ -75,6 +75,17 @@ function escapeJqlText(value) {
   return String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"');
 }
 
+async function searchIssues(jql, options = {}) {
+  return jira('/rest/api/3/search/jql', {
+    method: 'POST',
+    body: JSON.stringify({
+      jql,
+      maxResults: options.maxResults || 1,
+      fields: options.fields || ['summary']
+    })
+  });
+}
+
 function issueBody(metadata) {
   const files = metadata.upstream_changed_files || [];
   const surfaces = metadata.impacted_wrapper_surfaces || [];
@@ -117,14 +128,9 @@ Validation:
 async function findExistingIssue(summary, sourceMarker) {
   if (sourceMarker) {
     const markerTerm = escapeJqlText(sourceMarker);
-    const markerResult = await jira('/rest/api/3/search', {
-      method: 'POST',
-      body: JSON.stringify({
-        jql: `project = ${JIRA_PROJECT_KEY} AND text ~ "${markerTerm}" ORDER BY created DESC`,
-        maxResults: 1,
-        fields: ['summary']
-      })
-    });
+    const markerResult = await searchIssues(
+      `project = ${JIRA_PROJECT_KEY} AND text ~ "${markerTerm}" ORDER BY created DESC`
+    );
 
     if (markerResult.issues && markerResult.issues.length) {
       return markerResult.issues[0];
@@ -134,14 +140,7 @@ async function findExistingIssue(summary, sourceMarker) {
   const summaryTerm = escapeJqlText(summary.slice(0, 80));
   const jql = `project = ${JIRA_PROJECT_KEY} AND summary ~ "${summaryTerm}" ORDER BY created DESC`;
 
-  const result = await jira('/rest/api/3/search', {
-    method: 'POST',
-    body: JSON.stringify({
-      jql,
-      maxResults: 1,
-      fields: ['summary']
-    })
-  });
+  const result = await searchIssues(jql);
 
   return result.issues && result.issues.length ? result.issues[0] : undefined;
 }
