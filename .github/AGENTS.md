@@ -135,6 +135,24 @@ a detailed OWASP checklist.
   they already appear in approved VGS source material and the wording remains
   accurate.
 
+## React Wrapper Parity Automation
+
+- The `react-wrapper-parity.yml` workflow receives merged Collect.js PR context,
+  triages wrapper impact, creates or updates Jira, comments back upstream, and
+  opens draft parity PRs only for `code-required` or `docs-only` results.
+- Keep generated parity PRs draft until Codex or a maintainer has implemented
+  code/docs, validation is complete, and human review is complete.
+- Treat `no-op` parity results as audit evidence only. Do not create empty
+  implementation branches for no-op results.
+- Treat `blocked` parity results as Jira-tracked blockers. Do not create draft
+  PRs until missing upstream evidence, Jira credentials, or source context is
+  available.
+- Treat `jira-blocked` parity PRs as untracked until Jira creation or update is
+  repaired. Do not mark them ready for review without a linked Jira issue.
+- Parity automation must never print or persist PAN, CVC/CVV, SSN, passwords,
+  OAuth tokens, client secrets, session IDs, vault credentials, bearer tokens,
+  production route IDs, or production CNAME details.
+
 ## Documentation And Instruction Updates
 
 - After every repository change, check whether contributor instructions,

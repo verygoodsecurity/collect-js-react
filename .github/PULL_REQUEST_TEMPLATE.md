@@ -7,6 +7,15 @@
 <!--- Why is this change required? What problem does it solve? -->
 <!--- If it fixes an open issue, please link to the issue here. -->
 
+## Upstream Collect.js Parity
+
+<!--- Required for automated or manual React wrapper parity work. Use "N/A" for unrelated PRs. -->
+- Upstream Collect.js PR:
+- Upstream merge SHA:
+- Jira:
+- Triage result: <!-- code-required, docs-only, no-op, blocked, or N/A -->
+- Wrapper surfaces checked: <!-- src/types, Fields, Form, Session, tests, demo, README, skills, or N/A -->
+
 ## How Has This Been Tested?
 
 <!--- Please describe in detail how you tested your changes. -->
@@ -31,3 +40,5 @@
 - [ ] My code follows the code style of this project.
 - [ ] My change requires a change to the documentation.
 - [ ] I have updated the documentation accordingly.
+- [ ] I checked whether public skills under `skills/` need updates.
+- [ ] I did not add PAN, CVC, SSN, OAuth tokens, client secrets, bearer tokens, production route IDs, production CNAMEs, or vault credentials.

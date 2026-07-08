@@ -1,0 +1,233 @@
+name: Collect.js React wrapper parity
+
+on:
+  repository_dispatch:
+    types: [collect-js-feature-merged]
+  workflow_dispatch:
+    inputs:
+      upstream_repo:
+        description: 'Upstream Collect.js repository'
+        required: true
+        default: verygoodsecurity/vgs-collect
+        type: string
+      upstream_pr_number:
+        description: 'Upstream PR number to replay'
+        required: false
+        type: string
+      upstream_merge_sha:
+        description: 'Upstream merge commit SHA to replay when PR number is not known'
+        required: false
+        type: string
+      react_wrapper_impact:
+        description: 'Override React wrapper impact for manual replay'
+        required: true
+        default: unknown
+        type: choice
+        options:
+          - unknown
+          - required
+          - docs-only
+          - not-needed
+      release_notes:
+        description: 'Optional release/version notes for manual replay'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  parity:
+    name: Triage and create parity work
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.VGS_GITHUB_CI_BOT_APP_ID }}
+          private-key: ${{ secrets.VGS_GITHUB_CI_BOT_APP_PEM_FILE }}
+          owner: verygoodsecurity
+          repositories: |
+            collect-js-react-private
+            vgs-collect
+
+      - name: Checkout React wrapper
+        uses: actions/checkout@v4
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Run React wrapper parity triage
+        id: triage
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          PARITY_OUTPUT_DIR: ${{ runner.temp }}/react-wrapper-parity
+        run: node .github/scripts/react-wrapper-parity-triage.js
+
+      - name: Create or update Jira issue
+        id: jira
+        if: steps.triage.outputs.should_create_jira == 'true'
+        continue-on-error: true
+        env:
+          PARITY_METADATA_PATH: ${{ steps.triage.outputs.metadata_path }}
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          JIRA_PROJECT_KEY: ${{ secrets.JIRA_PROJECT_KEY }}
+          JIRA_ISSUE_TYPE: ${{ vars.JIRA_ISSUE_TYPE || 'Task' }}
+        run: node .github/scripts/jira-react-wrapper-parity.js
+
+      - name: Comment triage result on upstream PR
+        if: steps.triage.outputs.upstream_pr_number != ''
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          REPORT_PATH: ${{ steps.triage.outputs.report_path }}
+          UPSTREAM_REPO: ${{ steps.triage.outputs.upstream_repository }}
+          UPSTREAM_PR_NUMBER: ${{ steps.triage.outputs.upstream_pr_number }}
+          JIRA_URL: ${{ steps.jira.outputs.jira_url }}
+          JIRA_OUTCOME: ${{ steps.jira.outcome }}
+        run: |
+          set -euo pipefail
+          COMMENT_PATH="$RUNNER_TEMP/react-wrapper-parity-comment.md"
+          cp "$REPORT_PATH" "$COMMENT_PATH"
+
+          if [[ -n "${JIRA_URL:-}" ]]; then
+            {
+              echo
+              echo "## Tracking"
+              echo
+              echo "- Jira: $JIRA_URL"
+            } >> "$COMMENT_PATH"
+          elif [[ "$JIRA_OUTCOME" == "failure" ]]; then
+            {
+              echo
+              echo "## Tracking"
+              echo
+              echo "- Jira: creation or update failed. Check this workflow run before relying on Jira tracking."
+            } >> "$COMMENT_PATH"
+          fi
+
+          gh pr comment "$UPSTREAM_PR_NUMBER" --repo "$UPSTREAM_REPO" --body-file "$COMMENT_PATH"
+
+      - name: Upsert React wrapper parity labels
+        if: steps.triage.outputs.should_create_pr == 'true'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          upsert_label() {
+            local name="$1"
+            local color="$2"
+            local description="$3"
+
+            if gh label view "$name" --repo "$GH_REPO" >/dev/null 2>&1; then
+              gh label edit "$name" --repo "$GH_REPO" --color "$color" --description "$description"
+            else
+              gh label create "$name" --repo "$GH_REPO" --color "$color" --description "$description"
+            fi
+          }
+
+          upsert_label "react-wrapper-parity" "5319e7" "Automated React wrapper parity work from Collect.js"
+          upsert_label "needs-codex-handoff" "fbca04" "Draft parity PR needs Codex or maintainer implementation handoff"
+          upsert_label "agent-review" "1d76db" "Run Claude agent review on this PR"
+          upsert_label "jira-blocked" "d93f0b" "Jira issue creation or update failed"
+          upsert_label "security-sensitive" "b60205" "Touches or may touch security-sensitive wrapper surfaces"
+
+      - name: Create draft React wrapper parity PR
+        if: steps.triage.outputs.should_create_pr == 'true'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          BRANCH_SLUG: ${{ steps.triage.outputs.branch_slug }}
+          JIRA_KEY: ${{ steps.jira.outputs.jira_key }}
+          JIRA_URL: ${{ steps.jira.outputs.jira_url }}
+          JIRA_OUTCOME: ${{ steps.jira.outcome }}
+          PR_BODY_PATH: ${{ steps.triage.outputs.pr_body_path }}
+          UPSTREAM_TITLE: ${{ steps.triage.outputs.upstream_pr_title }}
+          SECURITY_SENSITIVE: ${{ steps.triage.outputs.security_sensitive }}
+        run: |
+          set -euo pipefail
+
+          TRACKING_KEY="${JIRA_KEY:-NOJIRA}"
+
+          if [[ -z "${JIRA_KEY:-}" ]]; then
+            TRACKING_SEGMENT="jira-blocked"
+          else
+            TRACKING_SEGMENT="$JIRA_KEY"
+          fi
+
+          BRANCH="feature/${TRACKING_SEGMENT}/react-wrapper-parity-${BRANCH_SLUG}"
+          TITLE="${TRACKING_KEY}: React wrapper parity for ${UPSTREAM_TITLE}"
+          BODY_WITH_TRACKING="$RUNNER_TEMP/react-wrapper-parity-pr-body-with-tracking.md"
+
+          git config user.name "vgs-ci-bot"
+          git config user.email "vgs-ci-bot@users.noreply.github.com"
+
+          if git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null 2>&1; then
+            git fetch origin "$BRANCH"
+            git switch -c "$BRANCH" "origin/$BRANCH"
+          else
+            git switch -c "$BRANCH"
+            git commit --allow-empty -m "${JIRA_KEY}: create React wrapper parity handoff"
+            git push --set-upstream origin "$BRANCH"
+          fi
+
+          cp "$PR_BODY_PATH" "$BODY_WITH_TRACKING"
+          {
+            echo
+            echo "## Tracking"
+            echo
+            if [[ -n "${JIRA_URL:-}" ]]; then
+              echo "- Jira: $JIRA_URL"
+            else
+              echo "- Jira: creation or update failed. Do not mark this PR ready until Jira tracking is repaired."
+            fi
+          } >> "$BODY_WITH_TRACKING"
+
+          PR_NUMBER="$(gh pr list --head "$BRANCH" --base main --state open --json number --jq '.[0].number // empty')"
+
+          if [[ -z "$PR_NUMBER" ]]; then
+            PR_URL="$(gh pr create \
+              --draft \
+              --base main \
+              --head "$BRANCH" \
+              --title "$TITLE" \
+              --body-file "$BODY_WITH_TRACKING")"
+            PR_NUMBER="$(gh pr view "$PR_URL" --json number --jq '.number')"
+          else
+            gh pr edit "$PR_NUMBER" --title "$TITLE" --body-file "$BODY_WITH_TRACKING"
+          fi
+
+          gh pr edit "$PR_NUMBER" --add-label "react-wrapper-parity" --add-label "needs-codex-handoff" --add-label "agent-review"
+
+          if [[ "$JIRA_OUTCOME" == "failure" || -z "${JIRA_KEY:-}" ]]; then
+            gh pr edit "$PR_NUMBER" --add-label "jira-blocked"
+          fi
+
+          if [[ "$SECURITY_SENSITIVE" == "true" ]]; then
+            gh pr edit "$PR_NUMBER" --add-label "security-sensitive"
+          fi
+
+          {
+            echo "### React wrapper parity PR"
+            echo
+            echo "- PR: #$PR_NUMBER"
+            echo "- Branch: $BRANCH"
+            echo "- Jira: ${JIRA_URL:-creation failed}"
+            echo "- Draft: yes"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Add no-op summary
+        if: steps.triage.outputs.result == 'no-op'
+        env:
+          REPORT_PATH: ${{ steps.triage.outputs.report_path }}
+        run: |
+          {
+            echo "### React wrapper parity no-op"
+            echo
+            cat "$REPORT_PATH"
+          } >> "$GITHUB_STEP_SUMMARY"
