@@ -107,7 +107,6 @@ function manualPayload(event) {
     upstream_pr_number: pr.number,
     upstream_pr_url: pr.url,
     upstream_pr_title: pr.title,
-    upstream_pr_body: pr.body || '',
     upstream_pr_labels: labels,
     upstream_base_ref: pr.baseRefName,
     upstream_head_ref: pr.headRefName,
@@ -122,7 +121,7 @@ function manualPayload(event) {
 function currentPayload() {
   const event = EVENT_PATH && fs.existsSync(EVENT_PATH) ? readJson(EVENT_PATH) : {};
 
-  if (event.client_payload) return event.client_payload;
+  if (event.client_payload) return event.client_payload.parity || event.client_payload;
   if (event.inputs) return manualPayload(event);
 
   throw new Error('Unsupported event: expected repository_dispatch or workflow_dispatch.');
@@ -134,6 +133,7 @@ function docsOnly(files) {
       file.endsWith('.md') ||
       file.startsWith('docs/') ||
       file.startsWith('skills/') ||
+      file.startsWith('development/') ||
       file.startsWith('examples/') ||
       file === 'README.md'
     );
@@ -146,6 +146,7 @@ function wrapperSensitiveFiles(files) {
     file.startsWith('secure-frame/') ||
     file.startsWith('src/') ||
     file.startsWith('skills/') ||
+    file.startsWith('development/') ||
     file.startsWith('examples/') ||
     file === 'README.md' ||
     file === 'package.json' ||
@@ -185,7 +186,7 @@ function impactedSurfaces(payload) {
     surfaces.add('src/types/*');
   }
 
-  if (files.some((file) => file.startsWith('skills/') || file.startsWith('examples/') || file.endsWith('.md'))) {
+  if (files.some((file) => file.startsWith('skills/') || file.startsWith('development/') || file.startsWith('examples/') || file.endsWith('.md'))) {
     surfaces.add('README.md');
     surfaces.add('skills/vgs-collect-react-guide/*');
   }
