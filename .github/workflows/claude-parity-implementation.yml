@@ -19,13 +19,17 @@ jobs:
       github.event.label.name == 'needs-claude-implementation' &&
       github.event.pull_request.draft == true &&
       github.event.pull_request.head.repo.full_name == github.repository &&
-      contains(toJson(github.event.pull_request.labels), 'react-wrapper-parity')
+      startsWith(github.event.pull_request.head.ref, 'feature/') &&
+      contains(github.event.pull_request.head.ref, '/react-wrapper-parity-') &&
+      contains(github.event.pull_request.labels.*.name, 'react-wrapper-parity') &&
+      contains(github.event.pull_request.labels.*.name, 'needs-claude-implementation') &&
+      contains(github.event.pull_request.body || '', 'collect-react-parity-source:')
     runs-on: ubuntu-latest
 
     steps:
       - name: Create GitHub App token
         id: app-token
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2
         with:
           app-id: ${{ secrets.VGS_GITHUB_CI_BOT_APP_ID }}
           private-key: ${{ secrets.VGS_GITHUB_CI_BOT_APP_PEM_FILE }}
@@ -35,7 +39,7 @@ jobs:
             vgs-collect
 
       - name: Checkout parity branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           token: ${{ steps.app-token.outputs.token }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
@@ -46,7 +50,7 @@ jobs:
         run: echo "GH_TOKEN=${{ steps.app-token.outputs.token }}" >> "$GITHUB_ENV"
 
       - name: Run Claude parity implementation
-        uses: anthropics/claude-code-action@v1
+        uses: anthropics/claude-code-action@e3ba649a81aa8af3ddca750d3ddc35901f29de19 # v1
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         with:

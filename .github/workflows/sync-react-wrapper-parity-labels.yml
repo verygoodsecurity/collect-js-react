@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  contents: read
   issues: write
 
 jobs:
@@ -12,28 +13,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout label script
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
       - name: Upsert parity labels
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-        run: |
-          set -euo pipefail
-
-          upsert_label() {
-            local name="$1"
-            local color="$2"
-            local description="$3"
-
-            if gh label view "$name" --repo "$GH_REPO" >/dev/null 2>&1; then
-              gh label edit "$name" --repo "$GH_REPO" --color "$color" --description "$description"
-            else
-              gh label create "$name" --repo "$GH_REPO" --color "$color" --description "$description"
-            fi
-          }
-
-          upsert_label "react-wrapper-parity" "5319e7" "Automated React wrapper parity work from Collect.js"
-          upsert_label "needs-codex-handoff" "fbca04" "Draft parity PR needs Codex or maintainer implementation handoff"
-          upsert_label "needs-claude-implementation" "c2e0ff" "Draft parity PR should receive an automated Claude implementation pass"
-          upsert_label "agent-review" "1d76db" "Run Claude agent review on this PR"
-          upsert_label "jira-blocked" "d93f0b" "Jira issue creation or update failed"
-          upsert_label "security-sensitive" "b60205" "Touches or may touch security-sensitive wrapper surfaces"
+        run: .github/scripts/sync-react-wrapper-parity-labels.sh

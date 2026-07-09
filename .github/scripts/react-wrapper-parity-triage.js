@@ -45,6 +45,14 @@ function normalizeLabels(labels) {
     .filter(Boolean);
 }
 
+function sanitizeText(value) {
+  return String(value || '')
+    .replace(/\b(?:pan|cvc|cvv|ssn|oauth|bearer|client[_ -]?secret|api[_ -]?token|access[_ -]?token)\s*[:=]\s*\S+/gi, '[redacted]')
+    .replace(/\b(?:sk|gho|ghp|github_pat|xox[baprs])_[A-Za-z0-9_=-]+/g, '[redacted-token]')
+    .replace(/\bBearer\s+[A-Za-z0-9._~+/=-]+/gi, 'Bearer [redacted]')
+    .replace(/\b(?:route[_ -]?id|vault[_ -]?id|cname)\s*[:=]\s*\S+/gi, '[redacted]');
+}
+
 function prFromMergeSha(repository, mergeSha) {
   const pulls = JSON.parse(
     runGh([
@@ -113,6 +121,7 @@ function manualPayload(event) {
     upstream_merge_sha: pr.mergeCommit ? pr.mergeCommit.oid : inputs.upstream_merge_sha,
     upstream_merged_at: pr.mergedAt,
     upstream_changed_files: files,
+    upstream_pr_body: sanitizeText(pr.body || '').slice(0, 6000),
     react_wrapper_impact: inputs.react_wrapper_impact || 'unknown',
     release_notes: inputs.release_notes || ''
   };
@@ -154,6 +163,16 @@ function wrapperSensitiveFiles(files) {
   ));
 }
 
+function runtimeSensitiveFiles(files) {
+  return files.filter((file) => (
+    file.startsWith('public-lib/') ||
+    file.startsWith('secure-frame/') ||
+    file.startsWith('src/') ||
+    file === 'package.json' ||
+    file.endsWith('.d.ts')
+  ));
+}
+
 function githubCustomerImpactFiles(files) {
   return files.filter((file) => (
     file === '.github/PULL_REQUEST_TEMPLATE.md' ||
@@ -172,7 +191,7 @@ function mentionsAny(value, words) {
 
 function impactedSurfaces(payload) {
   const files = payload.upstream_changed_files || [];
-  const text = `${payload.upstream_pr_title || ''}\n${payload.upstream_pr_body || ''}\n${files.join('\n')}`;
+  const text = `${payload.upstream_pr_title || ''}\n${payload.upstream_pr_body || ''}\n${payload.release_notes || ''}\n${files.join('\n')}`;
   const surfaces = new Set();
 
   if (mentionsAny(text, ['field', 'validation', 'mask', 'serializer', 'iframe', 'placeholder', 'input'])) {
@@ -202,7 +221,7 @@ function impactedSurfaces(payload) {
 
 function securitySensitive(payload) {
   const files = payload.upstream_changed_files || [];
-  const text = `${payload.upstream_pr_title || ''}\n${payload.upstream_pr_body || ''}\n${files.join('\n')}`;
+  const text = `${payload.upstream_pr_title || ''}\n${payload.upstream_pr_body || ''}\n${payload.release_notes || ''}\n${files.join('\n')}`;
 
   if (files.some((file) => (
     file.startsWith('public-lib/') ||
@@ -239,7 +258,7 @@ function triage(payload) {
   const labels = normalizeLabels(payload.upstream_pr_labels).map((label) => label.toLowerCase());
   const impact = String(payload.react_wrapper_impact || 'unknown').toLowerCase();
   const files = payload.upstream_changed_files || [];
-  const text = `${payload.upstream_pr_title || ''}\n${payload.upstream_pr_body || ''}\n${files.join('\n')}`;
+  const text = `${payload.upstream_pr_title || ''}\n${payload.upstream_pr_body || ''}\n${payload.release_notes || ''}\n${files.join('\n')}`;
   const sensitiveFiles = wrapperSensitiveFiles(files);
   const githubImpactFiles = githubCustomerImpactFiles(files);
 
@@ -317,7 +336,37 @@ function markdownList(items) {
   return items.map((item) => `- ${item}`).join('\n');
 }
 
-function reportFor(payload, assessment, surfaces, sensitive) {
+function assessmentWarnings(payload, assessment) {
+  const files = payload.upstream_changed_files || [];
+  const impact = String(payload.react_wrapper_impact || 'unknown').toLowerCase();
+  const warnings = [];
+
+  if (assessment.result === 'docs-only' && impact === 'docs-only') {
+    const runtimeFiles = runtimeSensitiveFiles(files);
+    if (runtimeFiles.length) {
+      warnings.push(`Docs-only impact was explicitly trusted even though runtime or public API files changed: ${runtimeFiles.join(', ')}.`);
+    }
+
+    const githubImpactFiles = githubCustomerImpactFiles(files);
+    if (githubImpactFiles.length) {
+      warnings.push(`Docs-only impact was explicitly trusted even though GitHub workflow/template files changed: ${githubImpactFiles.join(', ')}.`);
+    }
+  }
+
+  return warnings;
+}
+
+function optionalWarningsSection(warnings) {
+  if (!warnings.length) return '';
+
+  return `## Audit Warnings
+
+${markdownList(warnings)}
+
+`;
+}
+
+function reportFor(payload, assessment, surfaces, sensitive, warnings) {
   const files = payload.upstream_changed_files || [];
   const labels = normalizeLabels(payload.upstream_pr_labels);
 
@@ -329,6 +378,7 @@ function reportFor(payload, assessment, surfaces, sensitive) {
 - Reason: ${assessment.reason}
 - Security-sensitive: ${sensitive ? 'yes' : 'no'}
 
+${optionalWarningsSection(warnings)}
 ## Upstream Evidence
 
 - Repository: ${payload.upstream_repository}
@@ -374,7 +424,7 @@ Use the upstream PR, merge SHA, changed files, and impacted wrapper surfaces abo
 `;
 }
 
-function prBodyFor(payload, assessment, surfaces, sensitive) {
+function prBodyFor(payload, assessment, surfaces, sensitive, warnings) {
   return `## Summary
 
 Draft React wrapper parity PR created from upstream Collect.js merge.
@@ -385,6 +435,7 @@ Draft React wrapper parity PR created from upstream Collect.js merge.
 - Triage result: \`${assessment.result}\`
 - Security-sensitive: ${sensitive ? 'yes' : 'no'}
 
+${optionalWarningsSection(warnings)}
 ## Release Notes
 
 ${payload.release_notes ? payload.release_notes : 'None provided.'}
@@ -422,12 +473,14 @@ function main() {
   const assessment = triage(payload);
   const surfaces = impactedSurfaces(payload);
   const sensitive = securitySensitive(payload);
+  const warnings = assessmentWarnings(payload, assessment);
   const slug = slugify(payload.upstream_pr_title);
 
   const metadata = {
     ...payload,
     triage_result: assessment.result,
     triage_reason: assessment.reason,
+    audit_warnings: warnings,
     impacted_wrapper_surfaces: surfaces,
     security_sensitive: sensitive,
     branch_slug: slug
@@ -437,8 +490,8 @@ function main() {
   const prBodyPath = path.join(OUTPUT_DIR, 'react-wrapper-parity-pr-body.md');
   const metadataPath = path.join(OUTPUT_DIR, 'react-wrapper-parity-metadata.json');
 
-  fs.writeFileSync(reportPath, reportFor(payload, assessment, surfaces, sensitive));
-  fs.writeFileSync(prBodyPath, prBodyFor(payload, assessment, surfaces, sensitive));
+  fs.writeFileSync(reportPath, reportFor(payload, assessment, surfaces, sensitive, warnings));
+  fs.writeFileSync(prBodyPath, prBodyFor(payload, assessment, surfaces, sensitive, warnings));
   writeJson(metadataPath, metadata);
 
   writeOutput('result', assessment.result);

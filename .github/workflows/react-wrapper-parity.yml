@@ -46,7 +46,7 @@ jobs:
     steps:
       - name: Create GitHub App token
         id: app-token
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2
         with:
           app-id: ${{ secrets.VGS_GITHUB_CI_BOT_APP_ID }}
           private-key: ${{ secrets.VGS_GITHUB_CI_BOT_APP_PEM_FILE }}
@@ -56,7 +56,7 @@ jobs:
             vgs-collect
 
       - name: Checkout React wrapper
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           token: ${{ steps.app-token.outputs.token }}
 
@@ -117,27 +117,7 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           GH_REPO: ${{ github.repository }}
-        run: |
-          set -euo pipefail
-
-          upsert_label() {
-            local name="$1"
-            local color="$2"
-            local description="$3"
-
-            if gh label view "$name" --repo "$GH_REPO" >/dev/null 2>&1; then
-              gh label edit "$name" --repo "$GH_REPO" --color "$color" --description "$description"
-            else
-              gh label create "$name" --repo "$GH_REPO" --color "$color" --description "$description"
-            fi
-          }
-
-          upsert_label "react-wrapper-parity" "5319e7" "Automated React wrapper parity work from Collect.js"
-          upsert_label "needs-codex-handoff" "fbca04" "Draft parity PR needs Codex or maintainer implementation handoff"
-          upsert_label "needs-claude-implementation" "c2e0ff" "Draft parity PR should receive an automated Claude implementation pass"
-          upsert_label "agent-review" "1d76db" "Run Claude agent review on this PR"
-          upsert_label "jira-blocked" "d93f0b" "Jira issue creation or update failed"
-          upsert_label "security-sensitive" "b60205" "Touches or may touch security-sensitive wrapper surfaces"
+        run: .github/scripts/sync-react-wrapper-parity-labels.sh
 
       - name: Create draft React wrapper parity PR
         if: steps.triage.outputs.should_create_pr == 'true'
@@ -148,6 +128,7 @@ jobs:
           JIRA_URL: ${{ steps.jira.outputs.jira_url }}
           JIRA_OUTCOME: ${{ steps.jira.outcome }}
           PR_BODY_PATH: ${{ steps.triage.outputs.pr_body_path }}
+          UPSTREAM_PR_NUMBER: ${{ steps.triage.outputs.upstream_pr_number }}
           UPSTREAM_TITLE: ${{ steps.triage.outputs.upstream_pr_title }}
           SECURITY_SENSITIVE: ${{ steps.triage.outputs.security_sensitive }}
         run: |
@@ -161,7 +142,8 @@ jobs:
             TRACKING_SEGMENT="$JIRA_KEY"
           fi
 
-          BRANCH="feature/${TRACKING_SEGMENT}/react-wrapper-parity-${BRANCH_SLUG}"
+          SOURCE_SEGMENT="pr-${UPSTREAM_PR_NUMBER:-unknown}"
+          BRANCH="feature/${TRACKING_SEGMENT}/react-wrapper-parity-${SOURCE_SEGMENT}-${BRANCH_SLUG}"
           TITLE="${TRACKING_KEY}: React wrapper parity for ${UPSTREAM_TITLE}"
           BODY_WITH_TRACKING="$RUNNER_TEMP/react-wrapper-parity-pr-body-with-tracking.md"
 
@@ -173,7 +155,7 @@ jobs:
             git switch -c "$BRANCH" "origin/$BRANCH"
           else
             git switch -c "$BRANCH"
-            git commit --allow-empty -m "${JIRA_KEY}: create React wrapper parity handoff"
+            git commit --allow-empty -m "${TRACKING_KEY}: create React wrapper parity handoff"
             git push --set-upstream origin "$BRANCH"
           fi
 
@@ -185,7 +167,7 @@ jobs:
             if [[ -n "${JIRA_URL:-}" ]]; then
               echo "- Jira: $JIRA_URL"
             else
-              echo "- Jira: creation or update failed. Do not mark this PR ready until Jira tracking is repaired."
+              echo "- Jira: creation or update failed. Use this PR and the upstream PR comment as fallback tracking, and retry Jira separately."
             fi
           } >> "$BODY_WITH_TRACKING"
 

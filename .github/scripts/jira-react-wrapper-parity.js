@@ -89,6 +89,7 @@ async function searchIssues(jql, options = {}) {
 function issueBody(metadata) {
   const files = metadata.upstream_changed_files || [];
   const surfaces = metadata.impacted_wrapper_surfaces || [];
+  const warnings = metadata.audit_warnings || [];
 
   return `Automated React wrapper parity triage for a merged Collect.js PR.
 
@@ -98,6 +99,9 @@ Source marker: ${metadata.source_marker || `collect-react-parity-source: ${metad
 Triage result: ${metadata.triage_result}
 Reason: ${metadata.triage_reason}
 Security-sensitive: ${metadata.security_sensitive ? 'yes' : 'no'}
+
+Audit warnings:
+${warnings.length ? warnings.map((warning) => `- ${warning}`).join('\n') : '- None'}
 
 Release notes:
 ${metadata.release_notes || 'None provided.'}
