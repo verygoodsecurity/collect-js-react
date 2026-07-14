@@ -142,6 +142,12 @@ a detailed OWASP checklist.
   opens draft parity PRs only for `code-required` or `docs-only` results.
 - Generated parity PRs receive the `needs-claude-implementation` label so the
   Claude parity implementation workflow can add code/docs to the draft branch.
+- Claude implementation runs must produce at least one new signed commit. A
+  successful agent process without a committed diff is a failed parity run.
+- Controlled wrapper-only tests use the
+  `collect-react-parity-source: manual-wrapper-test/no-upstream` source marker
+  plus the `manual-wrapper-test` label, and take their implementation
+  requirement from the draft PR body.
 - Keep generated parity PRs draft until Claude, Codex, or a maintainer has
   implemented code/docs, validation is complete, and human review is complete.
 - Treat `no-op` parity results as audit evidence only. Do not create empty
